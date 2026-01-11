@@ -1,144 +1,230 @@
-import { Injectable, inject, signal } from '@angular/core';
+import { Injectable, signal, computed, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, BehaviorSubject, tap, of } from 'rxjs';
-import { BaseHttpService } from './base-http.service';
-import { User, LoginRequest, RegisterRequest, AuthTokens } from '../models';
-import { APP_CONSTANTS, ROUTES } from '../constants/app.constants';
+import { CryptoService } from './crypto.service';
+import { AuthState, LoginCredentials, AuthSession } from '../models/auth.models';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService extends BaseHttpService {
+export class AuthService {
   private readonly router = inject(Router);
-  
-  private readonly currentUserSubject = new BehaviorSubject<User | null>(null);
-  private readonly isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
-  
-  public readonly currentUser$ = this.currentUserSubject.asObservable();
-  public readonly isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
-  
-  // Signals para estado reactivo
-  public readonly currentUser = signal<User | null>(null);
-  public readonly isAuthenticated = signal<boolean>(false);
+  private readonly cryptoService = inject(CryptoService);
+
+  private readonly sessionTimeout = 30 * 60 * 1000; // 30 minutes
+  private readonly maxInactivity = 15 * 60 * 1000; // 15 minutes
+
+  // Obfuscated credentials
+  private readonly c1 = 'sadyanda';
+  private readonly c2 = '.sumak';
+  private readonly p1 = 'LA9_ds*De';
+  private readonly p2 = '.SX2026-+.';
+
+  private readonly authState = signal<AuthState>({
+    isAuthenticated: false,
+    sessionToken: null,
+    expiresAt: null,
+    lastActivity: Date.now()
+  });
+
+  readonly isAuthenticated = computed(() => this.authState().isAuthenticated);
+  readonly sessionToken = computed(() => this.authState().sessionToken);
+  readonly currentUser = computed(() => {
+    if (this.authState().isAuthenticated) {
+      return {
+        firstName: 'Sadyanda',
+        lastName: 'Sumak',
+        email: 'sadyanda.sumak@sumak.com'
+      };
+    }
+    return null;
+  });
 
   constructor() {
-    super();
     this.initializeAuth();
+    this.startSessionMonitoring();
+    this.setupAntiDebug();
   }
 
-  private initializeAuth(): void {
-    const token = this.getAccessToken();
-    if (token && !this.isTokenExpired(token)) {
-      this.loadUserProfile();
-    } else {
-      this.clearAuthData();
-    }
-  }
-
-  login(credentials: LoginRequest): Observable<AuthTokens> {
-    return this.post<AuthTokens>(APP_CONSTANTS.API_ENDPOINTS.AUTH.LOGIN, credentials)
-      .pipe(
-        tap(tokens => {
-          this.setTokens(tokens);
-          this.loadUserProfile();
-        })
-      );
-  }
-
-  register(userData: RegisterRequest): Observable<AuthTokens> {
-    return this.post<AuthTokens>(APP_CONSTANTS.API_ENDPOINTS.AUTH.REGISTER, userData)
-      .pipe(
-        tap(tokens => {
-          this.setTokens(tokens);
-          this.loadUserProfile();
-        })
-      );
-  }
-
-  logout(): Observable<any> {
-    const refreshToken = this.getRefreshToken();
-    
-    if (refreshToken) {
-      return this.post(APP_CONSTANTS.API_ENDPOINTS.AUTH.LOGOUT, { refreshToken })
-        .pipe(
-          tap(() => this.performLogout())
-        );
-    }
-    
-    this.performLogout();
-    return of(null);
-  }
-
-  refreshToken(): Observable<AuthTokens> {
-    const refreshToken = this.getRefreshToken();
-    
-    if (!refreshToken) {
-      throw new Error('No refresh token available');
-    }
-
-    return this.post<AuthTokens>(APP_CONSTANTS.API_ENDPOINTS.AUTH.REFRESH, { refreshToken })
-      .pipe(
-        tap(tokens => this.setTokens(tokens))
-      );
-  }
-
-  private loadUserProfile(): void {
-    this.get<User>(APP_CONSTANTS.API_ENDPOINTS.AUTH.PROFILE)
-      .subscribe({
-        next: (user) => {
-          this.setCurrentUser(user);
-        },
-        error: () => {
-          this.clearAuthData();
-        }
+  private async initializeAuth(): Promise<void> {
+    const storedSession = await this.getStoredSession();
+    if (storedSession && this.isValidSession(storedSession)) {
+      this.authState.set({
+        isAuthenticated: true,
+        sessionToken: storedSession.token,
+        expiresAt: storedSession.expiresAt,
+        lastActivity: Date.now()
       });
+    }
   }
 
-  private performLogout(): void {
-    this.clearAuthData();
-    this.router.navigate([ROUTES.AUTH.LOGIN]);
+  private setupAntiDebug(): void {
+    // Production anti-debug protection
+    setInterval(() => {
+      const start = performance.now();
+      debugger;
+      const end = performance.now();
+      if (end - start > 100) {
+        this.logout();
+        window.location.reload();
+      }
+    }, 3000);
+
+    // Advanced console detection
+    let devtools = { open: false };
+    const threshold = 160;
+    setInterval(() => {
+      if (window.outerHeight - window.innerHeight > threshold || 
+          window.outerWidth - window.innerWidth > threshold) {
+        devtools.open = true;
+      }
+      if (devtools.open) {
+        this.logout();
+        window.location.reload();
+      }
+    }, 1000);
+
+    // Clear console logs
+    setInterval(() => {
+      console.clear();
+    }, 2000);
   }
 
-  private setCurrentUser(user: User): void {
-    this.currentUserSubject.next(user);
-    this.isAuthenticatedSubject.next(true);
-    this.currentUser.set(user);
-    this.isAuthenticated.set(true);
-    
-    localStorage.setItem(APP_CONSTANTS.STORAGE_KEYS.USER_DATA, JSON.stringify(user));
+  async login(credentials: LoginCredentials): Promise<boolean> {
+    try {
+      const isValid = await this.validateCredentials(credentials);
+
+      if (isValid) {
+        const session = await this.createSession();
+        await this.storeSession(session);
+
+        this.authState.set({
+          isAuthenticated: true,
+          sessionToken: session.token,
+          expiresAt: session.expiresAt,
+          lastActivity: Date.now()
+        });
+
+        return true;
+      }
+
+      // Add delay to prevent brute force
+      await this.delay(2000);
+      return false;
+    } catch (error) {
+      console.error('Authentication error:', error);
+      return false;
+    }
   }
 
-  private setTokens(tokens: AuthTokens): void {
-    localStorage.setItem(APP_CONSTANTS.STORAGE_KEYS.ACCESS_TOKEN, tokens.accessToken);
-    localStorage.setItem(APP_CONSTANTS.STORAGE_KEYS.REFRESH_TOKEN, tokens.refreshToken);
+  private async validateCredentials(credentials: LoginCredentials): Promise<boolean> {
+    try {
+      const validCreds = this.getValidCredentials();
+      const inputUsername = credentials.username.trim();
+      const inputPassword = credentials.password.trim();
+      
+      return inputUsername === validCreds.username && inputPassword === validCreds.password;
+    } catch {
+      return false;
+    }
   }
 
-  private clearAuthData(): void {
-    localStorage.removeItem(APP_CONSTANTS.STORAGE_KEYS.ACCESS_TOKEN);
-    localStorage.removeItem(APP_CONSTANTS.STORAGE_KEYS.REFRESH_TOKEN);
-    localStorage.removeItem(APP_CONSTANTS.STORAGE_KEYS.USER_DATA);
-    
-    this.currentUserSubject.next(null);
-    this.isAuthenticatedSubject.next(false);
-    this.currentUser.set(null);
-    this.isAuthenticated.set(false);
+  private getValidCredentials() {
+    return {
+      username: this.c1 + this.c2,
+      password: this.p1 + this.p2
+    };
+  }
+
+  private async createSession(): Promise<AuthSession> {
+    const token = this.cryptoService.generateSecureToken();
+    const expiresAt = Date.now() + this.sessionTimeout;
+
+    return {
+      token,
+      expiresAt,
+      createdAt: Date.now()
+    };
+  }
+
+  private async storeSession(session: AuthSession): Promise<void> {
+    try {
+      const sessionData = JSON.stringify(session);
+      const encrypted = await this.cryptoService.encrypt(sessionData, this.getSessionKey());
+      sessionStorage.setItem('sumak_auth_session', encrypted);
+    } catch {
+      // Fallback to basic encoding if encryption fails
+      const encoded = btoa(JSON.stringify(session));
+      sessionStorage.setItem('sumak_auth_session', encoded);
+    }
+  }
+
+  private async getStoredSession(): Promise<AuthSession | null> {
+    try {
+      const stored = sessionStorage.getItem('sumak_auth_session');
+      if (!stored) return null;
+
+      // Try AES decryption first
+      try {
+        const decrypted = await this.cryptoService.decrypt(stored, this.getSessionKey());
+        return JSON.parse(decrypted);
+      } catch {
+        // Fallback to base64 decoding
+        const decoded = atob(stored);
+        return JSON.parse(decoded);
+      }
+    } catch {
+      return null;
+    }
+  }
+
+  private getSessionKey(): string {
+    return this.c1 + this.c2 + '_session_key_2024';
+  }
+
+  private isValidSession(session: AuthSession): boolean {
+    const now = Date.now();
+    return session.expiresAt > now && (now - session.createdAt) < this.sessionTimeout;
+  }
+
+  private startSessionMonitoring(): void {
+    setInterval(() => {
+      const state = this.authState();
+      if (state.isAuthenticated) {
+        const now = Date.now();
+        const inactiveTime = now - state.lastActivity;
+
+        if (inactiveTime > this.maxInactivity || (state.expiresAt && now > state.expiresAt)) {
+          this.logout();
+        }
+      }
+    }, 30000); // Check every 30 seconds
+  }
+
+  updateActivity(): void {
+    if (this.authState().isAuthenticated) {
+      this.authState.update(state => ({
+        ...state,
+        lastActivity: Date.now()
+      }));
+    }
   }
 
   getAccessToken(): string | null {
-    return localStorage.getItem(APP_CONSTANTS.STORAGE_KEYS.ACCESS_TOKEN);
+    return this.authState().sessionToken;
   }
 
-  getRefreshToken(): string | null {
-    return localStorage.getItem(APP_CONSTANTS.STORAGE_KEYS.REFRESH_TOKEN);
+  logout(): void {
+    sessionStorage.removeItem('sumak_auth_session');
+    this.authState.set({
+      isAuthenticated: false,
+      sessionToken: null,
+      expiresAt: null,
+      lastActivity: Date.now()
+    });
+    this.router.navigate(['/']);
   }
 
-  private isTokenExpired(token: string): boolean {
-    try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      const currentTime = Math.floor(Date.now() / 1000);
-      return payload.exp < currentTime;
-    } catch {
-      return true;
-    }
+  private delay(ms: number): Promise<void> {
+    return new Promise(resolve => setTimeout(resolve, ms));
   }
 }

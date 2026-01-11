@@ -199,7 +199,7 @@ export class RegisterComponent {
         next: () => {
           this.router.navigate([ROUTES.DASHBOARD]);
         },
-        error: (error) => {
+        error: (error: any) => {
           this.errorMessage = error.message || 'Error al crear la cuenta';
           this.isLoading = false;
         },

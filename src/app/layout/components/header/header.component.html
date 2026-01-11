@@ -17,13 +17,6 @@
       <!-- Navigation -->
       <nav class="hidden md:flex space-x-8">
         <a
-          routerLink="/dashboard"
-          routerLinkActive="text-sumak-green border-sumak-gold"
-          class="text-text-secondary hover:text-sumak-green px-4 py-2 text-sm font-garet font-medium border-b-2 border-transparent hover:border-sumak-gold/50 transition-all duration-200"
-        >
-          Dashboard
-        </a>
-        <a
           routerLink="/catalog"
           routerLinkActive="text-sumak-green border-sumak-gold"
           class="text-text-secondary hover:text-sumak-green px-4 py-2 text-sm font-garet font-medium border-b-2 border-transparent hover:border-sumak-gold/50 transition-all duration-200"
@@ -31,12 +24,29 @@
           Catálogo
         </a>
         <a
-          routerLink="/profile"
+          routerLink="/faq"
           routerLinkActive="text-sumak-green border-sumak-gold"
           class="text-text-secondary hover:text-sumak-green px-4 py-2 text-sm font-garet font-medium border-b-2 border-transparent hover:border-sumak-gold/50 transition-all duration-200"
         >
-          Perfil
+          FAQ
         </a>
+        <!-- Admin only navigation -->
+        <ng-container *ngIf="authService.isAuthenticated()">
+          <a
+            routerLink="/dashboard"
+            routerLinkActive="text-sumak-green border-sumak-gold"
+            class="text-text-secondary hover:text-sumak-green px-4 py-2 text-sm font-garet font-medium border-b-2 border-transparent hover:border-sumak-gold/50 transition-all duration-200"
+          >
+            Dashboard
+          </a>
+          <a
+            routerLink="/profile"
+            routerLinkActive="text-sumak-green border-sumak-gold"
+            class="text-text-secondary hover:text-sumak-green px-4 py-2 text-sm font-garet font-medium border-b-2 border-transparent hover:border-sumak-gold/50 transition-all duration-200"
+          >
+            Perfil
+          </a>
+        </ng-container>
       </nav>
 
       <!-- User Menu -->
@@ -136,14 +146,6 @@
     <div *ngIf="showMobileMenu" class="md:hidden border-t border-gray-100 py-4">
       <div class="space-y-2">
         <a
-          routerLink="/dashboard"
-          routerLinkActive="bg-sumak-green/5 text-sumak-green"
-          class="block px-4 py-3 font-garet text-base font-medium text-text-secondary hover:bg-gray-50 hover:text-sumak-green rounded-lg transition-colors duration-200"
-          (click)="closeMobileMenu()"
-        >
-          Dashboard
-        </a>
-        <a
           routerLink="/catalog"
           routerLinkActive="bg-sumak-green/5 text-sumak-green"
           class="block px-4 py-3 font-garet text-base font-medium text-text-secondary hover:bg-gray-50 hover:text-sumak-green rounded-lg transition-colors duration-200"
@@ -152,13 +154,32 @@
           Catálogo
         </a>
         <a
-          routerLink="/profile"
+          routerLink="/faq"
           routerLinkActive="bg-sumak-green/5 text-sumak-green"
           class="block px-4 py-3 font-garet text-base font-medium text-text-secondary hover:bg-gray-50 hover:text-sumak-green rounded-lg transition-colors duration-200"
           (click)="closeMobileMenu()"
         >
-          Perfil
+          FAQ
         </a>
+        <!-- Admin only mobile navigation -->
+        <ng-container *ngIf="authService.isAuthenticated()">
+          <a
+            routerLink="/dashboard"
+            routerLinkActive="bg-sumak-green/5 text-sumak-green"
+            class="block px-4 py-3 font-garet text-base font-medium text-text-secondary hover:bg-gray-50 hover:text-sumak-green rounded-lg transition-colors duration-200"
+            (click)="closeMobileMenu()"
+          >
+            Dashboard
+          </a>
+          <a
+            routerLink="/profile"
+            routerLinkActive="bg-sumak-green/5 text-sumak-green"
+            class="block px-4 py-3 font-garet text-base font-medium text-text-secondary hover:bg-gray-50 hover:text-sumak-green rounded-lg transition-colors duration-200"
+            (click)="closeMobileMenu()"
+          >
+            Perfil
+          </a>
+        </ng-container>
       </div>
     </div>
   </div>
