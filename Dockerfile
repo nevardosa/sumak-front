@@ -18,6 +18,11 @@ RUN rm -rf /usr/share/nginx/html/*
 
 COPY --from=build /app/dist/sumak-front/ /usr/share/nginx/html/
 
+RUN echo "=== HTML DIR ===" && ls -la /usr/share/nginx/html
+RUN echo "=== HTML/BROWSER DIR ===" && ls -la /usr/share/nginx/html/browser || true
+RUN echo "=== HTML INDEX ===" && ls -la /usr/share/nginx/html/index.html || true
+
+
 
 COPY nginx.conf /etc/nginx/nginx.conf
 
