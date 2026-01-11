@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { authGuard, guestGuard } from './core/guards/auth.guard';
 import { LayoutComponent } from './layout/layout.component';
+import { HomeComponent } from './features/home/home.component';
 import { LoginComponent } from './features/auth/components/login/login.component';
 import { RegisterComponent } from './features/auth/components/register/register.component';
 import { DashboardComponent } from './features/dashboard/dashboard.component';
@@ -15,13 +16,16 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: '/dashboard',
-        pathMatch: 'full'
+        component: HomeComponent
+      },
+      {
+        path: 'home',
+        component: HomeComponent
       },
       {
         path: 'dashboard',
         component: DashboardComponent,
-        // canActivate: [authGuard]
+        canActivate: [authGuard]
       },
       {
         path: 'catalog',

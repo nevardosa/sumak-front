@@ -34,6 +34,31 @@ export const APP_CONSTANTS = {
     API_REQUEST: 30000,
     DEBOUNCE_SEARCH: 300,
     TOAST_DURATION: 5000
+  },
+  
+  // Home Page Constants
+  HOME: {
+    TESTIMONIAL_ROTATION_INTERVAL: 5000,
+    ANIMATION_DURATION: 300,
+    HERO_CTA_ROUTES: {
+      PRIMARY: '/catalog',
+      SECONDARY: '/about'
+    },
+    SOCIAL_LINKS: {
+      WHATSAPP: 'https://wa.me/573001234567',
+      INSTAGRAM: 'https://instagram.com/sumakgourmet',
+      FACEBOOK: 'https://facebook.com/sumakgourmet'
+    }
+  },
+  
+  // SEO Constants
+  SEO: {
+    HOME: {
+      TITLE: 'Sumak Gourmet - Sabores Auténticos de Colombia',
+      DESCRIPTION: 'Descubre la riqueza gastronómica colombiana con productos artesanales seleccionados directamente desde el origen. Calidad premium, entrega rápida.',
+      KEYWORDS: 'gourmet, colombia, productos artesanales, comida tradicional, sabores auténticos',
+      OG_IMAGE: '/assets/images/sumak-og-image.jpg'
+    }
   }
 } as const;
 
