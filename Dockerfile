@@ -1,13 +1,15 @@
 # Stage 1: Build
-FROM node:18-alpine AS build
-
+FROM node:20-alpine AS build
 WORKDIR /app
+
+# IMPORTANT: disable husky in CI/build
+ENV HUSKY=0
 
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies
-RUN npm ci --only=production
+# Install ALL deps (Angular needs devDependencies to build)
+RUN npm ci
 
 # Copy source code
 COPY . .
@@ -24,8 +26,7 @@ COPY --from=build /app/dist/sumak-front /usr/share/nginx/html
 # Copy nginx configuration
 COPY nginx.conf /etc/nginx/nginx.conf
 
-# Expose port
-EXPOSE 80
+# Cloud Run uses 8080 by default
+EXPOSE 8080
 
-# Start nginx
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["nginx"]()
