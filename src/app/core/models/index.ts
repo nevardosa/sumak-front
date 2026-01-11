@@ -49,3 +49,6 @@ export interface RegisterRequest extends LoginRequest {
   firstName: string;
   lastName: string;
 }
+
+// Home models
+export * from './home.models';

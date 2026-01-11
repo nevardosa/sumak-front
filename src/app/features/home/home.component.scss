@@ -1,0 +1,82 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+// Optimizaciones de rendimiento
+.hero-section {
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+// Animaciones suaves y optimizadas
+.feature-card {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  &:hover {
+    transform: translateY(-8px) translateZ(0);
+  }
+}
+
+// Testimonials carousel optimizations
+.testimonial-container {
+  contain: layout style paint;
+}
+
+.testimonial-slide {
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+// Stats counter animation
+.stat-number {
+  font-variant-numeric: tabular-nums;
+  
+  @media (prefers-reduced-motion: no-preference) {
+    transition: color 0.3s ease-out;
+  }
+}
+
+// Responsive optimizations
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2.5rem;
+    line-height: 1.2;
+  }
+  
+  .hero-subtitle {
+    font-size: 1.125rem;
+  }
+}
+
+// Accessibility improvements
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+// Focus states for keyboard navigation
+.feature-card:focus-visible {
+  outline: 2px solid theme('colors.sumak.gold');
+  outline-offset: 4px;
+}
+
+.testimonial-nav-button:focus-visible {
+  outline: 2px solid theme('colors.sumak.gold');
+  outline-offset: 2px;
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  .hero-section {
+    background: theme('colors.sumak.green');
+  }
+  
+  .feature-card {
+    border: 2px solid theme('colors.sumak.green');
+  }
+}
