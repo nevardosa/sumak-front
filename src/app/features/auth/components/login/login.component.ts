@@ -35,7 +35,6 @@ export class LoginComponent {
     // Production security measures
     this.disableDevTools();
     this.preventInspection();
-    this.obfuscateCredentials();
   }
 
   private disableDevTools(): void {
@@ -50,12 +49,14 @@ export class LoginComponent {
         this.handleSecurityViolation();
         return false;
       }
+      return true;
     });
 
     // Disable right-click
     document.addEventListener('contextmenu', (e) => {
       e.preventDefault();
       this.handleSecurityViolation();
+      return false;
     });
   }
 
@@ -68,7 +69,6 @@ export class LoginComponent {
     }, 1000);
 
     // Detect DevTools
-    let devtools = { open: false };
     const threshold = 160;
     setInterval(() => {
       if (window.outerHeight - window.innerHeight > threshold || 
@@ -76,6 +76,13 @@ export class LoginComponent {
         this.handleSecurityViolation();
       }
     }, 500);
+
+    // Clear clipboard and disable text selection
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText('');
+    }
+    document.body.style.userSelect = 'none';
+    document.body.style.webkitUserSelect = 'none';
   }
 
   private handleSecurityViolation(): void {
