@@ -1,0 +1,78 @@
+<div class="product-card bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden cursor-pointer">
+  <!-- Imagen del Producto -->
+  <div class="product-image-container relative aspect-square overflow-hidden" (click)="onImageClick()">
+    <img
+      [src]="product.imageUrl"
+      [alt]="product.name"
+      class="product-image w-full h-full object-cover"
+      loading="lazy"
+    />
+    
+    <!-- Badge de Categoría -->
+    <div class="absolute top-4 left-4 z-10">
+      <span [class]="getCategoryBadgeClass()">
+        {{ getCategoryLabel() }}
+      </span>
+    </div>
+
+    <!-- Overlay con botón de vista rápida -->
+    <div class="product-overlay absolute inset-0 flex items-center justify-center">
+      <button
+        type="button"
+        (click)="onImageClick()"
+        class="product-overlay-btn bg-white/95 text-sumak-green px-4 py-2 rounded-lg font-medium"
+      >
+        Ver Detalles
+      </button>
+    </div>
+  </div>
+
+  <!-- Contenido de la Tarjeta -->
+  <div class="p-6">
+    <!-- Nombre y Precio -->
+    <div class="mb-4">
+      <h3 class="text-xl font-normal text-sumak-green mb-2 line-clamp-1">
+        {{ product.name }}
+      </h3>
+      <p class="text-2xl font-semibold text-sumak-brown">
+        {{ formatPrice(product.price) }}
+      </p>
+    </div>
+
+    <!-- Descripción -->
+    <p class="text-sm text-text-body mb-4 line-clamp-3 leading-relaxed">
+      {{ product.description }}
+    </p>
+
+    <!-- Experiencia Sensorial -->
+    <div class="mb-6">
+      <p class="text-xs font-medium text-sumak-gold uppercase tracking-wider mb-2">
+        Experiencia Sensorial
+      </p>
+      <p class="text-sm text-text-secondary italic line-clamp-2">
+        {{ product.sensorialExperience }}
+      </p>
+    </div>
+
+    <!-- Botones de Acción -->
+    <div class="flex gap-3">
+      <app-button
+        variant="outline"
+        size="sm"
+        class="flex-1"
+        (clicked)="onImageClick()"
+      >
+        Ver Más
+      </app-button>
+      
+      <app-button
+        variant="primary"
+        size="sm"
+        class="flex-1"
+        (clicked)="onAddToCart($event)"
+      >
+        Agregar
+      </app-button>
+    </div>
+  </div>
+</div>

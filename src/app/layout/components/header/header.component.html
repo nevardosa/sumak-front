@@ -1,0 +1,165 @@
+<header class="bg-white shadow-sm border-b border-gray-100">
+  <div class="container-sumak">
+    <div class="flex justify-between items-center h-20">
+      <!-- Logo SUMAK -->
+      <div class="flex items-center">
+        <a routerLink="/" class="flex items-center space-x-3">
+          <div class="w-12 h-12 bg-sumak-green rounded-lg flex items-center justify-center">
+            <span class="text-white font-angainc text-xl font-bold">S</span>
+          </div>
+          <div class="flex flex-col">
+            <span class="font-angainc text-2xl font-normal text-sumak-green">SUMAK</span>
+            <span class="font-garet text-sm text-sumak-gold tracking-wider">GOURMET</span>
+          </div>
+        </a>
+      </div>
+
+      <!-- Navigation -->
+      <nav class="hidden md:flex space-x-8">
+        <a
+          routerLink="/dashboard"
+          routerLinkActive="text-sumak-green border-sumak-gold"
+          class="text-text-secondary hover:text-sumak-green px-4 py-2 text-sm font-garet font-medium border-b-2 border-transparent hover:border-sumak-gold/50 transition-all duration-200"
+        >
+          Dashboard
+        </a>
+        <a
+          routerLink="/catalog"
+          routerLinkActive="text-sumak-green border-sumak-gold"
+          class="text-text-secondary hover:text-sumak-green px-4 py-2 text-sm font-garet font-medium border-b-2 border-transparent hover:border-sumak-gold/50 transition-all duration-200"
+        >
+          Catálogo
+        </a>
+        <a
+          routerLink="/profile"
+          routerLinkActive="text-sumak-green border-sumak-gold"
+          class="text-text-secondary hover:text-sumak-green px-4 py-2 text-sm font-garet font-medium border-b-2 border-transparent hover:border-sumak-gold/50 transition-all duration-200"
+        >
+          Perfil
+        </a>
+      </nav>
+
+      <!-- User Menu -->
+      <div class="flex items-center space-x-4">
+        <div *ngIf="authService.currentUser() as user" class="flex items-center space-x-4">
+          <div class="hidden md:block text-right">
+            <p class="font-garet text-sm font-medium text-sumak-green">
+              {{ user.firstName }} {{ user.lastName }}
+            </p>
+            <p class="font-garet text-xs text-text-body">{{ user.email }}</p>
+          </div>
+          
+          <div class="relative">
+            <button
+              (click)="toggleUserMenu()"
+              class="flex items-center space-x-2 p-3 rounded-lg hover:bg-gray-50 transition-colors duration-200"
+            >
+              <div class="w-10 h-10 bg-sumak-gold/10 rounded-full flex items-center justify-center">
+                <span class="text-sumak-green font-garet font-medium text-sm">
+                  {{ user.firstName.charAt(0) }}{{ user.lastName.charAt(0) }}
+                </span>
+              </div>
+              <svg class="w-4 h-4 text-text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </button>
+
+            <!-- Dropdown Menu -->
+            <div
+              *ngIf="showUserMenu"
+              class="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50"
+            >
+              <a
+                routerLink="/profile"
+                class="block px-4 py-3 font-garet text-sm text-text-body hover:bg-gray-50 hover:text-sumak-green transition-colors duration-200"
+                (click)="closeUserMenu()"
+              >
+                Mi Perfil
+              </a>
+              <a
+                routerLink="/settings"
+                class="block px-4 py-3 font-garet text-sm text-text-body hover:bg-gray-50 hover:text-sumak-green transition-colors duration-200"
+                (click)="closeUserMenu()"
+              >
+                Configuración
+              </a>
+              <hr class="my-2 border-gray-100">
+              <button
+                (click)="logout()"
+                class="block w-full text-left px-4 py-3 font-garet text-sm text-sumak-wine hover:bg-red-50 transition-colors duration-200"
+              >
+                Cerrar Sesión
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Login Button for guests -->
+        <div *ngIf="!authService.isAuthenticated()">
+          <app-button
+            variant="primary"
+            size="md"
+            routerLink="/auth/login"
+          >
+            Iniciar Sesión
+          </app-button>
+        </div>
+      </div>
+
+      <!-- Mobile menu button -->
+      <div class="md:hidden">
+        <button
+          (click)="toggleMobileMenu()"
+          class="p-2 rounded-lg text-text-secondary hover:text-sumak-green hover:bg-gray-50 transition-colors duration-200"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              *ngIf="!showMobileMenu"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16"
+            ></path>
+            <path
+              *ngIf="showMobileMenu"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            ></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation -->
+    <div *ngIf="showMobileMenu" class="md:hidden border-t border-gray-100 py-4">
+      <div class="space-y-2">
+        <a
+          routerLink="/dashboard"
+          routerLinkActive="bg-sumak-green/5 text-sumak-green"
+          class="block px-4 py-3 font-garet text-base font-medium text-text-secondary hover:bg-gray-50 hover:text-sumak-green rounded-lg transition-colors duration-200"
+          (click)="closeMobileMenu()"
+        >
+          Dashboard
+        </a>
+        <a
+          routerLink="/catalog"
+          routerLinkActive="bg-sumak-green/5 text-sumak-green"
+          class="block px-4 py-3 font-garet text-base font-medium text-text-secondary hover:bg-gray-50 hover:text-sumak-green rounded-lg transition-colors duration-200"
+          (click)="closeMobileMenu()"
+        >
+          Catálogo
+        </a>
+        <a
+          routerLink="/profile"
+          routerLinkActive="bg-sumak-green/5 text-sumak-green"
+          class="block px-4 py-3 font-garet text-base font-medium text-text-secondary hover:bg-gray-50 hover:text-sumak-green rounded-lg transition-colors duration-200"
+          (click)="closeMobileMenu()"
+        >
+          Perfil
+        </a>
+      </div>
+    </div>
+  </div>
+</header>

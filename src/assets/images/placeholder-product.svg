@@ -1,0 +1,7 @@
+<svg width="400" height="400" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="400" fill="#F9FAFB"/>
+  <rect x="50" y="50" width="300" height="300" rx="20" fill="#063A3D" fill-opacity="0.1"/>
+  <path d="M200 150L175 175L200 200L225 175L200 150Z" fill="#C5A572"/>
+  <text x="200" y="280" text-anchor="middle" fill="#063A3D" font-family="serif" font-size="24" font-weight="normal">SUMAK</text>
+  <text x="200" y="310" text-anchor="middle" fill="#C5A572" font-family="sans-serif" font-size="14" font-weight="normal">GOURMET</text>
+</svg>

@@ -1,0 +1,439 @@
+import { Component, Output, EventEmitter, inject, OnInit, ChangeDetectionStrategy, signal, computed } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { CartService } from '../../services/cart.service';
+import { CheckoutService } from '../../services/checkout.service';
+import { OrderExportService } from '../../services/order-export.service';
+import { SecurityService } from '../../../../core/services/security.service';
+import { EmailValidationService } from '../../../../shared/services/email-validation.service';
+import { ButtonComponent } from '../../../../shared/components/button/button.component';
+import { InputComponent } from '../../../../shared/components/input/input.component';
+import { SelectComponent, SelectOption } from '../../../../shared/components/select/select.component';
+import { CheckboxComponent } from '../../../../shared/components/checkbox/checkbox.component';
+import { AlertComponent } from '../../../../shared/components/alert/alert.component';
+import { TooltipComponent } from '../../../../shared/components/tooltip/tooltip.component';
+import { CustomerData, Municipality } from '../../models/catalog.models';
+import { CHECKOUT_CONSTANTS } from '../../constants/checkout.constants';
+import { SecureValidators } from '../../../../shared/validators/secure-validators';
+
+@Component({
+  selector: 'app-checkout-modal',
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    ButtonComponent,
+    InputComponent,
+    SelectComponent,
+    CheckboxComponent,
+    AlertComponent,
+    TooltipComponent
+  ],
+  templateUrl: './checkout-modal.component.html',
+  styleUrl: './checkout-modal.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class CheckoutModalComponent implements OnInit {
+  @Output() close = new EventEmitter<void>();
+
+  private readonly fb = inject(FormBuilder);
+  private readonly cartService = inject(CartService);
+  private readonly checkoutService = inject(CheckoutService);
+  private readonly orderExportService = inject(OrderExportService);
+  private readonly securityService = inject(SecurityService);
+  private readonly emailValidationService = inject(EmailValidationService);
+  private readonly priceFormatter = new Intl.NumberFormat('es-CO', {
+    style: 'currency',
+    currency: 'COP',
+    minimumFractionDigits: 0
+  });
+
+  checkoutForm: FormGroup;
+  selectedDepartment = signal<string>('');
+  emailAlert = signal<{
+    show: boolean;
+    type: 'success' | 'error' | 'warning' | 'info';
+    title: string;
+    message: string;
+    suggestion?: string;
+  }>({ show: false, type: 'info', title: '', message: '' });
+
+  municipalities = computed(() => {
+    const deptId = this.selectedDepartment();
+    if (!deptId) return [];
+    return this.checkoutService.getMunicipalitiesByDepartment(deptId);
+  });
+
+  readonly departments = this.checkoutService.getDepartments();
+  readonly identificationTypes = CHECKOUT_CONSTANTS.IDENTIFICATION_TYPES;
+  readonly paymentInstructions = this.checkoutService.getPaymentInstructions();
+  readonly cart = this.cartService.cart;
+
+  readonly departmentOptions = computed(() =>
+    this.departments.map(dept => ({
+      value: dept.id,
+      label: dept.name
+    }))
+  );
+
+  readonly municipalityOptions = computed(() =>
+    this.municipalities().map(mun => ({
+      value: mun.id,
+      label: mun.name
+    }))
+  );
+
+  readonly identificationOptions: SelectOption[] =
+    this.identificationTypes.map(type => ({
+      value: type.value,
+      label: type.label
+    }));
+
+  constructor() {
+    this.checkoutForm = this.initializeForm();
+  }
+
+  ngOnInit(): void {
+    this.setupFormSubscriptions();
+  }
+
+  private initializeForm(): FormGroup {
+    const form = this.fb.group({
+      firstName: ['', [
+        Validators.required,
+        Validators.minLength(2),
+        Validators.maxLength(50),
+        SecureValidators.secureNameValidator()
+      ]],
+      lastName: ['', [
+        Validators.required,
+        Validators.minLength(2),
+        Validators.maxLength(50),
+        SecureValidators.secureNameValidator()
+      ]],
+      identificationType: ['', [Validators.required]],
+      identificationNumber: ['', [
+        Validators.required,
+        Validators.minLength(6),
+        Validators.maxLength(12),
+        SecureValidators.colombianIdValidator()
+      ]],
+      department: ['', [Validators.required]],
+      municipality: [{ value: '', disabled: true }, [Validators.required]],
+      urbanization: ['', [
+        Validators.maxLength(100),
+        SecureValidators.secureAddressValidator()
+      ]],
+      houseNumber: ['', [
+        Validators.required,
+        Validators.minLength(5),
+        Validators.maxLength(100),
+        SecureValidators.secureAddressValidator()
+      ]],
+      apartmentNumber: ['', [
+        Validators.maxLength(20),
+        SecureValidators.secureAddressValidator()
+      ]],
+      tower: ['', [
+        Validators.maxLength(50),
+        SecureValidators.secureAddressValidator()
+      ]],
+      block: ['', [
+        Validators.maxLength(50),
+        SecureValidators.secureAddressValidator()
+      ]],
+      additionalInfo: ['', [
+        Validators.maxLength(200),
+        SecureValidators.secureAddressValidator()
+      ]],
+      email: ['',
+        [
+          Validators.required,
+          Validators.email,
+          Validators.maxLength(254),
+          SecureValidators.secureEmailValidator()
+        ],
+        [SecureValidators.emailExistsValidator(this.emailValidationService)]
+      ],
+      phone: ['', [
+        Validators.required,
+        Validators.minLength(10),
+        Validators.maxLength(10),
+        SecureValidators.colombianPhoneValidator()
+      ]],
+      acceptsDataProcessing: [false, [Validators.requiredTrue]]
+    });
+
+    // Marcar todos los campos como touched para mostrar errores inmediatamente
+    form.markAllAsTouched();
+
+    return form;
+  }
+
+  private setupFormSubscriptions(): void {
+    this.checkoutForm.get('department')?.valueChanges.subscribe(departmentId => {
+      if (departmentId && typeof departmentId === 'string') {
+        this.selectedDepartment.set(departmentId);
+        const municipalityControl = this.checkoutForm.get('municipality');
+        municipalityControl?.setValue('');
+        municipalityControl?.enable();
+      } else {
+        this.checkoutForm.get('municipality')?.disable();
+      }
+    });
+
+    // Validación en tiempo real para todos los campos
+    Object.keys(this.checkoutForm.controls).forEach(key => {
+      const control = this.checkoutForm.get(key);
+      if (control) {
+        control.valueChanges.subscribe(() => {
+          // Marcar como touched para mostrar errores inmediatamente
+          if (!control.touched) {
+            control.markAsTouched();
+          }
+        });
+      }
+    });
+
+    // Suscribirse a cambios en el email para mostrar alertas
+    const emailControl = this.checkoutForm.get('email');
+    if (emailControl) {
+      emailControl.statusChanges.subscribe(status => {
+        const errors = emailControl.errors;
+
+        if (errors?.['emailNotExists']) {
+          this.showEmailAlert(
+            'error',
+            'Email no válido',
+            errors['emailNotExists'].message,
+            errors['emailNotExists'].suggestion
+          );
+        } else if (errors && emailControl.touched) {
+          // No mostrar alerta si hay otros errores de formato
+          this.hideEmailAlert();
+        } else if (status === 'PENDING') {
+          this.showEmailAlert(
+            'info',
+            'Verificando email...',
+            'Validando la existencia del correo electrónico'
+          );
+        } else {
+          this.hideEmailAlert();
+        }
+      });
+    }
+  }
+
+  showEmailAlert(type: 'success' | 'error' | 'warning' | 'info', title: string, message: string, suggestion?: string): void {
+    this.emailAlert.set({
+      show: true,
+      type,
+      title,
+      message,
+      suggestion
+    });
+  }
+
+  hideEmailAlert(): void {
+    this.emailAlert.set({ show: false, type: 'info', title: '', message: '' });
+  }
+
+  onEmailSuggestionClick(suggestion: string): void {
+    this.checkoutForm.get('email')?.setValue(suggestion);
+    this.hideEmailAlert();
+  }
+
+  onClose(): void {
+    this.close.emit();
+  }
+
+  onBackdropClick(event: Event): void {
+    if (event.target === event.currentTarget) {
+      this.onClose();
+    }
+  }
+
+  formatPrice(price: number): string {
+    if (typeof price !== 'number' || isNaN(price) || price < 0) {
+      return '$0';
+    }
+    return this.priceFormatter.format(price);
+  }
+
+  getFieldError(fieldName: string): string {
+    const field = this.checkoutForm.get(fieldName);
+    if (!field || (!field.errors && !field.pending) || !field.touched) {
+      return '';
+    }
+
+    const errors = field.errors;
+
+    // Errores de validación personalizada
+    if (errors?.['invalidName']) {
+      return errors['invalidName'].message;
+    }
+
+    if (errors?.['invalidId']) {
+      return errors['invalidId'].message;
+    }
+
+    if (errors?.['invalidPhone']) {
+      return errors['invalidPhone'].message;
+    }
+
+    if (errors?.['invalidEmail']) {
+      return errors['invalidEmail'].message;
+    }
+
+    if (errors?.['invalidAddress']) {
+      return errors['invalidAddress'].message;
+    }
+
+    if (errors?.['emailNotExists']) {
+      return errors['emailNotExists'].message;
+    }
+
+    // Errores estándar de Angular
+    if (errors?.['required']) {
+      return this.getRequiredMessage(fieldName);
+    }
+
+    if (errors?.['email']) {
+      return 'Formato de email inválido';
+    }
+
+    if (errors?.['minlength']) {
+      const requiredLength = errors['minlength'].requiredLength;
+      const actualLength = errors['minlength'].actualLength;
+      return `Mínimo ${requiredLength} caracteres (actual: ${actualLength})`;
+    }
+
+    if (errors?.['maxlength']) {
+      const requiredLength = errors['maxlength'].requiredLength;
+      return `Máximo ${requiredLength} caracteres`;
+    }
+
+    if (errors?.['pattern']) {
+      return this.getPatternMessage(fieldName);
+    }
+
+    return 'Campo inválido';
+  }
+
+  private getRequiredMessage(fieldName: string): string {
+    const messages: { [key: string]: string } = {
+      'firstName': 'Los nombres son requeridos',
+      'lastName': 'Los apellidos son requeridos',
+      'identificationType': 'Selecciona el tipo de identificación',
+      'identificationNumber': 'El número de identificación es requerido',
+      'department': 'Selecciona el departamento',
+      'municipality': 'Selecciona el municipio',
+      'houseNumber': 'La dirección es requerida',
+      'email': 'El correo electrónico es requerido',
+      'phone': 'El número de teléfono es requerido',
+      'acceptsDataProcessing': 'Debes aceptar el tratamiento de datos'
+    };
+
+    return messages[fieldName] || 'Este campo es requerido';
+  }
+
+  private getPatternMessage(fieldName: string): string {
+    const messages: { [key: string]: string } = {
+      'identificationNumber': 'Solo se permiten números (6-12 dígitos)',
+      'phone': 'Formato inválido. Debe ser: 3XXXXXXXXX',
+      'email': 'Formato de email inválido'
+    };
+
+    return messages[fieldName] || 'Formato inválido';
+  }
+
+  onSubmit(): void {
+    if (!this.checkoutForm.valid) {
+      this.markFormGroupTouched();
+      return;
+    }
+
+    try {
+      const formData = this.checkoutForm.value;
+      
+      // Security validation before processing
+      if (!this.validateFormData(formData)) {
+        throw new Error('Datos del formulario inválidos');
+      }
+      
+      const customerData: CustomerData = {
+        firstName: SecureValidators.sanitizeText(formData.firstName),
+        lastName: SecureValidators.sanitizeText(formData.lastName),
+        identificationType: formData.identificationType,
+        identificationNumber: formData.identificationNumber.replace(/\D/g, ''),
+        department: this.getDepartmentName(formData.department),
+        municipality: this.getMunicipalityName(formData.municipality),
+        address: {
+          urbanization: formData.urbanization ? SecureValidators.sanitizeText(formData.urbanization) : undefined,
+          houseNumber: SecureValidators.sanitizeText(formData.houseNumber),
+          apartmentNumber: formData.apartmentNumber ? SecureValidators.sanitizeText(formData.apartmentNumber) : undefined,
+          tower: formData.tower ? SecureValidators.sanitizeText(formData.tower) : undefined,
+          block: formData.block ? SecureValidators.sanitizeText(formData.block) : undefined,
+          additionalInfo: formData.additionalInfo ? SecureValidators.sanitizeText(formData.additionalInfo) : undefined
+        },
+        email: formData.email.toLowerCase().trim(),
+        phone: formData.phone.replace(/\D/g, ''),
+        acceptsDataProcessing: formData.acceptsDataProcessing
+      };
+
+      const checkoutData = {
+        customer: customerData,
+        cart: this.cart(),
+        paymentInstructions: this.paymentInstructions
+      };
+
+      const message = this.checkoutService.generateWhatsAppMessage(checkoutData);
+
+      // Exportar pedido a CSV
+      this.orderExportService.exportOrderToCSV(checkoutData);
+
+      this.checkoutService.openWhatsApp(message);
+      this.onClose();
+    } catch (error) {
+      console.error('Error en checkout:', error);
+      // Mostrar mensaje de error más específico
+      if (error instanceof Error) {
+        if (error.message.includes('WhatsApp')) {
+          alert('No se pudo abrir WhatsApp. Verifica que no esté bloqueado por el navegador o intenta desde un dispositivo móvil.');
+        } else {
+          alert('Error al procesar el pedido. Por favor, verifica los datos e inténtalo nuevamente.');
+        }
+      } else {
+        alert('Error al procesar el pedido. Por favor, verifica los datos e inténtalo nuevamente.');
+      }
+    }
+  }
+
+  private getDepartmentName(departmentId: string): string {
+    return this.departments.find(d => d.id === departmentId)?.name || '';
+  }
+
+  private getMunicipalityName(municipalityId: string): string {
+    return this.municipalities().find(m => m.id === municipalityId)?.name || '';
+  }
+
+  private markFormGroupTouched(): void {
+    Object.keys(this.checkoutForm.controls).forEach(key => {
+      this.checkoutForm.get(key)?.markAsTouched();
+    });
+  }
+
+  private validateFormData(formData: any): boolean {
+    if (!formData || typeof formData !== 'object') return false;
+    
+    // Validate all string inputs
+    const stringFields = ['firstName', 'lastName', 'houseNumber', 'email', 'phone'];
+    for (const field of stringFields) {
+      if (!formData[field] || !this.securityService.validateInput(formData[field])) {
+        return false;
+      }
+    }
+    
+    return true;
+  }
+}

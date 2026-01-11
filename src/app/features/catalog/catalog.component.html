@@ -1,0 +1,90 @@
+<div class="min-h-screen bg-gray-50">
+  <!-- Header del Catálogo -->
+  <div class="bg-white border-b border-gray-100">
+    <div class="container-sumak py-12">
+      <div class="text-center mb-12">
+        <h1 class="title-primary mb-4">Catálogo SUMAK Gourmet</h1>
+        <p class="subtitle text-text-secondary max-w-3xl mx-auto">
+          Descubre nuestras experiencias gastronómicas premium, 
+          cuidadosamente seleccionadas para paladares exigentes
+        </p>
+      </div>
+
+      <!-- Filtros por Categoría -->
+      <div class="flex flex-wrap justify-center gap-4 mb-8">
+        <button
+          *ngFor="let category of categories"
+          (click)="filterByCategory(category.value)"
+          [class]="selectedCategory === category.value 
+            ? 'bg-sumak-green text-white' 
+            : 'bg-white text-sumak-green border-2 border-sumak-green hover:bg-sumak-green hover:text-white'"
+          class="px-6 py-3 rounded-lg font-garet font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-sumak-gold focus:ring-offset-2"
+        >
+          {{ category.label }}
+          <span class="ml-2 text-sm opacity-75">({{ category.count }})</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Grid de Productos -->
+  <div class="container-sumak section-padding">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+      <app-product-card
+        *ngFor="let product of filteredProducts; trackBy: trackByProductId"
+        [product]="product"
+        (productClick)="onProductClick($event)"
+        (addToCart)="onAddToCart($event)"
+      ></app-product-card>
+    </div>
+
+    <!-- Estado vacío -->
+    <div *ngIf="filteredProducts.length === 0" class="text-center py-16">
+      <div class="w-24 h-24 bg-sumak-green/10 rounded-full flex items-center justify-center mx-auto mb-6">
+        <svg class="w-12 h-12 text-sumak-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+        </svg>
+      </div>
+      <h3 class="title-secondary mb-2">No hay productos en esta categoría</h3>
+      <p class="body-large text-text-body">Explora otras categorías para descubrir nuestras experiencias gourmet</p>
+    </div>
+  </div>
+
+  <!-- Botón flotante del carrito -->
+  <button
+    *ngIf="cartService.cart().itemCount > 0"
+    (click)="toggleCart()"
+    class="fixed bottom-6 right-6 bg-sumak-gold hover:bg-sumak-gold/90 text-sumak-green p-4 rounded-full shadow-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-sumak-green focus:ring-offset-2 z-40"
+  >
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m0 0h8m-8 0a2 2 0 100 4 2 2 0 000-4zm8 0a2 2 0 100 4 2 2 0 000-4z"></path>
+    </svg>
+    <span class="absolute -top-2 -right-2 bg-sumak-wine text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center">
+      {{ cartService.cart().itemCount }}
+    </span>
+  </button>
+</div>
+
+<!-- Modal del Producto -->
+<app-product-modal
+  *ngIf="showProductModal && selectedProduct"
+  [product]="selectedProduct"
+  (close)="onCloseModal()"
+  (addToCart)="onAddToCart($event)"
+></app-product-modal>
+
+<!-- Carrito de Compras -->
+<app-cart
+  *ngIf="showCart"
+  (close)="toggleCart()"
+></app-cart>
+
+<!-- Toast Notification -->
+<app-toast
+  [show]="showToast()"
+  [title]="toastTitle()"
+  [message]="toastMessage()"
+  [autoClose]="true"
+  [duration]="3000"
+  (closed)="onToastClosed()">
+</app-toast>

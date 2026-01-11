@@ -1,0 +1,91 @@
+:host {
+  .modal-container {
+    animation: modalSlideIn 0.3s ease-out;
+  }
+
+  .backdrop {
+    animation: backdropFadeIn 0.3s ease-out;
+  }
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes backdropFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+// Custom scrollbar for better UX
+.overflow-y-auto {
+  scrollbar-width: thin;
+  scrollbar-color: theme('colors.sumak.gold') theme('colors.gray.100');
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: theme('colors.gray.100');
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: theme('colors.sumak.gold');
+    border-radius: 3px;
+
+    &:hover {
+      background: theme('colors.sumak.gold') / 0.8;
+    }
+  }
+}
+
+// Form section styling
+.form-section {
+  h3 {
+    svg {
+      flex-shrink: 0;
+    }
+  }
+}
+
+// Step indicator styling
+.step-indicator {
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .modal-container {
+    margin: 1rem;
+    max-height: calc(100vh - 2rem);
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+// Focus states for accessibility
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 2px solid theme('colors.sumak.gold');
+  outline-offset: 2px;
+}
