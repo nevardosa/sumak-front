@@ -43,15 +43,38 @@ export const APP_CONSTANTS = {
     HERO_CTA_ROUTES: {
       PRIMARY: '/catalog',
       SECONDARY: '/about'
-    },
-    SOCIAL_LINKS: {
-      WHATSAPP: 'https://wa.me/573001234567',
-      INSTAGRAM: 'https://instagram.com/sumakgourmet',
-      FACEBOOK: 'https://facebook.com/sumakgourmet'
     }
   },
   
-  // SEO Constants
+  // Social Media Constants
+  SOCIAL_MEDIA: {
+    INSTAGRAM: {
+      URL: 'https://www.instagram.com/sumak_gourmet/',
+      LABEL: 'Instagram',
+      HANDLE: '@sumak_gourmet'
+    },
+    FACEBOOK: {
+      URL: 'https://www.facebook.com/profile.php?id=61584393061696',
+      LABEL: 'Facebook',
+      HANDLE: 'Sumak Gourmet'
+    },
+    TIKTOK: {
+      URL: 'https://www.tiktok.com/@sumak_gourmet',
+      LABEL: 'TikTok',
+      HANDLE: '@sumak_gourmet'
+    }
+  },
+  
+  // FAQ Constants
+  FAQ: {
+    CATEGORIES: {
+      GENERAL: { id: 'general', name: 'General', icon: 'M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z' },
+      ORDERS: { id: 'orders', name: 'Pedidos', icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2' },
+      SHIPPING: { id: 'shipping', name: 'Envíos', icon: 'M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z' },
+      PRODUCTS: { id: 'products', name: 'Productos', icon: 'M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4' },
+      PAYMENTS: { id: 'payments', name: 'Pagos', icon: 'M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z' }
+    }
+  },
   SEO: {
     HOME: {
       TITLE: 'Sumak Gourmet - Sabores Auténticos de Colombia',
@@ -71,5 +94,6 @@ export const ROUTES = {
   },
   DASHBOARD: '/dashboard',
   PROFILE: '/profile',
-  SETTINGS: '/settings'
+  SETTINGS: '/settings',
+  FAQ: '/faq'
 } as const;

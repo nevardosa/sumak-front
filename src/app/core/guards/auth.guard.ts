@@ -1,39 +1,41 @@
-import { CanActivateFn, Router } from '@angular/router';
 import { inject } from '@angular/core';
-import { map, take } from 'rxjs/operators';
+import { CanActivateFn, Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
-import { ROUTES } from '../constants/app.constants';
 
-export const authGuard: CanActivateFn = () => {
+export const authGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
   const router = inject(Router);
-
-  return authService.isAuthenticated$.pipe(
-    take(1),
-    map(isAuthenticated => {
-      if (isAuthenticated) {
-        return true;
-      }
-      
-      router.navigate([ROUTES.AUTH.LOGIN]);
+  
+  // Multiple security layers
+  if (!authService.isAuthenticated()) {
+    router.navigate(['/auth/login']);
+    return false;
+  }
+  
+  // Update activity on route access
+  authService.updateActivity();
+  
+  // Additional validation for sensitive routes
+  const protectedRoutes = ['/dashboard', '/profile', '/settings'];
+  if (protectedRoutes.includes(state.url)) {
+    const sessionToken = authService.sessionToken();
+    if (!sessionToken || sessionToken.length < 32) {
+      authService.logout();
       return false;
-    })
-  );
+    }
+  }
+  
+  return true;
 };
 
-export const guestGuard: CanActivateFn = () => {
+export const guestGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
   const router = inject(Router);
-
-  return authService.isAuthenticated$.pipe(
-    take(1),
-    map(isAuthenticated => {
-      if (!isAuthenticated) {
-        return true;
-      }
-      
-      router.navigate([ROUTES.DASHBOARD]);
-      return false;
-    })
-  );
+  
+  if (authService.isAuthenticated()) {
+    router.navigate(['/dashboard']);
+    return false;
+  }
+  
+  return true;
 };

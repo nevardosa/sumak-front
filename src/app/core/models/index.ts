@@ -52,3 +52,5 @@ export interface RegisterRequest extends LoginRequest {
 
 // Home models
 export * from './home.models';
+export * from './social-media.models';
+export * from './faq.models';

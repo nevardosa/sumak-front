@@ -1,13 +1,11 @@
 import { Routes } from '@angular/router';
-import { authGuard, guestGuard } from './core/guards/auth.guard';
+import { authGuard } from './core/guards/auth.guard';
 import { LayoutComponent } from './layout/layout.component';
 import { HomeComponent } from './features/home/home.component';
 import { LoginComponent } from './features/auth/components/login/login.component';
-import { RegisterComponent } from './features/auth/components/register/register.component';
 import { DashboardComponent } from './features/dashboard/dashboard.component';
 import { ProfileComponent } from './features/profile/profile.component';
 import { SettingsComponent } from './features/settings/settings.component';
-import { NotFoundComponent } from './shared/components/not-found/not-found.component';
 
 export const routes: Routes = [
   {
@@ -23,13 +21,18 @@ export const routes: Routes = [
         component: HomeComponent
       },
       {
+        path: 'catalog',
+        loadComponent: () => import('./features/catalog/catalog.component').then(m => m.CatalogComponent)
+      },
+      {
+        path: 'faq',
+        loadComponent: () => import('./features/faq/faq.component').then(m => m.FaqComponent)
+      },
+      // Admin routes - protected
+      {
         path: 'dashboard',
         component: DashboardComponent,
         canActivate: [authGuard]
-      },
-      {
-        path: 'catalog',
-        loadComponent: () => import('./features/catalog/catalog.component').then(m => m.CatalogComponent)
       },
       {
         path: 'profile',
@@ -44,26 +47,11 @@ export const routes: Routes = [
     ]
   },
   {
-    path: 'auth',
-    canActivate: [guestGuard],
-    children: [
-      {
-        path: 'login',
-        component: LoginComponent
-      },
-      {
-        path: 'register',
-        component: RegisterComponent
-      },
-      {
-        path: '',
-        redirectTo: 'login',
-        pathMatch: 'full'
-      }
-    ]
+    path: 'auth/login',
+    component: LoginComponent
   },
   {
     path: '**',
-    component: NotFoundComponent
+    redirectTo: '/home'
   }
 ];

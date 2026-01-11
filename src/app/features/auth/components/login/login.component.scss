@@ -1,0 +1,62 @@
+:host {
+  display: block;
+  height: 100vh;
+}
+
+// Security enhancements
+::selection {
+  background: transparent;
+}
+
+::-moz-selection {
+  background: transparent;
+}
+
+// Disable text selection on sensitive areas
+.security-sensitive {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+// Form enhancements
+.login-form {
+  input {
+    &:-webkit-autofill {
+      -webkit-box-shadow: 0 0 0 30px rgba(255, 255, 255, 0.2) inset;
+      -webkit-text-fill-color: white;
+    }
+    
+    &:focus {
+      box-shadow: 0 0 0 3px rgba(197, 165, 114, 0.3);
+    }
+  }
+}
+
+// Anti-debug styles
+@media screen and (max-width: 0px) {
+  body {
+    display: none;
+  }
+}
+
+// Accessibility improvements
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+// High contrast mode
+@media (prefers-contrast: high) {
+  .login-container {
+    border: 2px solid white;
+  }
+  
+  input {
+    border: 2px solid white;
+  }
+}

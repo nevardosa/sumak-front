@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, signal, computed, ChangeDetectionStrategy
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ButtonComponent } from '../../shared/components/button/button.component';
+import { SocialLinksComponent } from '../../shared/components/social-links/social-links.component';
 import { Subject, interval, takeUntil } from 'rxjs';
 import { FeatureCard, Testimonial, Stat, HomeComponentState } from '../../core/models';
 import { APP_CONSTANTS } from '../../core/constants/app.constants';
@@ -10,7 +11,7 @@ import { HomeDataService } from '../../core/services/home-data.service';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, RouterModule, ButtonComponent],
+  imports: [CommonModule, RouterModule, ButtonComponent, SocialLinksComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush

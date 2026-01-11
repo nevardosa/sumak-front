@@ -19,7 +19,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
           break;
         case 401:
           errorMessage = 'No autorizado. Por favor, inicia sesión nuevamente';
-          authService.logout().subscribe();
+          authService.logout();
           router.navigate([ROUTES.AUTH.LOGIN]);
           break;
         case 403:

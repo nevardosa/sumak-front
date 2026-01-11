@@ -157,11 +157,24 @@
       Únete a miles de colombianos que ya disfrutan de la mejor 
       selección de productos gourmet del país.
     </p>
-    <app-button 
-      variant="primary" 
-      size="lg"
-      [routerLink]="'/catalog'">
-      Comenzar a Comprar
-    </app-button>
+    <div class="flex flex-col items-center space-y-6">
+      <app-button 
+        variant="primary" 
+        size="lg"
+        [routerLink]="'/catalog'">
+        Comenzar a Comprar
+      </app-button>
+      
+      <div class="flex flex-col items-center space-y-3">
+        <p class="text-sm text-sumak-brown font-medium">
+          Síguenos en nuestras redes sociales
+        </p>
+        <app-social-links 
+          variant="filled" 
+          size="lg" 
+          displayStyle="horizontal">
+        </app-social-links>
+      </div>
+    </div>
   </div>
 </section>
