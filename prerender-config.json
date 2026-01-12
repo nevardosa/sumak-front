@@ -1,0 +1,26 @@
+{
+  "prerender": {
+    "builder": "@nguniversal/builders:prerender",
+    "options": {
+      "routes": [
+        "/",
+        "/catalog",
+        "/faq"
+      ]
+    },
+    "configurations": {
+      "production": {
+        "browserTarget": "sumak-front:build:production",
+        "serverTarget": "sumak-front:server:production"
+      }
+    }
+  }
+}
+
+// Comandos para implementar:
+// 1. ng add @nguniversal/express-engine
+// 2. npm run build:ssr
+// 3. npm run serve:ssr
+
+// Para prerendering estático:
+// ng run sumak-front:prerender:production

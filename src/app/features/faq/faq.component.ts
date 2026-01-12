@@ -3,17 +3,20 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { FaqService } from '../../core/services/faq.service';
 import { FaqItem, FaqCategory, FaqCategoryId, FaqComponentState } from '../../core/models/faq.models';
+import { EnterpriseSEOService } from '../../core/services/enterprise-seo.service';
+import { SeoOptimizedDirective } from '../../shared/directives/seo-optimized.directive';
 
 @Component({
   selector: 'app-faq',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, SeoOptimizedDirective],
   templateUrl: './faq.component.html',
   styleUrls: ['./faq.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FaqComponent implements OnInit {
   private readonly faqService = inject(FaqService);
+  private readonly seoService = inject(EnterpriseSEOService);
 
   readonly state = signal<FaqComponentState>({
     selectedCategory: 'all',
@@ -41,7 +44,7 @@ export class FaqComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    // Component initialization if needed
+    this.seoService.updateFAQPage();
   }
 
   onCategoryChange(categoryId: FaqCategoryId | 'all'): void {
@@ -88,5 +91,17 @@ export class FaqComponent implements OnInit {
 
   trackByCategory(index: number, category: FaqCategory): string {
     return category.id;
+  }
+
+  openEmailClient(): void {
+    const subject = encodeURIComponent('Consulta Sumak');
+    const body = encodeURIComponent('Hola equipo Sumak,\n\nMe gustaría hacer una consulta:\n\n[Escribe tu consulta aquí]\n\nGracias.');
+    const mailtoUrl = `mailto:suumak25@gmail.com?subject=${subject}&body=${body}`;
+    
+    try {
+      window.open(mailtoUrl, '_blank');
+    } catch (error) {
+      window.location.href = mailtoUrl;
+    }
   }
 }

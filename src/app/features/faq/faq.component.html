@@ -1,13 +1,13 @@
-<div class="min-h-screen bg-gray-50">
+<div class="min-h-screen bg-gray-50" appSeoOptimized seoRole="main" seoSchema="FAQPage" seoImportance="high">
   <!-- Header Section -->
-  <section class="bg-gradient-to-br from-sumak-green to-sumak-brown text-white py-16">
+  <section class="bg-gradient-to-br from-sumak-green to-sumak-brown text-white py-16" appSeoOptimized seoRole="banner">
     <div class="container-sumak">
       <div class="text-center max-w-4xl mx-auto">
-        <h1 class="title-primary text-white mb-6">
-          Preguntas Frecuentes
+        <h1 class="title-primary text-white mb-6" itemProp="name">
+          Preguntas Frecuentes sobre Experiencias Gourmet Premium
         </h1>
-        <p class="body-large text-gray-200 leading-relaxed">
-          Encuentra respuestas a las preguntas más comunes sobre nuestros productos y servicios
+        <p class="body-large text-gray-200 leading-relaxed" itemProp="description">
+          Encuentra respuestas a las preguntas más comunes sobre nuestras experiencias gastronómicas premium, procesos de pedido y servicios exclusivos de SUMAK Gourmet
         </p>
       </div>
     </div>
@@ -44,7 +44,7 @@
             }">
             Todas
           </button>
-          
+
           <button
             *ngFor="let category of categories(); trackBy: trackByCategory"
             type="button"
@@ -65,7 +65,7 @@
   </section>
 
   <!-- FAQ Items -->
-  <section class="py-12">
+  <section class="py-12" appSeoOptimized seoRole="complementary" seoSchema="Question">
     <div class="container-sumak">
       <div class="max-w-4xl mx-auto">
         <div *ngIf="filteredFaqs().length === 0" class="text-center py-12">
@@ -76,18 +76,19 @@
           <p class="body-small text-text-body">Intenta con otros términos de búsqueda o selecciona una categoría diferente.</p>
         </div>
 
-        <div class="space-y-4">
-          <div
+        <div class="space-y-4" itemScope itemType="https://schema.org/FAQPage">
+          <article
             *ngFor="let faq of filteredFaqs(); trackBy: trackByFaq"
-            class="bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-all duration-200">
-            
+            class="bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-all duration-200"
+            itemScope itemType="https://schema.org/Question">
+
             <button
               type="button"
               (click)="toggleFaqItem(faq.id)"
               class="w-full px-6 py-6 text-left focus:outline-none focus:ring-2 focus:ring-sumak-gold focus:ring-offset-2 rounded-xl"
               [attr.aria-expanded]="isItemExpanded(faq.id)"
               [attr.aria-controls]="'faq-answer-' + faq.id">
-              
+
               <div class="flex items-center justify-between">
                 <div class="flex items-start space-x-4">
                   <div class="flex-shrink-0 w-8 h-8 bg-sumak-green/10 rounded-lg flex items-center justify-center">
@@ -96,7 +97,7 @@
                     </svg>
                   </div>
                   <div class="flex-1">
-                    <h3 class="subtitle text-sumak-green leading-tight">
+                    <h3 class="subtitle text-sumak-green leading-tight" itemProp="name">
                       {{ faq.question }}
                     </h3>
                     <span class="inline-block mt-2 px-3 py-1 text-xs font-medium bg-sumak-gold/10 text-sumak-brown rounded-full">
@@ -104,7 +105,7 @@
                     </span>
                   </div>
                 </div>
-                
+
                 <div class="flex-shrink-0 ml-4">
                   <svg
                     class="w-6 h-6 text-sumak-green transition-transform duration-200"
@@ -122,16 +123,17 @@
               [id]="'faq-answer-' + faq.id"
               class="overflow-hidden transition-all duration-300 ease-in-out"
               [class.max-h-0]="!isItemExpanded(faq.id)"
-              [class.max-h-96]="isItemExpanded(faq.id)">
-              
+              [class.max-h-96]="isItemExpanded(faq.id)"
+              itemScope itemType="https://schema.org/Answer">
+
               <div class="px-6 pb-6">
                 <div class="pl-12">
                   <div class="prose prose-sumak max-w-none">
-                    <p class="body-large text-text-body leading-relaxed">
+                    <p class="body-large text-text-body leading-relaxed" itemProp="text">
                       {{ faq.answer }}
-                      <a *ngIf="faq.id === '7' || faq.id === '8'" 
-                         href="https://www.banrep.gov.co/es/bre-b" 
-                         target="_blank" 
+                      <a *ngIf="faq.id === '7' || faq.id === '8'"
+                         href="https://www.banrep.gov.co/es/bre-b"
+                         target="_blank"
                          rel="noopener noreferrer"
                          class="inline-flex items-center ml-2 text-sumak-gold hover:text-sumak-green transition-colors font-medium">
                         Más información oficial
@@ -144,7 +146,7 @@
                 </div>
               </div>
             </div>
-          </div>
+          </article>
         </div>
       </div>
     </div>
@@ -162,7 +164,7 @@
         </p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
           <a
-            href="https://wa.me/573001234567"
+            href="https://wa.me/573208663691"
             target="_blank"
             rel="noopener noreferrer"
             class="inline-flex items-center px-6 py-3 bg-sumak-green text-white font-medium rounded-lg hover:bg-sumak-green/90 transition-colors focus:outline-none focus:ring-2 focus:ring-sumak-gold focus:ring-offset-2">
@@ -171,14 +173,15 @@
             </svg>
             Contactar por WhatsApp
           </a>
-          <a
-            href="mailto:info@sumakgourmet.com"
+          <button
+            type="button"
+            (click)="openEmailClient()"
             class="inline-flex items-center px-6 py-3 bg-white text-sumak-green font-medium rounded-lg border border-sumak-green hover:bg-sumak-green hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-sumak-gold focus:ring-offset-2">
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
             </svg>
             Enviar Email
-          </a>
+          </button>
         </div>
       </div>
     </div>
