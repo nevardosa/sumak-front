@@ -1,11 +1,15 @@
 import { Injectable, signal } from '@angular/core';
+import { SecuritySanitizerService } from '../../../core/services/security-sanitizer.service';
 import { Product, ProductCategory } from '../models/catalog.models';
+import { inject } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CatalogService {
-private readonly products = signal<Product[]>([
+  private readonly securityService = inject(SecuritySanitizerService);
+  
+  private readonly products = signal<Product[]>([
   {
     id: '1',
     name: 'Kuntur Dorado',
@@ -519,22 +523,77 @@ private readonly products = signal<Product[]>([
 
 
   getProducts() {
-    return this.products();
+    return this.products().map(product => this.sanitizeProduct(product));
   }
 
   getProductById(id: string): Product | undefined {
-    return this.products().find(product => product.id === id);
+    if (!id || typeof id !== 'string') return undefined;
+    
+    const product = this.products().find(product => product.id === id);
+    return product ? this.sanitizeProduct(product) : undefined;
   }
 
   getProductsByCategory(category: ProductCategory): Product[] {
-    return this.products().filter(product => product.category === category);
+    if (!Object.values(ProductCategory).includes(category)) {
+      return [];
+    }
+    
+    return this.products()
+      .filter(product => product.category === category)
+      .map(product => this.sanitizeProduct(product));
+  }
+
+  private sanitizeProduct(product: Product): Product {
+    const nameValidation = this.securityService.validateProductName(product.name);
+    const priceValidation = this.securityService.validatePrice(product.price);
+    
+    if (!nameValidation.isValid || !priceValidation.isValid) {
+      console.warn('[SECURITY] Product data validation failed:', {
+        id: product.id,
+        nameErrors: nameValidation.errors,
+        priceErrors: priceValidation.errors
+      });
+    }
+
+    return {
+      ...product,
+      name: nameValidation.sanitizedValue || 'Producto sin nombre',
+      price: Number(priceValidation.sanitizedValue) || 0,
+      description: this.securityService.sanitizeDescription(product.description),
+      experience: this.securityService.sanitizeDescription(product.experience),
+      sensorialExperience: this.securityService.sanitizeDescription(product.sensorialExperience),
+      curatedLine: this.securityService.sanitizeDescription(product.curatedLine),
+      servingSuggestion: this.securityService.sanitizeDescription(product.servingSuggestion),
+      ingredients: product.ingredients.map(ingredient => 
+        this.securityService.sanitizeInput(ingredient, 200)
+      ),
+      occasions: product.occasions.map(occasion => 
+        this.securityService.sanitizeInput(occasion, 100)
+      ),
+      affinity: {
+        temperament: product.affinity.temperament.map(temp => 
+          this.securityService.sanitizeInput(temp, 50)
+        ),
+        palate: product.affinity.palate.map(palate => 
+          this.securityService.sanitizeInput(palate, 50)
+        ),
+        genderAffinity: this.securityService.sanitizeInput(product.affinity.genderAffinity, 50)
+      }
+    };
   }
 
   formatPrice(price: number): string {
+    const validation = this.securityService.validatePrice(price);
+    
+    if (!validation.isValid) {
+      console.warn('[SECURITY] Price formatting failed:', validation.errors);
+      return '$0';
+    }
+
     return new Intl.NumberFormat('es-CO', {
       style: 'currency',
       currency: 'COP',
       minimumFractionDigits: 0
-    }).format(price);
+    }).format(Number(validation.sanitizedValue));
   }
 }

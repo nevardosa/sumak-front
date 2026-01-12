@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Product, ProductCategory } from '../../models/catalog.models';
+import { SafeHtmlPipe, SecureTextPipe, SecurePricePipe } from '../../../../shared/pipes/security.pipes';
 
 @Component({
   selector: 'app-product-modal',
