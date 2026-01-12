@@ -8,6 +8,17 @@ export interface Product {
   sensorialExperience: string;
   imageUrl: string;
   category: ProductCategory;
+  // New fields for enhanced product information
+  curatedLine: string;
+  occasions: string[];
+  affinity: ProductAffinity;
+  servingSuggestion: string;
+}
+
+export interface ProductAffinity {
+  temperament: string[];
+  palate: string[];
+  genderAffinity: string;
 }
 
 export enum ProductCategory {

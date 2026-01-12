@@ -1,0 +1,27 @@
+/* Security-only styles - All design handled by Tailwind + Sumak classes */
+:host {
+  /* Security: Disable text selection and context menu */
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+/* Security overlay for tamper detection */
+.security-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.95);
+  z-index: 9999;
+  display: none;
+}
+
+.security-overlay.active {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
