@@ -161,6 +161,25 @@ export class SecureValidators {
     };
   }
 
+  static numericValidator(maxLength: number): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (!control.value) return null;
+      
+      const value = control.value.toString().trim();
+      const numericPattern = new RegExp(`^[0-9]{1,${maxLength}}$`);
+      
+      if (!numericPattern.test(value)) {
+        return { 
+          invalidNumeric: { 
+            message: `Solo números, máximo ${maxLength} dígitos` 
+          } 
+        };
+      }
+      
+      return null;
+    };
+  }
+
   static sanitizeText(text: string): string {
     if (!text || typeof text !== 'string') return '';
     

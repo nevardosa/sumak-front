@@ -38,6 +38,9 @@ export const MUNICIPALITIES_BY_DEPARTMENT: Readonly<{ [key: string]: readonly st
     'Sabanagrande', 'Sabanalarga', 'Santa Lucía', 'Santo Tomás', 'Soledad',
     'Suan', 'Tubará', 'Usiacurí'
   ]),
+  'bogota': Object.freeze([
+    'Bogotá D.C.'
+  ]),
   'bolivar': Object.freeze([
     'Cartagena', 'Achí', 'Altos del Rosario', 'Arenal', 'Arjona', 'Arroyohondo',
     'Barranco de Loba', 'Calamar', 'Cantagallo', 'Cicuco', 'Córdoba', 'Clemencia',
@@ -272,16 +275,16 @@ export function getMunicipalitiesByDepartment(departmentId: string): Array<{id: 
   if (!departmentId || typeof departmentId !== 'string') {
     return [];
   }
-  
+
   // Sanitización del ID del departamento
   const sanitizedDeptId = departmentId.toLowerCase().trim().replace(/[^a-z0-9-]/g, '');
-  
+
   // Verificación de existencia en el mapa
   const municipalities = MUNICIPALITIES_BY_DEPARTMENT[sanitizedDeptId];
   if (!municipalities || !Array.isArray(municipalities)) {
     return [];
   }
-  
+
   // Generación segura de IDs únicos
   return municipalities.map((name, index) => {
     // Sanitización del nombre del municipio
@@ -289,7 +292,7 @@ export function getMunicipalitiesByDepartment(departmentId: string): Array<{id: 
     if (!sanitizedName) {
       return null;
     }
-    
+
     // Generación de ID único y seguro
     const safeId = `${sanitizedDeptId}-${sanitizedName.toLowerCase()
       .normalize('NFD')
@@ -297,7 +300,7 @@ export function getMunicipalitiesByDepartment(departmentId: string): Array<{id: 
       .replace(/[^a-z0-9]/g, '-')
       .replace(/-+/g, '-')
       .replace(/^-|-$/g, '')}`;
-    
+
     return {
       id: safeId,
       name: sanitizedName,

@@ -10,8 +10,20 @@ export const environment = {
     enableOfflineMode: true,
   },
   payment: {
-    breAccount: '@dani5263',
+    breAccount: '@DAVILCR422',
     whatsappNumber: '573208663691',
     whatsappBaseUrl: 'https://wa.me/'
+  },
+  emailjs: {
+    serviceId: 'service_sumak_secure',
+    templateId: 'template_order_csv',
+    publicKey: 'DEVELOPMENT_MODE', // Placeholder for development
+    adminEmail: 'suumak25@gmail.com'
+  },
+  security: {
+    encryptionEnabled: true,
+    auditEnabled: true,
+    antiDebugEnabled: true,
+    keyDerivationIterations: 100000
   }
 };

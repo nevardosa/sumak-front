@@ -74,8 +74,20 @@ export class AuthService {
   }
 
   private setupAntiDebug(): void {
-    // Production anti-debug protection
-    setInterval(() => {
+    // Disabled in development to prevent refresh issues
+    if (typeof window !== 'undefined' && window.location.hostname === 'localhost') {
+      return;
+    }
+
+    // Production anti-debug protection (optimized)
+    let debugCheckCount = 0;
+    const debugInterval = setInterval(() => {
+      debugCheckCount++;
+      if (debugCheckCount > 10) {
+        clearInterval(debugInterval);
+        return;
+      }
+
       const start = performance.now();
       debugger;
       const end = performance.now();
@@ -86,33 +98,31 @@ export class AuthService {
           { detectionMethod: 'performance_timing', delay: end - start }
         );
         this.logout();
-        window.location.reload();
+        clearInterval(debugInterval);
       }
-    }, 3000);
+    }, 10000); // Reduced frequency to 10 seconds
 
-    // Advanced console detection
-    let devtools = { open: false };
-    const threshold = 160;
-    setInterval(() => {
+    // Console detection (optimized)
+    let consoleCheckCount = 0;
+    const consoleInterval = setInterval(() => {
+      consoleCheckCount++;
+      if (consoleCheckCount > 5) {
+        clearInterval(consoleInterval);
+        return;
+      }
+
+      const threshold = 160;
       if (window.outerHeight - window.innerHeight > threshold ||
           window.outerWidth - window.innerWidth > threshold) {
-        devtools.open = true;
-      }
-      if (devtools.open) {
         this.auditService.logSecurityEvent(
           SecurityEventType.ANTI_DEBUG_TRIGGERED,
           'CRITICAL',
           { detectionMethod: 'window_size_detection' }
         );
         this.logout();
-        window.location.reload();
+        clearInterval(consoleInterval);
       }
-    }, 1000);
-
-    // Clear console logs
-    setInterval(() => {
-      console.clear();
-    }, 2000);
+    }, 30000); // Reduced frequency to 30 seconds
   }
 
   async login(credentials: LoginCredentials): Promise<boolean> {

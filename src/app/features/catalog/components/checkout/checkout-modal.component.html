@@ -137,20 +137,27 @@
                   formControlName="apartmentNumber"
                   type="number"
                   label="Apartamento"
-                  placeholder="Número de apartamento (opcional)">
+                  placeholder="Ej: 101"
+                  maxlength="5"
+                  [errorMessage]="getFieldError('apartmentNumber')">
                 </app-input>
 
                 <app-input
                   formControlName="tower"
                   type="number"
                   label="Torre"
-                  placeholder="Torre o edificio (opcional)">
+                  placeholder="Ej: 1"
+                  maxlength="4"
+                  [errorMessage]="getFieldError('tower')">
                 </app-input>
 
                 <app-input
                   formControlName="block"
+                  type="number"
                   label="Bloque"
-                  placeholder="Bloque (opcional)">
+                  placeholder="Ej: 2"
+                  maxlength="4"
+                  [errorMessage]="getFieldError('block')">
                 </app-input>
 
                 <app-input
@@ -397,7 +404,7 @@
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <app-input
                   formControlName="urbanization"
-                  label="Urbanización/Conjunto/Casa"
+                  label="Urbanización/Conjunto"
                   placeholder="Nombre del conjunto (opcional)">
                 </app-input>
 
@@ -411,14 +418,20 @@
 
                 <app-input
                   formControlName="apartmentNumber"
+                  type="number"
                   label="Apartamento"
-                  placeholder="Número de apartamento (opcional)">
+                  placeholder="Ej: 101"
+                  maxlength="5"
+                  [errorMessage]="getFieldError('apartmentNumber')">
                 </app-input>
 
                 <app-input
                   formControlName="tower"
+                  type="number"
                   label="Torre/Bloque"
-                  placeholder="Torre o edificio (opcional)">
+                  placeholder="Ej: 1"
+                  maxlength="5"
+                  [errorMessage]="getFieldError('tower')">
                 </app-input>
 
                 <app-input
@@ -466,7 +479,7 @@
                   formControlName="phone"
                   type="tel"
                   label="Teléfono"
-                  placeholder="3509632001"
+                  placeholder="3210000000"
                   [required]="true"
                   [errorMessage]="getFieldError('phone')">
                 </app-input>

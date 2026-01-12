@@ -8,7 +8,7 @@ import { inject } from '@angular/core';
 })
 export class CatalogService {
   private readonly securityService = inject(SecuritySanitizerService);
-  
+
   private readonly products = signal<Product[]>([
   {
     id: '1',
@@ -528,7 +528,7 @@ export class CatalogService {
 
   getProductById(id: string): Product | undefined {
     if (!id || typeof id !== 'string') return undefined;
-    
+
     const product = this.products().find(product => product.id === id);
     return product ? this.sanitizeProduct(product) : undefined;
   }
@@ -537,7 +537,7 @@ export class CatalogService {
     if (!Object.values(ProductCategory).includes(category)) {
       return [];
     }
-    
+
     return this.products()
       .filter(product => product.category === category)
       .map(product => this.sanitizeProduct(product));
@@ -546,7 +546,7 @@ export class CatalogService {
   private sanitizeProduct(product: Product): Product {
     const nameValidation = this.securityService.validateProductName(product.name);
     const priceValidation = this.securityService.validatePrice(product.price);
-    
+
     if (!nameValidation.isValid || !priceValidation.isValid) {
       console.warn('[SECURITY] Product data validation failed:', {
         id: product.id,
@@ -564,17 +564,17 @@ export class CatalogService {
       sensorialExperience: this.securityService.sanitizeDescription(product.sensorialExperience),
       curatedLine: this.securityService.sanitizeDescription(product.curatedLine),
       servingSuggestion: this.securityService.sanitizeDescription(product.servingSuggestion),
-      ingredients: product.ingredients.map(ingredient => 
+      ingredients: product.ingredients.map(ingredient =>
         this.securityService.sanitizeInput(ingredient, 200)
       ),
-      occasions: product.occasions.map(occasion => 
+      occasions: product.occasions.map(occasion =>
         this.securityService.sanitizeInput(occasion, 100)
       ),
       affinity: {
-        temperament: product.affinity.temperament.map(temp => 
+        temperament: product.affinity.temperament.map(temp =>
           this.securityService.sanitizeInput(temp, 50)
         ),
-        palate: product.affinity.palate.map(palate => 
+        palate: product.affinity.palate.map(palate =>
           this.securityService.sanitizeInput(palate, 50)
         ),
         genderAffinity: this.securityService.sanitizeInput(product.affinity.genderAffinity, 50)
@@ -584,7 +584,7 @@ export class CatalogService {
 
   formatPrice(price: number): string {
     const validation = this.securityService.validatePrice(price);
-    
+
     if (!validation.isValid) {
       console.warn('[SECURITY] Price formatting failed:', validation.errors);
       return '$0';

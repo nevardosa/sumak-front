@@ -31,7 +31,7 @@ export class CheckoutService {
     return PAYMENT_INSTRUCTIONS;
   }
 
-  generateWhatsAppMessage(checkoutData: CheckoutData): string {
+  generateWhatsAppMessage(checkoutData: CheckoutData, orderNumber?: string): string {
     try {
       if (!this.validateCheckoutData(checkoutData)) {
         throw new Error('Datos de checkout inválidos');
@@ -41,7 +41,11 @@ export class CheckoutService {
       const customerInfo = this.formatCustomerInfo(customer);
       const orderInfo = this.formatOrderInfo(cart);
       
-      return `🛍️ *NUEVO PEDIDO SUMAK*\n\n${customerInfo}\n\n${orderInfo}`;
+      const orderHeader = orderNumber 
+        ? `🛍️ *NUEVO PEDIDO SUMAK N°: ${orderNumber}*`
+        : `🛍️ *NUEVO PEDIDO SUMAK*`;
+      
+      return `${orderHeader}\n\n${customerInfo}\n\n${orderInfo}`;
     } catch (error) {
       console.error('Error generando mensaje WhatsApp:', error);
       throw new Error('Error al generar el mensaje');
@@ -214,15 +218,22 @@ export class CheckoutService {
       const encodedMessage = encodeURIComponent(message);
       const whatsappUrl = `${CHECKOUT_CONSTANTS.WHATSAPP_BASE_URL}${PAYMENT_INSTRUCTIONS.whatsappNumber}?text=${encodedMessage}`;
       
-      // Siempre usar window.open para abrir en nueva pestaña
+      // Intentar abrir en nueva pestaña primero
       const newWindow = window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
       
-      if (!newWindow) {
-        throw new Error('No se pudo abrir WhatsApp. Verifica que no esté bloqueado por el navegador.');
+      // Si falla, intentar con location.href como fallback
+      if (!newWindow || newWindow.closed) {
+        // Fallback: abrir en la misma pestaña
+        window.location.href = whatsappUrl;
       }
     } catch (error) {
-      console.error('Error abriendo WhatsApp:', error);
-      throw error;
+      // Fallback final: copiar al portapapeles
+      try {
+        navigator.clipboard.writeText(message);
+        alert('WhatsApp no pudo abrirse automáticamente. El mensaje se ha copiado al portapapeles. Pégalo manualmente en WhatsApp.');
+      } catch {
+        alert('No se pudo abrir WhatsApp. Por favor, envía el pedido manualmente.');
+      }
     }
   }
 }
