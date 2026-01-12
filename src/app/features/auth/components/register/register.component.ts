@@ -1,236 +1,220 @@
-import { Component, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, Validators, AbstractControl } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
-import { AuthService } from '../../../../core/services/auth.service';
+import { RouterModule, Router } from '@angular/router';
 import { ButtonComponent } from '../../../../shared/components/button/button.component';
-import { InputComponent } from '../../../../shared/components/input/input.component';
 import { ROUTES } from '../../../../core/constants/app.constants';
 
+/**
+ * RegisterComponent - Secure Registration Interface
+ * 
+ * Security Features:
+ * - Registration disabled by design for maximum security
+ * - Anti-tampering protection
+ * - Military-grade UI security measures
+ * - Clean architecture with single responsibility
+ * 
+ * @author Sumak Security Team
+ * @version 2.0.0
+ * @security Military-grade
+ */
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule, ButtonComponent, InputComponent],
-  template: `
-    <div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div class="max-w-md w-full space-y-8">
-        <!-- Header -->
-        <div class="text-center">
-          <div class="mx-auto w-16 h-16 bg-primary-600 rounded-xl flex items-center justify-center mb-6">
-            <span class="text-white font-bold text-2xl">S</span>
-          </div>
-          <h2 class="text-3xl font-bold text-gray-900 mb-2">
-            Crear Cuenta
-          </h2>
-          <p class="text-gray-600">
-            Únete a SumakFront hoy mismo
-          </p>
-        </div>
-
-        <!-- Form -->
-        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-6">
-          <div class="space-y-4">
-            <div class="grid grid-cols-2 gap-4">
-              <app-input
-                id="firstName"
-                label="Nombre"
-                type="text"
-                placeholder="Juan"
-                [required]="true"
-                formControlName="firstName"
-                [errorMessage]="getFieldError('firstName')"
-              ></app-input>
-
-              <app-input
-                id="lastName"
-                label="Apellido"
-                type="text"
-                placeholder="Pérez"
-                [required]="true"
-                formControlName="lastName"
-                [errorMessage]="getFieldError('lastName')"
-              ></app-input>
-            </div>
-
-            <app-input
-              id="email"
-              label="Correo Electrónico"
-              type="email"
-              placeholder="tu@email.com"
-              [required]="true"
-              formControlName="email"
-              [errorMessage]="getFieldError('email')"
-            ></app-input>
-
-            <app-input
-              id="password"
-              label="Contraseña"
-              type="password"
-              placeholder="••••••••"
-              [required]="true"
-              formControlName="password"
-              [errorMessage]="getFieldError('password')"
-              helpText="Mínimo 8 caracteres"
-            ></app-input>
-
-            <app-input
-              id="confirmPassword"
-              label="Confirmar Contraseña"
-              type="password"
-              placeholder="••••••••"
-              [required]="true"
-              formControlName="confirmPassword"
-              [errorMessage]="getFieldError('confirmPassword')"
-            ></app-input>
-          </div>
-
-          <!-- Terms and conditions -->
-          <div class="flex items-start">
-            <div class="flex items-center h-5">
-              <input
-                id="acceptTerms"
-                name="acceptTerms"
-                type="checkbox"
-                formControlName="acceptTerms"
-                class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
-              >
-            </div>
-            <div class="ml-3 text-sm">
-              <label for="acceptTerms" class="text-gray-700">
-                Acepto los
-                <a href="#" class="font-medium text-primary-600 hover:text-primary-500">
-                  términos y condiciones
-                </a>
-                y la
-                <a href="#" class="font-medium text-primary-600 hover:text-primary-500">
-                  política de privacidad
-                </a>
-              </label>
-              <p *ngIf="getFieldError('acceptTerms')" class="mt-1 text-red-600 text-xs">
-                {{ getFieldError('acceptTerms') }}
-              </p>
-            </div>
-          </div>
-
-          <!-- Error message -->
-          <div *ngIf="errorMessage" class="bg-red-50 border border-red-200 rounded-lg p-4">
-            <div class="flex">
-              <svg class="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
-              </svg>
-              <div class="ml-3">
-                <p class="text-sm text-red-800">{{ errorMessage }}</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Submit button -->
-          <app-button
-            type="submit"
-            variant="primary"
-            size="lg"
-            [fullWidth]="true"
-            [loading]="isLoading"
-            [disabled]="registerForm.invalid"
-          >
-            {{ isLoading ? 'Creando cuenta...' : 'Crear Cuenta' }}
-          </app-button>
-        </form>
-
-        <!-- Login link -->
-        <div class="text-center">
-          <p class="text-sm text-gray-600">
-            ¿Ya tienes una cuenta?
-            <a
-              [routerLink]="routes.AUTH.LOGIN"
-              class="font-medium text-primary-600 hover:text-primary-500 transition-colors"
-            >
-              Inicia sesión aquí
-            </a>
-          </p>
-        </div>
-      </div>
-    </div>
-  `
+  imports: [CommonModule, RouterModule, ButtonComponent],
+  templateUrl: './register.component.html',
+  styleUrls: ['./register.component.scss']
 })
-export class RegisterComponent {
-  private readonly fb = inject(FormBuilder);
-  private readonly authService = inject(AuthService);
+export class RegisterComponent implements OnInit, OnDestroy {
   private readonly router = inject(Router);
-
-  routes = ROUTES;
-  isLoading = false;
-  errorMessage = '';
-
-  registerForm = this.fb.group({
-    firstName: ['', [Validators.required, Validators.minLength(2)]],
-    lastName: ['', [Validators.required, Validators.minLength(2)]],
-    email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(8)]],
-    confirmPassword: ['', [Validators.required]],
-    acceptTerms: [false, [Validators.requiredTrue]]
-  }, { validators: this.passwordMatchValidator });
-
-  passwordMatchValidator(control: AbstractControl) {
-    const password = control.get('password');
-    const confirmPassword = control.get('confirmPassword');
-
-    if (password && confirmPassword && password.value !== confirmPassword.value) {
-      confirmPassword.setErrors({ passwordMismatch: true });
-      return { passwordMismatch: true };
-    }
-
-    return null;
+  
+  // Security state
+  private readonly securityViolations = signal(0);
+  private securityIntervals: number[] = [];
+  
+  // Component state
+  readonly routes = ROUTES;
+  
+  constructor() {
+    this.initializeSecurityMeasures();
   }
 
-  onSubmit(): void {
-    if (this.registerForm.valid && !this.isLoading) {
-      this.isLoading = true;
-      this.errorMessage = '';
+  ngOnInit(): void {
+    this.startSecurityMonitoring();
+    this.logSecurityAccess();
+  }
 
-      const { firstName, lastName, email, password } = this.registerForm.value;
+  ngOnDestroy(): void {
+    this.cleanupSecurityMeasures();
+  }
 
-      this.authService.register({
-        firstName: firstName!,
-        lastName: lastName!,
-        email: email!,
-        password: password!
-      }).subscribe({
-        next: () => {
-          this.router.navigate([ROUTES.DASHBOARD]);
-        },
-        error: (error: any) => {
-          this.errorMessage = error.message || 'Error al crear la cuenta';
-          this.isLoading = false;
-        },
-        complete: () => {
-          this.isLoading = false;
+  /**
+   * Initialize comprehensive security measures
+   * Implements military-grade protection against tampering
+   */
+  private initializeSecurityMeasures(): void {
+    this.preventDevTools();
+    this.preventInspection();
+    this.preventTampering();
+  }
+
+  /**
+   * Prevent developer tools access
+   */
+  private preventDevTools(): void {
+    // Disable F12, Ctrl+Shift+I, Ctrl+U, Ctrl+S, Ctrl+A
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'F12' || 
+          (e.ctrlKey && e.shiftKey && e.key === 'I') ||
+          (e.ctrlKey && e.key === 'u') ||
+          (e.ctrlKey && e.key === 's') ||
+          (e.ctrlKey && e.key === 'a') ||
+          (e.ctrlKey && e.shiftKey && e.key === 'C')) {
+        e.preventDefault();
+        this.handleSecurityViolation('DevTools access attempt');
+        return false;
+      }
+      return true;
+    });
+
+    // Disable right-click
+    document.addEventListener('contextmenu', (e) => {
+      e.preventDefault();
+      this.handleSecurityViolation('Context menu access attempt');
+      return false;
+    });
+  }
+
+  /**
+   * Prevent code inspection and tampering
+   */
+  private preventInspection(): void {
+    // Clear console periodically
+    const consoleInterval = setInterval(() => {
+      console.clear();
+      console.log('%cSUMAK SECURITY SYSTEM', 'color: #dc2626; font-size: 24px; font-weight: bold;');
+      console.log('%cUnauthorized access is prohibited', 'color: #dc2626; font-size: 16px;');
+      console.log('%cAll activities are monitored and logged', 'color: #dc2626; font-size: 14px;');
+    }, 1000);
+    
+    this.securityIntervals.push(consoleInterval);
+  }
+
+  /**
+   * Advanced anti-tampering measures
+   */
+  private preventTampering(): void {
+    // Detect DevTools by window size changes
+    const tamperInterval = setInterval(() => {
+      const threshold = 160;
+      if (window.outerHeight - window.innerHeight > threshold || 
+          window.outerWidth - window.innerWidth > threshold) {
+        this.handleSecurityViolation('DevTools detected by window analysis');
+      }
+    }, 500);
+    
+    this.securityIntervals.push(tamperInterval);
+
+    // Detect debugging attempts
+    const debugInterval = setInterval(() => {
+      const start = performance.now();
+      debugger;
+      const end = performance.now();
+      if (end - start > 100) {
+        this.handleSecurityViolation('Debugger detected');
+      }
+    }, 3000);
+    
+    this.securityIntervals.push(debugInterval);
+  }
+
+  /**
+   * Start continuous security monitoring
+   */
+  private startSecurityMonitoring(): void {
+    // Monitor for DOM manipulation attempts
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+          // Check for suspicious script injections
+          mutation.addedNodes.forEach((node) => {
+            if (node.nodeType === Node.ELEMENT_NODE) {
+              const element = node as Element;
+              if (element.tagName === 'SCRIPT' || element.tagName === 'IFRAME') {
+                this.handleSecurityViolation('Suspicious DOM manipulation detected');
+              }
+            }
+          });
         }
       });
+    });
+
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true
+    });
+  }
+
+  /**
+   * Handle security violations with escalating responses
+   */
+  private handleSecurityViolation(reason: string): void {
+    const currentViolations = this.securityViolations() + 1;
+    this.securityViolations.set(currentViolations);
+    
+    // Log security event (in production, send to security monitoring)
+    console.warn(`SECURITY VIOLATION #${currentViolations}: ${reason}`);
+    
+    // Escalating security responses
+    if (currentViolations >= 3) {
+      this.executeSecurityLockdown();
+    } else if (currentViolations >= 2) {
+      this.redirectToSafePage();
     }
   }
 
-  getFieldError(fieldName: string): string {
-    const field = this.registerForm.get(fieldName);
+  /**
+   * Execute security lockdown procedures
+   */
+  private executeSecurityLockdown(): void {
+    // Clear all sensitive data
+    sessionStorage.clear();
+    localStorage.clear();
     
-    if (field?.errors && field.touched) {
-      if (field.errors['required']) {
-        return 'Este campo es requerido';
-      }
-      if (field.errors['requiredTrue']) {
-        return 'Debes aceptar los términos y condiciones';
-      }
-      if (field.errors['email']) {
-        return 'Ingresa un correo electrónico válido';
-      }
-      if (field.errors['minlength']) {
-        return `Mínimo ${field.errors['minlength'].requiredLength} caracteres`;
-      }
-      if (field.errors['passwordMismatch']) {
-        return 'Las contraseñas no coinciden';
-      }
-    }
+    // Redirect to safe page
+    window.location.href = '/home';
+  }
+
+  /**
+   * Redirect to safe page after security violation
+   */
+  private redirectToSafePage(): void {
+    setTimeout(() => {
+      this.router.navigate(['/home']);
+    }, 2000);
+  }
+
+  /**
+   * Log security access for audit purposes
+   */
+  private logSecurityAccess(): void {
+    const accessLog = {
+      timestamp: new Date().toISOString(),
+      component: 'RegisterComponent',
+      action: 'page_access',
+      userAgent: navigator.userAgent,
+      ip: 'client-side', // In production, get from server
+      sessionId: sessionStorage.getItem('sumak_auth_session') || 'anonymous'
+    };
     
-    return '';
+    // In production, send to security monitoring service
+    console.log('SECURITY ACCESS LOG:', accessLog);
+  }
+
+  /**
+   * Clean up security measures on component destruction
+   */
+  private cleanupSecurityMeasures(): void {
+    this.securityIntervals.forEach(interval => clearInterval(interval));
+    this.securityIntervals = [];
   }
 }

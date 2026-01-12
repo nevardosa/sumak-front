@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Product } from '../../models/catalog.models';
+import { Product, ProductCategory } from '../../models/catalog.models';
 import { ButtonComponent } from '../../../../shared/components/button/button.component';
 
 @Component({
@@ -46,5 +46,23 @@ export class ProductModalComponent {
       currency: 'COP',
       minimumFractionDigits: 0
     }).format(price);
+  }
+
+  getCategoryClass(category: ProductCategory): string {
+    const classes = {
+      [ProductCategory.PREMIUM]: 'bg-sumak-green/10 text-sumak-green',
+      [ProductCategory.CLASSIC]: 'bg-sumak-gold/10 text-sumak-brown',
+      [ProductCategory.EXCLUSIVE]: 'bg-sumak-wine/10 text-sumak-wine'
+    };
+    return classes[category] || 'bg-gray-100 text-gray-600';
+  }
+
+  getCategoryLabel(category: ProductCategory): string {
+    const labels = {
+      [ProductCategory.PREMIUM]: 'Premium',
+      [ProductCategory.CLASSIC]: 'Clásico',
+      [ProductCategory.EXCLUSIVE]: 'Exclusivo'
+    };
+    return labels[category] || category;
   }
 }

@@ -99,6 +99,21 @@
     @apply text-sumak-gold font-medium;
   }
   
+  /* Line clamp utilities */
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
   /* SUMAK Gourmet Layout */
   .section-padding {
     @apply py-16 px-4 sm:px-6 lg:px-8;

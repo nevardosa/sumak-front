@@ -6,6 +6,7 @@ import { LoginComponent } from './features/auth/components/login/login.component
 import { DashboardComponent } from './features/dashboard/dashboard.component';
 import { ProfileComponent } from './features/profile/profile.component';
 import { SettingsComponent } from './features/settings/settings.component';
+import { RegisterComponent } from './features/auth/components/register/register.component';
 
 export const routes: Routes = [
   {
@@ -42,6 +43,11 @@ export const routes: Routes = [
       {
         path: 'settings',
         component: SettingsComponent,
+        canActivate: [authGuard]
+      },
+      {
+        path: 'register',
+        component: RegisterComponent,
         canActivate: [authGuard]
       }
     ]

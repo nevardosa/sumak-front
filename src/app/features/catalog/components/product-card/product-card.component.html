@@ -20,9 +20,15 @@
       <button
         type="button"
         (click)="onImageClick()"
-        class="product-overlay-btn bg-white/95 text-sumak-green px-4 py-2 rounded-lg font-medium"
+        class="px-6 py-3 bg-white/95 hover:bg-white text-sumak-green hover:text-sumak-green/90 font-garet font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-sumak-green/30"
       >
-        Ver Detalles
+        <span class="flex items-center space-x-2">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+          </svg>
+          <span>Ver Detalles</span>
+        </span>
       </button>
     </div>
   </div>
@@ -56,23 +62,34 @@
 
     <!-- Botones de Acción -->
     <div class="flex gap-3">
-      <app-button
-        variant="outline"
-        size="sm"
-        class="flex-1"
-        (clicked)="onImageClick()"
+      <!-- Botón Ver Más -->
+      <button
+        type="button"
+        (click)="onImageClick()"
+        class="flex-1 px-4 py-2.5 bg-white border-2 border-gray-200 hover:border-sumak-green/30 text-gray-700 hover:text-sumak-green font-garet font-medium rounded-lg transition-all duration-200 hover:shadow-sm focus:outline-none focus:ring-2 focus:ring-sumak-green/20 focus:border-sumak-green"
       >
-        Ver Más
-      </app-button>
+        <span class="flex items-center justify-center space-x-1.5">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+          </svg>
+          <span class="text-sm">Ver Más</span>
+        </span>
+      </button>
       
-      <app-button
-        variant="primary"
-        size="sm"
-        class="flex-1"
-        (clicked)="onAddToCart($event)"
+      <!-- Botón Agregar -->
+      <button
+        type="button"
+        (click)="onAddToCart($event)"
+        class="flex-1 px-4 py-2.5 bg-gradient-to-r from-sumak-green to-sumak-green/90 hover:from-sumak-green/90 hover:to-sumak-green text-white font-garet font-semibold rounded-lg transition-all duration-200 hover:shadow-md hover:shadow-sumak-green/25 focus:outline-none focus:ring-2 focus:ring-sumak-green/30 focus:ring-offset-1 transform hover:scale-[1.02] active:scale-[0.98]"
       >
-        Agregar
-      </app-button>
+        <span class="flex items-center justify-center space-x-1.5">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+          </svg>
+          <span class="text-sm">Agregar</span>
+        </span>
+      </button>
     </div>
   </div>
 </div>
