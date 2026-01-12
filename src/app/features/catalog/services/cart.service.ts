@@ -1,14 +1,25 @@
-import { Injectable, signal, computed, inject } from '@angular/core';
+import { Injectable, signal, inject, OnDestroy } from '@angular/core';
 import { SecuritySanitizerService } from '../../../core/services/security-sanitizer.service';
 import { MilitaryCartIntegrityService, MilitarySecureCartItem } from '../../../core/services/cart-integrity.service';
-import { Cart, CartItem, Product, Order, OrderStatus, PaymentInfo } from '../models/catalog.models';
+import { Cart, CartItem, Product, PaymentInfo, CustomerData } from '../models/catalog.models';
+import { CatalogService } from './catalog.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class CartService {
+export class CartService implements OnDestroy {
   private readonly securityService = inject(SecuritySanitizerService);
   private readonly militaryIntegrity = inject(MilitaryCartIntegrityService);
+  private readonly catalogService = inject(CatalogService);
+  
+  private readonly CACHE_CLEANUP_INTERVAL = 60000; // 1 minute
+  private readonly CACHE_EXPIRATION_TIME = 5 * 60 * 1000; // 5 minutes
+  
+  private readonly priceFormatter = new Intl.NumberFormat('es-CO', {
+    style: 'currency',
+    currency: 'COP',
+    minimumFractionDigits: 0
+  });
   private readonly militaryCartItems = signal<MilitarySecureCartItem[]>([]);
   
   // Signal reactivo para el estado del carrito (sin computed)
@@ -26,14 +37,19 @@ export class CartService {
   private setupCacheCleanup(): void {
     this.cacheCleanupTimer = window.setInterval(() => {
       const now = Date.now();
-      const fiveMinutes = 5 * 60 * 1000;
       
       for (const [key, cached] of this.decryptionCache.entries()) {
-        if (now - cached.timestamp > fiveMinutes) {
+        if (now - cached.timestamp > this.CACHE_EXPIRATION_TIME) {
           this.decryptionCache.delete(key);
         }
       }
-    }, 60000);
+    }, this.CACHE_CLEANUP_INTERVAL);
+  }
+
+  ngOnDestroy(): void {
+    if (this.cacheCleanupTimer) {
+      clearInterval(this.cacheCleanupTimer);
+    }
   }
 
   private syncCartState(): void {
@@ -56,46 +72,34 @@ export class CartService {
 
   readonly paymentInfo: PaymentInfo = {
     bankAccount: 'Cuenta de Ahorros',
-    accountType: 'Ahorros',
-    accountNumber: '1234-5678-9012-3456',
+    accountType: 'Ahorros', 
+    accountNumber: '****-****-****-3456',
     bankName: 'Banco SUMAK Gourmet'
   };
 
   async addToCart(product: Product, quantity: number = 1): Promise<void> {
-    if (!product || !product.id) {
-      console.warn('[MILITARY SECURITY] Invalid product data');
-      return;
-    }
+    if (!product?.id) return;
 
     const quantityValidation = this.securityService.validateQuantity(quantity);
-    if (!quantityValidation.isValid) {
-      console.warn('[MILITARY SECURITY] Invalid quantity:', quantityValidation.errors);
-      return;
-    }
+    if (!quantityValidation.isValid) return;
 
     const validatedQuantity = Number(quantityValidation.sanitizedValue);
     const sanitizedProduct = this.sanitizeProduct(product);
+    const currentItems = this.militaryCartItems();
     
     try {
-      const currentItems = this.militaryCartItems();
       const existingItemIndex = currentItems.findIndex(item => item.productId === sanitizedProduct.id);
 
       if (existingItemIndex >= 0) {
         const existingItem = currentItems[existingItemIndex];
         const decrypted = await this.militaryIntegrity.decryptMilitaryItem(existingItem);
         
-        if (!decrypted.isValid) {
-          console.error('[MILITARY SECURITY] Existing item decryption failed');
-          return;
-        }
+        if (!decrypted.isValid) return;
 
         const newQuantity = decrypted.quantity + validatedQuantity;
         const newQuantityValidation = this.securityService.validateQuantity(newQuantity);
         
-        if (!newQuantityValidation.isValid) {
-          console.warn('[MILITARY SECURITY] Total quantity exceeds limit');
-          return;
-        }
+        if (!newQuantityValidation.isValid) return;
 
         const updatedMilitaryItem = await this.militaryIntegrity.createMilitarySecureItem(
           sanitizedProduct.id,
@@ -107,7 +111,7 @@ export class CartService {
         const updatedItems = [...currentItems];
         updatedItems[existingItemIndex] = updatedMilitaryItem;
         this.militaryCartItems.set(updatedItems);
-        await this.updateDecryptionCache(updatedMilitaryItem);
+        await this.updateDecryptionCache(updatedMilitaryItem, sanitizedProduct);
       } else {
         const militaryItem = await this.militaryIntegrity.createMilitarySecureItem(
           sanitizedProduct.id,
@@ -117,20 +121,17 @@ export class CartService {
         );
         
         this.militaryCartItems.set([...currentItems, militaryItem]);
-        await this.updateDecryptionCache(militaryItem);
+        await this.updateDecryptionCache(militaryItem, sanitizedProduct);
       }
       
       this.syncCartState();
-    } catch (error) {
-      console.error('[MILITARY SECURITY] Failed to add item to cart:', error);
+    } catch {
+      // Silent fail for security
     }
   }
 
   async removeFromCart(productId: string): Promise<void> {
-    if (!productId || typeof productId !== 'string') {
-      console.warn('[MILITARY SECURITY] Invalid product ID for removal');
-      return;
-    }
+    if (!productId || typeof productId !== 'string') return;
 
     const currentItems = this.militaryCartItems();
     this.militaryCartItems.set(currentItems.filter(item => item.productId !== productId));
@@ -139,18 +140,13 @@ export class CartService {
   }
 
   async updateQuantity(productId: string, quantity: number): Promise<void> {
-    if (!productId || typeof productId !== 'string') {
-      console.warn('[MILITARY SECURITY] Invalid product ID');
-      return;
-    }
+    if (!productId || typeof productId !== 'string') return;
 
     const quantityValidation = this.securityService.validateQuantity(quantity);
     if (!quantityValidation.isValid) {
       if (quantity <= 0) {
         await this.removeFromCart(productId);
-        return;
       }
-      console.warn('[MILITARY SECURITY] Invalid quantity update:', quantityValidation.errors);
       return;
     }
 
@@ -163,10 +159,7 @@ export class CartService {
         const existingItem = currentItems[itemIndex];
         const decrypted = await this.militaryIntegrity.decryptMilitaryItem(existingItem);
         
-        if (!decrypted.isValid) {
-          console.error('[MILITARY SECURITY] Item decryption failed during update');
-          return;
-        }
+        if (!decrypted.isValid) return;
         
         const updatedMilitaryItem = await this.militaryIntegrity.createMilitarySecureItem(
           existingItem.productId,
@@ -178,11 +171,11 @@ export class CartService {
         const updatedItems = [...currentItems];
         updatedItems[itemIndex] = updatedMilitaryItem;
         this.militaryCartItems.set(updatedItems);
-        await this.updateDecryptionCache(updatedMilitaryItem);
+        await this.updateDecryptionCache(updatedMilitaryItem, this.getOriginalProduct(existingItem.productId));
         this.syncCartState();
       }
-    } catch (error) {
-      console.error('[MILITARY SECURITY] Failed to update quantity:', error);
+    } catch {
+      // Silent fail for security
     }
   }
 
@@ -204,15 +197,14 @@ export class CartService {
     };
   }
 
-  async generateMilitarySecureOrder(customerData: any): Promise<string> {
+  async generateMilitarySecureOrder(customerData: CustomerData): Promise<string> {
     try {
       const militaryOrder = await this.militaryIntegrity.createMilitarySecureOrder(this.militaryCartItems());
       const whatsappMessage = await this.militaryIntegrity.generateMilitaryWhatsAppMessage(militaryOrder, customerData);
       
       this.clearCart();
       return whatsappMessage;
-    } catch (error) {
-      console.error('[MILITARY SECURITY] Order generation failed:', error);
+    } catch {
       throw new Error('Error de seguridad militar: No se pudo generar el pedido.');
     }
   }
@@ -223,30 +215,21 @@ export class CartService {
       for (const item of items) {
         const decrypted = await this.militaryIntegrity.decryptMilitaryItem(item);
         if (!decrypted.isValid) {
-          console.error('[MILITARY SECURITY] Cart integrity check failed for item:', item.productId);
           return false;
         }
       }
       return true;
-    } catch (error) {
-      console.error('[MILITARY SECURITY] Cart integrity validation error:', error);
+    } catch {
       return false;
     }
   }
 
-  private async getDecryptedItemFromCacheAsync(militaryItem: MilitarySecureCartItem) {
-    const cached = this.decryptionCache.get(militaryItem.productId);
-    
-    if (cached && cached.timestamp === militaryItem.timestamp && cached.cartItem) {
-      return cached;
+  private getOriginalProduct(productId: string): Product | undefined {
+    try {
+      return this.catalogService.getProductById(productId);
+    } catch {
+      return undefined;
     }
-    
-    if (!cached || cached.timestamp !== militaryItem.timestamp) {
-      await this.updateDecryptionCache(militaryItem);
-      return this.decryptionCache.get(militaryItem.productId);
-    }
-    
-    return null;
   }
 
   private getDecryptedItemFromCache(militaryItem: MilitarySecureCartItem) {
@@ -260,7 +243,7 @@ export class CartService {
     return null;
   }
 
-  private async updateDecryptionCache(militaryItem: MilitarySecureCartItem): Promise<void> {
+  private async updateDecryptionCache(militaryItem: MilitarySecureCartItem, originalProduct?: Product): Promise<void> {
     try {
       const decrypted = await this.militaryIntegrity.decryptMilitaryItem(militaryItem);
       if (decrypted.isValid) {
@@ -269,16 +252,16 @@ export class CartService {
             id: militaryItem.productId,
             name: decrypted.name,
             price: decrypted.price,
-            description: '',
-            experience: '',
-            ingredients: [],
-            sensorialExperience: '',
-            imageUrl: '',
-            category: 'classic' as any,
-            curatedLine: '',
-            occasions: [],
-            affinity: { temperament: [], palate: [], genderAffinity: '' },
-            servingSuggestion: ''
+            description: originalProduct?.description || '',
+            experience: originalProduct?.experience || '',
+            ingredients: originalProduct?.ingredients || [],
+            sensorialExperience: originalProduct?.sensorialExperience || '',
+            imageUrl: originalProduct?.imageUrl || '',
+            category: originalProduct?.category || 'classic' as any,
+            curatedLine: originalProduct?.curatedLine || '',
+            occasions: originalProduct?.occasions || [],
+            affinity: originalProduct?.affinity || { temperament: [], palate: [], genderAffinity: '' },
+            servingSuggestion: originalProduct?.servingSuggestion || ''
           },
           quantity: decrypted.quantity,
           addedAt: new Date(militaryItem.timestamp)
@@ -291,8 +274,8 @@ export class CartService {
           timestamp: militaryItem.timestamp
         });
       }
-    } catch (error) {
-      console.error('[MILITARY SECURITY] Cache update failed:', error);
+    } catch {
+      // Silent fail for security
     }
   }
 
@@ -300,14 +283,9 @@ export class CartService {
     const validation = this.securityService.validatePrice(price);
     
     if (!validation.isValid) {
-      console.warn('[MILITARY SECURITY] Price formatting failed:', validation.errors);
       return '$0';
     }
 
-    return new Intl.NumberFormat('es-CO', {
-      style: 'currency',
-      currency: 'COP',
-      minimumFractionDigits: 0
-    }).format(Number(validation.sanitizedValue));
+    return this.priceFormatter.format(Number(validation.sanitizedValue));
   }
 }

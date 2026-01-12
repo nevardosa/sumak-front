@@ -1,195 +1,174 @@
 import { Injectable } from '@angular/core';
 import { CheckoutData } from '../models/catalog.models';
 import { SecureValidators } from '../../../shared/validators/secure-validators';
-
-interface OrderRecord {
-  readonly timestamp: string;
-  readonly orderId: string;
-  readonly customerName: string;
-  readonly customerEmail: string;
-  readonly customerPhone: string;
-  readonly customerAddress: string;
-  readonly customerLocation: string;
-  readonly orderItems: string;
-  readonly orderTotal: number;
-}
+import { MilitarySecureEmailService } from '../../../core/services/military-secure-email.service';
+import { SecurePdfGeneratorService } from '../../../shared/services/secure-pdf-generator.service';
+import { AdvancedSecurityService } from '../../../core/services/advanced-security.service';
+import { SecurityAuditService, SecurityEventType } from '../../../core/services/security-audit.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OrderExportService {
-  private readonly CSV_HEADERS = [
-    'Timestamp',
-    'Order_ID',
-    'Customer_Name',
-    'Customer_Email', 
-    'Customer_Phone',
-    'Customer_Address',
-    'Customer_Location',
-    'Order_Items',
-    'Order_Total'
-  ] as const;
+  constructor(
+    private militaryEmailService: MilitarySecureEmailService,
+    private pdfGenerator: SecurePdfGeneratorService,
+    private advancedSecurity: AdvancedSecurityService,
+    private auditService: SecurityAuditService
+  ) {}
 
-  exportOrderToCSV(checkoutData: CheckoutData): void {
+  async exportOrderToPDF(checkoutData: CheckoutData): Promise<void> {
     try {
       if (!this.validateCheckoutData(checkoutData)) {
         throw new Error('Datos de pedido inválidos');
       }
 
-      const orderRecord = this.createOrderRecord(checkoutData);
-      const csvContent = this.generateCSVContent(orderRecord);
-      const filename = this.generateSecureFilename();
+      const pdfResult = await this.pdfGenerator.generateSecureOrderPdf(
+        checkoutData.cart,
+        checkoutData.customer
+      );
       
-      this.downloadFile(csvContent, filename);
+      this.downloadPdfFile(pdfResult.pdfBase64, this.generateSecurePdfFilename());
+      
+      this.sendOrderBySecureEmail(pdfResult.pdfBase64, checkoutData).catch(() => {
+        // Email failure is non-blocking
+      });
+      
+      (checkoutData as any).orderNumber = pdfResult.orderNumber;
+      
     } catch (error) {
-      console.error('Error exportando pedido:', error);
-      throw new Error('Error al generar archivo de pedido');
+      throw new Error('Error al generar pedido en PDF');
     }
   }
 
   private validateCheckoutData(data: CheckoutData): boolean {
+    // Enhanced validation with security checks
+    if (!data || typeof data !== 'object') return false;
+    
+    // Rate limiting check
+    if (!this.advancedSecurity.checkRateLimit('order_export')) {
+      throw new Error('Export rate limit exceeded');
+    }
+    
+    // Attack detection
+    if (this.advancedSecurity.detectAttack(data)) {
+      throw new Error('Security violation detected in order data');
+    }
+    
     return !!(
       data?.customer?.firstName &&
       data?.customer?.lastName &&
       data?.customer?.email &&
       data?.customer?.phone &&
       data?.cart?.items?.length &&
-      typeof data.cart.total === 'number'
+      typeof data.cart.total === 'number' &&
+      data.cart.total > 0
     );
   }
 
-  private createOrderRecord(data: CheckoutData): OrderRecord {
-    const { customer, cart } = data;
-    const timestamp = new Date().toISOString();
-    const orderId = this.generateOrderId();
-    
-    return {
-      timestamp,
-      orderId,
-      customerName: this.sanitizeField(`${customer.firstName} ${customer.lastName}`),
-      customerEmail: this.sanitizeField(customer.email),
-      customerPhone: this.sanitizeField(customer.phone),
-      customerAddress: this.formatAddress(customer.address),
-      customerLocation: this.sanitizeField(`${customer.municipality}, ${customer.department}`),
-      orderItems: this.formatOrderItems(cart.items),
-      orderTotal: cart.total
+  private generateSecurePdfFilename(): string {
+    const now = new Date();
+    const dateStr = now.toISOString().split('T')[0].replace(/-/g, '');
+    const timeStr = now.toTimeString().split(' ')[0].replace(/:/g, '');
+    const secureToken = this.advancedSecurity.generateSecureToken(8);
+    return `Pedido_Sumak_${dateStr}_${timeStr}_${secureToken}.pdf`;
+  }
+
+  private downloadPdfFile(pdfBase64: string, filename: string): void {
+    try {
+      // Validate inputs
+      if (!pdfBase64 || typeof pdfBase64 !== 'string') {
+        throw new Error('PDF data invalid');
+      }
+      
+      if (!filename || !filename.endsWith('.pdf')) {
+        throw new Error('Invalid PDF filename');
+      }
+      
+      // Sanitize filename
+      const sanitizedFilename = this.advancedSecurity.sanitizeInput(filename)
+        .replace(/[^a-zA-Z0-9._-]/g, '_')
+        .substring(0, 100);
+      
+      // Convert base64 to blob
+      const byteCharacters = atob(pdfBase64);
+      const byteNumbers = new Array(byteCharacters.length);
+      
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      
+      const byteArray = new Uint8Array(byteNumbers);
+      const blob = new Blob([byteArray], { type: 'application/pdf' });
+      
+      // Validate blob size (max 50MB)
+      if (blob.size > 50 * 1024 * 1024) {
+        throw new Error('PDF file too large');
+      }
+      
+      // Create secure download link
+      const link = document.createElement('a');
+      const url = URL.createObjectURL(blob);
+      
+      link.setAttribute('href', url);
+      link.setAttribute('download', sanitizedFilename);
+      link.setAttribute('rel', 'noopener noreferrer');
+      link.style.visibility = 'hidden';
+      
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      // Clean up immediately
+      setTimeout(() => URL.revokeObjectURL(url), 100);
+      
+    } catch (error) {
+      console.error('Error downloading PDF:', error);
+      throw new Error('Error al descargar PDF');
+    }
+  }
+
+  private async sendOrderBySecureEmail(pdfBase64: string, checkoutData: CheckoutData): Promise<void> {
+    try {
+      // Convert PDF to secure format for email
+      const emailContent = this.createEmailContent(pdfBase64, checkoutData);
+      
+      await this.militaryEmailService.sendOrderEmail(
+        emailContent,
+        checkoutData.customer,
+        checkoutData.cart.total
+      );
+    } catch (error) {
+      console.error('Error sending secure email:', error);
+      throw error;
+    }
+  }
+
+  private createEmailContent(pdfBase64: string, checkoutData: CheckoutData): string {
+    const orderSummary = {
+      timestamp: new Date().toISOString(),
+      orderId: this.generateOrderId(),
+      customer: {
+        name: `${checkoutData.customer.firstName} ${checkoutData.customer.lastName}`,
+        email: checkoutData.customer.email,
+        phone: checkoutData.customer.phone
+      },
+      items: checkoutData.cart.items.map(item => ({
+        name: item.product.name,
+        quantity: item.quantity,
+        price: item.product.price,
+        total: item.product.price * item.quantity
+      })),
+      total: checkoutData.cart.total,
+      pdfAttachment: pdfBase64.substring(0, 1000) + '...[PDF_TRUNCATED]' // Only preview for email
     };
+    
+    return JSON.stringify(orderSummary, null, 2);
   }
 
   private generateOrderId(): string {
     const timestamp = Date.now();
-    const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
-    return `SUM${timestamp}${random}`;
-  }
-
-  private sanitizeField(value: string): string {
-    if (!value) return '';
-    return SecureValidators.sanitizeText(value)
-      .replace(/[,;"\n\r]/g, ' ')
-      .trim();
-  }
-
-  private formatAddress(address: any): string {
-    if (!address?.houseNumber) return '';
-    
-    const parts: string[] = [];
-    if (address.urbanization) parts.push(this.sanitizeField(address.urbanization));
-    parts.push(this.sanitizeField(address.houseNumber));
-    if (address.apartmentNumber) parts.push(`Apto ${this.sanitizeField(address.apartmentNumber)}`);
-    if (address.tower) parts.push(`Torre ${this.sanitizeField(address.tower)}`);
-    if (address.additionalInfo) parts.push(this.sanitizeField(address.additionalInfo));
-    
-    return parts.join(' - ');
-  }
-
-  private formatOrderItems(items: any[]): string {
-    if (!Array.isArray(items)) return '';
-    
-    return items.map(item => {
-      const name = this.sanitizeField(item.product?.name || '');
-      const quantity = item.quantity || 0;
-      const price = item.product?.price || 0;
-      return `${name} (${quantity}x$${price})`;
-    }).join(' | ');
-  }
-
-  private generateCSVContent(record: OrderRecord): string {
-    const headers = this.CSV_HEADERS.join(',');
-    const values = [
-      record.timestamp,
-      record.orderId,
-      `"${record.customerName}"`,
-      `"${record.customerEmail}"`,
-      `"${record.customerPhone}"`,
-      `"${record.customerAddress}"`,
-      `"${record.customerLocation}"`,
-      `"${record.orderItems}"`,
-      record.orderTotal.toString()
-    ].join(',');
-    
-    return `${headers}\n${values}`;
-  }
-
-  private generateSecureFilename(): string {
-    const now = new Date();
-    const dateStr = now.toISOString().split('T')[0].replace(/-/g, '');
-    const timeStr = now.toTimeString().split(' ')[0].replace(/:/g, '');
-    return `PedidosSumak_${dateStr}_${timeStr}.csv`;
-  }
-
-  private downloadFile(content: string, filename: string): void {
-    try {
-      // Validate inputs
-      if (!content || typeof content !== 'string') {
-        throw new Error('Contenido inválido');
-      }
-      
-      if (!filename || typeof filename !== 'string') {
-        throw new Error('Nombre de archivo inválido');
-      }
-      
-      // Sanitize filename to prevent path traversal
-      const sanitizedFilename = filename
-        .replace(/[^a-zA-Z0-9._-]/g, '_')
-        .substring(0, 100);
-      
-      if (!sanitizedFilename.endsWith('.csv')) {
-        throw new Error('Tipo de archivo no permitido');
-      }
-      
-      // Create blob with explicit MIME type
-      const blob = new Blob([content], { 
-        type: 'text/csv;charset=utf-8;' 
-      });
-      
-      // Validate blob size (max 10MB)
-      if (blob.size > 10 * 1024 * 1024) {
-        throw new Error('Archivo demasiado grande');
-      }
-      
-      const link = document.createElement('a');
-      
-      if (link.download !== undefined) {
-        const url = URL.createObjectURL(blob);
-        
-        // Set secure attributes
-        link.setAttribute('href', url);
-        link.setAttribute('download', sanitizedFilename);
-        link.setAttribute('rel', 'noopener noreferrer');
-        link.style.visibility = 'hidden';
-        
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        
-        // Clean up object URL immediately
-        setTimeout(() => URL.revokeObjectURL(url), 100);
-      } else {
-        throw new Error('Descarga no soportada en este navegador');
-      }
-    } catch (error) {
-      console.error('Error descargando archivo:', error);
-      throw new Error('Error al descargar archivo');
-    }
+    const secureRandom = this.advancedSecurity.generateSecureToken(6);
+    return `SUM-${timestamp}-${secureRandom}`.toUpperCase();
   }
 }

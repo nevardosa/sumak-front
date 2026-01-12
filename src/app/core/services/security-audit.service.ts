@@ -10,7 +10,13 @@ export enum SecurityEventType {
   UNAUTHORIZED_ACCESS = 'UNAUTHORIZED_ACCESS',
   ENCRYPTION_ERROR = 'ENCRYPTION_ERROR',
   LOGOUT = 'LOGOUT',
-  CREDENTIAL_VALIDATION = 'CREDENTIAL_VALIDATION'
+  CREDENTIAL_VALIDATION = 'CREDENTIAL_VALIDATION',
+  PDF_GENERATED = 'PDF_GENERATED',
+  PDF_GENERATION_FAILED = 'PDF_GENERATION_FAILED',
+  EMAIL_SENT = 'EMAIL_SENT',
+  EMAIL_ERROR = 'EMAIL_ERROR',
+  MILITARY_EMAIL_SENT = 'MILITARY_EMAIL_SENT',
+  MILITARY_EMAIL_ERROR = 'MILITARY_EMAIL_ERROR'
 }
 
 export interface SecurityEvent {
@@ -38,6 +44,16 @@ export class SecurityAuditService {
     sessionId?: string
   ): Promise<void> {
     try {
+      // Input validation
+      if (!type || !Object.values(SecurityEventType).includes(type)) {
+        console.error('[SECURITY AUDIT] Invalid event type:', type);
+        return;
+      }
+      
+      if (!['LOW', 'MEDIUM', 'HIGH', 'CRITICAL'].includes(severity)) {
+        severity = 'MEDIUM';
+      }
+      
       const event: SecurityEvent = {
         id: this.cryptoService.generateSecureToken().substring(0, 16),
         type,
@@ -57,6 +73,12 @@ export class SecurityAuditService {
           id: event.id
         });
       }
+      
+      // Auto-cleanup old events if storage is getting full
+      if (await this.getLogCount() > this.maxLogEntries * 0.9) {
+        await this.cleanupOldEvents();
+      }
+      
     } catch (error) {
       // Fallback logging - never fail silently on security events
       console.error('[SECURITY AUDIT] Failed to log event:', type, error);
@@ -145,18 +167,52 @@ export class SecurityAuditService {
     if (!details) return undefined;
     
     const sanitized: Record<string, unknown> = {};
+    const sensitiveKeys = ['password', 'token', 'secret', 'key', 'auth', 'credential', 'pin', 'ssn', 'card'];
+    
     for (const [key, value] of Object.entries(details)) {
       // Never log sensitive data
-      if (key.toLowerCase().includes('password') || 
-          key.toLowerCase().includes('token') ||
-          key.toLowerCase().includes('secret')) {
+      if (sensitiveKeys.some(sensitive => key.toLowerCase().includes(sensitive))) {
         sanitized[key] = '[REDACTED]';
-      } else if (typeof value === 'string' && value.length > 500) {
-        sanitized[key] = value.substring(0, 500) + '...[TRUNCATED]';
+      } else if (typeof value === 'string') {
+        if (value.length > 500) {
+          sanitized[key] = value.substring(0, 500) + '...[TRUNCATED]';
+        } else {
+          // Remove potential XSS
+          sanitized[key] = value.replace(/<[^>]*>/g, '').replace(/javascript:/gi, '');
+        }
+      } else if (typeof value === 'object' && value !== null) {
+        // Recursively sanitize nested objects
+        sanitized[key] = this.sanitizeDetails(value as Record<string, unknown>);
       } else {
         sanitized[key] = value;
       }
     }
     return sanitized;
+  }
+
+  private async getLogCount(): Promise<number> {
+    try {
+      const logs = await this.getSecurityLogs();
+      return logs.length;
+    } catch {
+      return 0;
+    }
+  }
+
+  private async cleanupOldEvents(): Promise<void> {
+    try {
+      const logs = await this.getSecurityLogs();
+      const cutoff = Date.now() - (7 * 24 * 60 * 60 * 1000); // 7 days
+      const recentLogs = logs.filter(log => log.timestamp >= cutoff);
+      
+      const encrypted = await this.cryptoService.encrypt(
+        JSON.stringify(recentLogs),
+        this.logKey
+      );
+      
+      localStorage.setItem('sumak_sec_audit', encrypted);
+    } catch (error) {
+      console.warn('[SECURITY AUDIT] Failed to cleanup old events:', error);
+    }
   }
 }

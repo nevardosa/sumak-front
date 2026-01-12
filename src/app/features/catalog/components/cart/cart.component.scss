@@ -118,11 +118,16 @@
 .continue-btn {
   @apply flex-1 px-4 py-3 border border-sumak-green/20 text-sumak-green font-medium rounded-lg
          hover:bg-sumak-green/5 transition-colors duration-200
-         focus:outline-none focus:ring-2 focus:ring-sumak-gold/50;
+         focus:outline-none focus:ring-2 focus:ring-sumak-gold/50
+         min-h-[44px] text-center;
 }
 
 .checkout-btn {
   @apply flex-1;
+}
+
+.checkout-btn ::ng-deep button {
+  @apply min-h-[44px] w-full;
 }
 
 /* Animations */
@@ -159,7 +164,37 @@
   }
   
   .action-buttons {
-    @apply flex-col gap-2;
+    @apply flex-col gap-3;
+  }
+  
+  .continue-btn {
+    @apply py-4 text-base min-h-[48px];
+  }
+  
+  .checkout-btn ::ng-deep button {
+    @apply py-4 text-base min-h-[48px] px-6;
+  }
+}
+
+@media (max-width: 480px) {
+  .cart-footer {
+    @apply p-3;
+  }
+  
+  .summary-section {
+    @apply mb-4;
+  }
+  
+  .action-buttons {
+    @apply gap-2;
+  }
+  
+  .continue-btn {
+    @apply text-sm px-4 py-3 min-h-[44px];
+  }
+  
+  .checkout-btn ::ng-deep button {
+    @apply text-sm px-4 py-3 min-h-[44px];
   }
 }
 

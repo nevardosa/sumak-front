@@ -6,6 +6,7 @@ export const COLOMBIA_DEPARTMENTS: Department[] = [
   { id: 'antioquia', name: 'Antioquia', municipalities: [] },
   { id: 'arauca', name: 'Arauca', municipalities: [] },
   { id: 'atlantico', name: 'Atlántico', municipalities: [] },
+  { id: 'bogota', name: 'Bogotá D.C.', municipalities: [] },
   { id: 'bolivar', name: 'Bolívar', municipalities: [] },
   { id: 'boyaca', name: 'Boyacá', municipalities: [] },
   { id: 'caldas', name: 'Caldas', municipalities: [] },

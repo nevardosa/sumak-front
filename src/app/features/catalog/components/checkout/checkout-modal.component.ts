@@ -4,7 +4,6 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { CartService } from '../../services/cart.service';
 import { CheckoutService } from '../../services/checkout.service';
 import { OrderExportService } from '../../services/order-export.service';
-import { SecurityService } from '../../../../core/services/security.service';
 import { EmailValidationService } from '../../../../shared/services/email-validation.service';
 import { ButtonComponent } from '../../../../shared/components/button/button.component';
 import { InputComponent } from '../../../../shared/components/input/input.component';
@@ -12,7 +11,7 @@ import { SelectComponent, SelectOption } from '../../../../shared/components/sel
 import { CheckboxComponent } from '../../../../shared/components/checkbox/checkbox.component';
 import { AlertComponent } from '../../../../shared/components/alert/alert.component';
 import { TooltipComponent } from '../../../../shared/components/tooltip/tooltip.component';
-import { CustomerData, Municipality } from '../../models/catalog.models';
+import { CustomerData } from '../../models/catalog.models';
 import { CHECKOUT_CONSTANTS } from '../../constants/checkout.constants';
 import { SecureValidators } from '../../../../shared/validators/secure-validators';
 
@@ -40,13 +39,7 @@ export class CheckoutModalComponent implements OnInit {
   private readonly cartService = inject(CartService);
   private readonly checkoutService = inject(CheckoutService);
   private readonly orderExportService = inject(OrderExportService);
-  private readonly securityService = inject(SecurityService);
   private readonly emailValidationService = inject(EmailValidationService);
-  private readonly priceFormatter = new Intl.NumberFormat('es-CO', {
-    style: 'currency',
-    currency: 'COP',
-    minimumFractionDigits: 0
-  });
 
   checkoutForm: FormGroup;
   selectedDepartment = signal<string>('');
@@ -60,31 +53,23 @@ export class CheckoutModalComponent implements OnInit {
 
   municipalities = computed(() => {
     const deptId = this.selectedDepartment();
-    if (!deptId) return [];
-    return this.checkoutService.getMunicipalitiesByDepartment(deptId);
+    return deptId ? this.checkoutService.getMunicipalitiesByDepartment(deptId) : [];
   });
 
   readonly departments = this.checkoutService.getDepartments();
-  readonly identificationTypes = CHECKOUT_CONSTANTS.IDENTIFICATION_TYPES;
   readonly paymentInstructions = this.checkoutService.getPaymentInstructions();
   readonly cart = this.cartService.cart;
 
   readonly departmentOptions = computed(() =>
-    this.departments.map(dept => ({
-      value: dept.id,
-      label: dept.name
-    }))
+    this.departments.map(dept => ({ value: dept.id, label: dept.name }))
   );
 
   readonly municipalityOptions = computed(() =>
-    this.municipalities().map(mun => ({
-      value: mun.id,
-      label: mun.name
-    }))
+    this.municipalities().map(mun => ({ value: mun.id, label: mun.name }))
   );
 
   readonly identificationOptions: SelectOption[] =
-    this.identificationTypes.map(type => ({
+    CHECKOUT_CONSTANTS.IDENTIFICATION_TYPES.map(type => ({
       value: type.value,
       label: type.label
     }));
@@ -131,16 +116,16 @@ export class CheckoutModalComponent implements OnInit {
         SecureValidators.secureAddressValidator()
       ]],
       apartmentNumber: ['', [
-        Validators.maxLength(20),
-        SecureValidators.secureAddressValidator()
+        Validators.maxLength(5),
+        Validators.pattern(/^[0-9]{1,5}$/)
       ]],
       tower: ['', [
-        Validators.maxLength(50),
-        SecureValidators.secureAddressValidator()
+        Validators.maxLength(4),
+        Validators.pattern(/^[0-9]{1,4}$/)
       ]],
       block: ['', [
-        Validators.maxLength(50),
-        SecureValidators.secureAddressValidator()
+        Validators.maxLength(4),
+        Validators.pattern(/^[0-9]{1,4}$/)
       ]],
       additionalInfo: ['', [
         Validators.maxLength(200),
@@ -254,10 +239,12 @@ export class CheckoutModalComponent implements OnInit {
   }
 
   formatPrice(price: number): string {
-    if (typeof price !== 'number' || isNaN(price) || price < 0) {
-      return '$0';
-    }
-    return this.priceFormatter.format(price);
+    if (typeof price !== 'number' || isNaN(price) || price < 0) return '$0';
+    return new Intl.NumberFormat('es-CO', {
+      style: 'currency',
+      currency: 'COP',
+      minimumFractionDigits: 0
+    }).format(price);
   }
 
   getFieldError(fieldName: string): string {
@@ -341,7 +328,10 @@ export class CheckoutModalComponent implements OnInit {
     const messages: { [key: string]: string } = {
       'identificationNumber': 'Solo se permiten números (6-12 dígitos)',
       'phone': 'Formato inválido. Debe ser: 3XXXXXXXXX',
-      'email': 'Formato de email inválido'
+      'email': 'Formato de email inválido',
+      'apartmentNumber': 'Solo números, máximo 5 dígitos',
+      'tower': 'Solo números, máximo 4 dígitos',
+      'block': 'Solo números, máximo 4 dígitos'
     };
 
     return messages[fieldName] || 'Formato inválido';
@@ -350,17 +340,23 @@ export class CheckoutModalComponent implements OnInit {
   onSubmit(): void {
     if (!this.checkoutForm.valid) {
       this.markFormGroupTouched();
+      console.error('Form is invalid:', this.checkoutForm.errors);
       return;
     }
 
+    this.processCheckout();
+  }
+
+  private async processCheckout(): Promise<void> {
     try {
       const formData = this.checkoutForm.value;
-      
+      console.log('Form data:', formData);
+
       // Security validation before processing
       if (!this.validateFormData(formData)) {
         throw new Error('Datos del formulario inválidos');
       }
-      
+
       const customerData: CustomerData = {
         firstName: SecureValidators.sanitizeText(formData.firstName),
         lastName: SecureValidators.sanitizeText(formData.lastName),
@@ -371,9 +367,9 @@ export class CheckoutModalComponent implements OnInit {
         address: {
           urbanization: formData.urbanization ? SecureValidators.sanitizeText(formData.urbanization) : undefined,
           houseNumber: SecureValidators.sanitizeText(formData.houseNumber),
-          apartmentNumber: formData.apartmentNumber ? SecureValidators.sanitizeText(formData.apartmentNumber) : undefined,
-          tower: formData.tower ? SecureValidators.sanitizeText(formData.tower) : undefined,
-          block: formData.block ? SecureValidators.sanitizeText(formData.block) : undefined,
+          apartmentNumber: formData.apartmentNumber ? formData.apartmentNumber.toString() : undefined,
+          tower: formData.tower ? formData.tower.toString() : undefined,
+          block: formData.block ? formData.block.toString() : undefined,
           additionalInfo: formData.additionalInfo ? SecureValidators.sanitizeText(formData.additionalInfo) : undefined
         },
         email: formData.email.toLowerCase().trim(),
@@ -381,16 +377,21 @@ export class CheckoutModalComponent implements OnInit {
         acceptsDataProcessing: formData.acceptsDataProcessing
       };
 
+      console.log('Customer data:', customerData);
+
       const checkoutData = {
         customer: customerData,
         cart: this.cart(),
         paymentInstructions: this.paymentInstructions
       };
 
-      const message = this.checkoutService.generateWhatsAppMessage(checkoutData);
+      console.log('Checkout data:', checkoutData);
 
-      // Exportar pedido a CSV
-      this.orderExportService.exportOrderToCSV(checkoutData);
+      const message = this.checkoutService.generateWhatsAppMessage(checkoutData, (checkoutData as any).orderNumber);
+      console.log('WhatsApp message generated:', message);
+
+      // Exportar pedido a PDF seguro
+      await this.orderExportService.exportOrderToPDF(checkoutData);
 
       this.checkoutService.openWhatsApp(message);
       this.onClose();
@@ -398,10 +399,13 @@ export class CheckoutModalComponent implements OnInit {
       console.error('Error en checkout:', error);
       // Mostrar mensaje de error más específico
       if (error instanceof Error) {
+        console.error('Error details:', error.message, error.stack);
         if (error.message.includes('WhatsApp')) {
           alert('No se pudo abrir WhatsApp. Verifica que no esté bloqueado por el navegador o intenta desde un dispositivo móvil.');
+        } else if (error.message.includes('PDF')) {
+          alert('Error al generar el PDF del pedido. Por favor, inténtalo de nuevo.');
         } else {
-          alert('Error al procesar el pedido. Por favor, verifica los datos e inténtalo nuevamente.');
+          alert(`Error al procesar el pedido: ${error.message}`);
         }
       } else {
         alert('Error al procesar el pedido. Por favor, verifica los datos e inténtalo nuevamente.');
@@ -424,16 +428,48 @@ export class CheckoutModalComponent implements OnInit {
   }
 
   private validateFormData(formData: any): boolean {
-    if (!formData || typeof formData !== 'object') return false;
-    
-    // Validate all string inputs
-    const stringFields = ['firstName', 'lastName', 'houseNumber', 'email', 'phone'];
-    for (const field of stringFields) {
-      if (!formData[field] || !this.securityService.validateInput(formData[field])) {
+    if (!formData || typeof formData !== 'object') {
+      console.error('Form data is not an object:', formData);
+      return false;
+    }
+
+    // Validate required string fields exist and are not empty
+    const requiredFields = ['firstName', 'lastName', 'houseNumber', 'email', 'phone'];
+    for (const field of requiredFields) {
+      if (!formData[field] || typeof formData[field] !== 'string' || !formData[field].trim()) {
+        console.error(`Required field missing or invalid: ${field}`, formData[field]);
         return false;
       }
     }
-    
+
+    // Validate required non-string fields
+    if (!formData.identificationType || !formData.identificationNumber ||
+        !formData.department || !formData.municipality ||
+        !formData.acceptsDataProcessing) {
+      console.error('Required non-string fields missing:', {
+        identificationType: formData.identificationType,
+        identificationNumber: formData.identificationNumber,
+        department: formData.department,
+        municipality: formData.municipality,
+        acceptsDataProcessing: formData.acceptsDataProcessing
+      });
+      return false;
+    }
+
+    // Basic format validation for critical fields
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      console.error('Invalid email format:', formData.email);
+      return false;
+    }
+
+    const phoneRegex = /^3[0-9]{9}$/;
+    if (!phoneRegex.test(formData.phone.replace(/\D/g, ''))) {
+      console.error('Invalid phone format:', formData.phone);
+      return false;
+    }
+
+    console.log('Form data validation passed');
     return true;
   }
 }
