@@ -1,12 +1,11 @@
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Product, ProductCategory } from '../../models/catalog.models';
-import { ButtonComponent } from '../../../../shared/components/button/button.component';
 
 @Component({
   selector: 'app-product-modal',
   standalone: true,
-  imports: [CommonModule, ButtonComponent],
+  imports: [CommonModule],
   templateUrl: './product-modal.component.html',
   styleUrl: './product-modal.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

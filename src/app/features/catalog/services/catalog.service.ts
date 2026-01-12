@@ -410,7 +410,7 @@ private readonly products = signal<Product[]>([
   {
     id: '12',
     name: 'Pasión Andina',
-    price: 452500,
+    price: 366000,
     description:
       'Vino Malbec Las Moras La cordillera es fuerza, emoción y carácter. Pasión Andina expresa esa intensidad que nace de la altura y se siente en cada sorbo.',
     experience: 'Un combo honesto, profundo y lleno de expresión frutal.',
@@ -446,7 +446,7 @@ private readonly products = signal<Product[]>([
   {
     id: '13',
     name: 'Selva Nocturna',
-    price: 452500,
+    price: 368000,
     description:
       'Vino Cabernet Sauvignon Cuando la selva se sumerge en la noche, todo se vuelve más profundo.',
     experience: 'Selva Nocturna es contemplación, silencio y elegancia natural.',
@@ -482,9 +482,9 @@ private readonly products = signal<Product[]>([
   {
     id: '14',
     name: 'Parche Fino',
-    price: 452500,
+    price: 459000,
     description:
-      'Chivas Regal 12 Un parche fino es ese encuentro donde la conversación fluye sin esfuerzo y el tiempo se vuelve secundario.',
+      'Chivas Regal 12 años, Un parche fino es ese encuentro donde la conversación fluye sin esfuerzo y el tiempo se vuelve secundario.',
     experience: 'Este combo celebra la amistad desde la elegancia y el equilibrio.',
     ingredients: [
       'Chivas Regal 12 años',
