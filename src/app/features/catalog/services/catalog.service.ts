@@ -210,7 +210,7 @@ export class CatalogService {
       'Miel de abejas infusionada con jalapeño 250 g'
     ],
     sensorialExperience: 'Fuego, dulzor y chispa tropical.',
-    imageUrl: 'assets/images/08.jpg',
+    imageUrl: 'assets/images/raíz_de_fuego.jpg',
     category: ProductCategory.EXCLUSIVE,
 
     curatedLine:
