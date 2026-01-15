@@ -4,26 +4,24 @@
   <div class="relative container-sumak section-padding">
     <div class="grid lg:grid-cols-2 gap-12 items-center">
       <div class="text-center lg:text-left">
-        <h1 class="text-5xl lg:text-6xl font-angainc text-white mb-6 leading-tight">
+        <h1 class="text-5xl lg:text-6xl text-white mb-6 leading-tight">
           Sabores
           <span class="text-sumak-gold">Auténticos</span>
           de Colombia
         </h1>
         <p class="text-xl text-gray-200 mb-8 leading-relaxed max-w-2xl">
-          Descubre la riqueza gastronómica colombiana con productos artesanales 
-          seleccionados directamente desde el origen.
-        </p>
-        <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-          <app-button 
-            variant="secondary" 
+            Rituales gastronómicos inspirados en la diversidad cultural del país, concebidos a partir de una curaduría cuidadosa de ingredientes nacionales e internacionales, seleccionados por su calidad, origen y afinidad sensorial.
+          <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+          <app-button
+            variant="secondary"
             size="lg"
             [routerLink]="'/catalog'">
-            Explorar Catálogo
+            Explorar rituales
           </app-button>
-          <app-button 
-            variant="outline" 
+          <app-button
+            variant="outline"
             size="lg">
-            Conocer Más
+            Nuestra Esencia
           </app-button>
         </div>
       </div>
@@ -35,7 +33,7 @@
 <section class="bg-white py-16">
   <div class="container-sumak">
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-8">
-      <div 
+      <div
         *ngFor="let stat of stats; trackBy: trackByStat"
         class="text-center group">
         <div class="text-4xl lg:text-5xl font-bold text-sumak-green mb-2">
@@ -57,13 +55,13 @@
         ¿Por qué elegir Sumak?
       </h2>
       <p class="text-xl text-text-secondary max-w-3xl mx-auto">
-        Nos especializamos en conectar los sabores auténticos de Colombia 
+        Nos especializamos en conectar los sabores auténticos de Colombia
         con tu mesa, garantizando calidad y tradición en cada producto.
       </p>
     </div>
-    
+
     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-      <div 
+      <div
         *ngFor="let feature of features; trackBy: trackByFeature"
         class="card group cursor-pointer hover:shadow-xl transition-all duration-300"
         [routerLink]="feature.route"
@@ -93,7 +91,7 @@
           Nuestra Historia
         </h2>
         <p class="text-lg text-text-body mb-6 leading-relaxed">
-          Sumak nace del amor por la gastronomía colombiana y el deseo de 
+          Sumak nace del amor por la gastronomía colombiana y el deseo de
           preservar las tradiciones culinarias de nuestros ancestros.
         </p>
         <app-button variant="primary" size="lg">
@@ -112,10 +110,10 @@
         Lo que dicen nuestros clientes
       </h2>
     </div>
-    
+
     <div class="max-w-4xl mx-auto">
       <div class="relative overflow-hidden rounded-2xl bg-white/10 backdrop-blur-sm p-8 lg:p-12">
-        <div 
+        <div
           *ngFor="let testimonial of testimonials; let i = index; trackBy: trackByTestimonial"
           class="text-center"
           [class.hidden]="currentTestimonial() !== i">
@@ -130,7 +128,7 @@
           </div>
         </div>
       </div>
-      
+
       <div class="flex justify-center mt-8 space-x-3">
         <button
           *ngFor="let testimonial of testimonials; let i = index"
@@ -154,24 +152,24 @@
       ¿Listo para descubrir nuevos sabores?
     </h2>
     <p class="text-xl text-sumak-brown mb-8 max-w-2xl mx-auto">
-      Únete a miles de colombianos que ya disfrutan de la mejor 
+      Únete a miles de colombianos que ya disfrutan de la mejor
       selección de productos gourmet del país.
     </p>
     <div class="flex flex-col items-center space-y-6">
-      <app-button 
-        variant="primary" 
+      <app-button
+        variant="primary"
         size="lg"
         [routerLink]="'/catalog'">
         Comenzar a Comprar
       </app-button>
-      
+
       <div class="flex flex-col items-center space-y-3">
         <p class="text-sm text-sumak-brown font-medium">
           Síguenos en nuestras redes sociales
         </p>
-        <app-social-links 
-          variant="filled" 
-          size="lg" 
+        <app-social-links
+          variant="filled"
+          size="lg"
           displayStyle="horizontal">
         </app-social-links>
       </div>

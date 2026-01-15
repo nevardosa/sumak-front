@@ -387,14 +387,27 @@ export class CheckoutModalComponent implements OnInit {
 
       console.log('Checkout data:', checkoutData);
 
-      const message = this.checkoutService.generateWhatsAppMessage(checkoutData, (checkoutData as any).orderNumber);
+      // 1. Generar PDF (sin descargar aún)
+      const pdfResult = await this.orderExportService.exportOrderToPDF(checkoutData);
+      console.log('PDF generated:', pdfResult.orderNumber);
+
+      // 2. Generar mensaje WhatsApp con número de orden
+      const message = this.checkoutService.generateWhatsAppMessage(checkoutData, pdfResult.orderNumber);
       console.log('WhatsApp message generated:', message);
 
-      // Exportar pedido a PDF seguro
-      await this.orderExportService.exportOrderToPDF(checkoutData);
-
+      // 3. Abrir WhatsApp INMEDIATAMENTE (antes de descargar PDF)
       this.checkoutService.openWhatsApp(message);
+      console.log('WhatsApp opened');
+
+      // 4. Descargar PDF DESPUÉS (con pequeño delay para evitar bloqueo)
+      setTimeout(() => {
+        this.orderExportService.downloadPDF(pdfResult.pdfBase64, pdfResult.filename);
+        console.log('PDF downloaded');
+      }, 500);
+
+      // 5. Cerrar modal
       this.onClose();
+      
     } catch (error) {
       console.error('Error en checkout:', error);
       // Mostrar mensaje de error más específico

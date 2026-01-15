@@ -2,43 +2,84 @@
 @tailwind components;
 @tailwind utilities;
 
-/* SUMAK Gourmet Typography */
+/* SUMAK Gourmet Typography - Fuentes personalizadas */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-/* Nota: Angainc Regular debe ser agregada como web font o instalada localmente */
-/* Usando Inter como fallback para Garet Book hasta obtener la fuente correcta */
+
+@font-face {
+  font-family: 'Against';
+  src: url('/assets/fonts/against_2/against regular.ttf') format('truetype'),
+       url('/assets/fonts/against_2/against regular.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Garet';
+  src: url('/assets/fonts/garet/Garet-Book.woff2') format('woff2'),
+       url('/assets/fonts/garet/Garet-Book.woff') format('woff'),
+       url('/assets/fonts/garet/Garet-Book.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Garet';
+  src: url('/assets/fonts/garet/Garet-Heavy.woff2') format('woff2'),
+       url('/assets/fonts/garet/Garet-Heavy.woff') format('woff'),
+       url('/assets/fonts/garet/Garet-Heavy.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
 
 @layer base {
   html {
     font-family: 'Inter', system-ui, sans-serif;
   }
-  
+
   body {
     @apply bg-gray-50 text-text-body antialiased;
   }
-  
+
   /* Optimizaciones de rendimiento globales */
   * {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
-  
+
   /* Prevenir parpadeo en transiciones */
   *,
   *::before,
   *::after {
     backface-visibility: hidden;
   }
-  
-  /* Tipografía Principal - Angainc Regular para títulos */
-  h1, h2, h3, .heading {
-    font-family: 'Angainc Regular', Georgia, serif;
+
+  /* Global Typography Styles */
+  h1, h2, h3, h4, h5, h6, .heading {
+    font-family: 'Against', serif !important;
     @apply text-sumak-green;
   }
-  
-  /* Tipografía Secundaria - Inter como fallback para Garet Book */
-  p, .body-text {
-    font-family: 'Inter', sans-serif;
-    @apply text-text-body;
+
+  p, span, div, .body-text {
+    @apply font-garet;
+  }
+
+  // .container-sumak, .section-padding span{}
+
+  div .container-sumak .product-card .font-semibold{
+    font-weight: 400;
+    @apply font-garet;
+  }
+
+  /* Utility classes for typography */
+  .text-primary {
+    @apply font-against;
+  }
+
+  .text-secondary {
+    @apply font-garet;
   }
 }
 
@@ -48,57 +89,57 @@
     @apply bg-sumak-green hover:bg-sumak-green/90 text-white font-medium py-3 px-6 rounded-lg focus:outline-none focus:ring-2 focus:ring-sumak-gold focus:ring-offset-2;
     transition: background-color 0.15s ease-out, box-shadow 0.15s ease-out;
   }
-  
+
   .btn-secondary {
     @apply bg-sumak-gold hover:bg-sumak-gold/90 text-sumak-green font-medium py-3 px-6 rounded-lg focus:outline-none focus:ring-2 focus:ring-sumak-green focus:ring-offset-2;
     transition: background-color 0.15s ease-out, box-shadow 0.15s ease-out;
   }
-  
+
   .btn-outline {
     @apply border-2 border-sumak-green text-sumak-green hover:bg-sumak-green hover:text-white font-medium py-3 px-6 rounded-lg focus:outline-none focus:ring-2 focus:ring-sumak-gold focus:ring-offset-2;
     transition: all 0.15s ease-out;
   }
-  
+
   /* SUMAK Gourmet Card Styles */
   .card {
     @apply bg-white rounded-xl shadow-sm border border-gray-100 p-8;
   }
-  
+
   .card-premium {
     @apply bg-white rounded-xl shadow-lg border border-sumak-gold/20 p-8;
   }
-  
+
   /* SUMAK Gourmet Input Styles */
   .input-field {
     @apply w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sumak-gold focus:border-transparent;
     transition: border-color 0.15s ease-out, box-shadow 0.15s ease-out;
   }
-  
+
   /* SUMAK Gourmet Typography Classes */
   .title-primary {
     @apply text-4xl font-normal text-sumak-green leading-tight;
   }
-  
+
   .title-secondary {
     @apply text-2xl font-normal text-text-secondary leading-relaxed;
   }
-  
+
   .subtitle {
     @apply text-lg font-medium text-text-secondary;
   }
-  
+
   .body-large {
     @apply text-base text-text-body leading-relaxed;
   }
-  
+
   .body-small {
     @apply text-sm text-text-body;
   }
-  
+
   .accent-text {
     @apply text-sumak-gold font-medium;
   }
-  
+
   /* Line clamp utilities */
   .line-clamp-2 {
     display: -webkit-box;
@@ -106,23 +147,23 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
-  
+
   .line-clamp-3 {
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
-  
+
   /* SUMAK Gourmet Layout */
   .section-padding {
     @apply py-16 px-4 sm:px-6 lg:px-8;
   }
-  
+
   .container-sumak {
     @apply max-w-7xl mx-auto;
   }
-  
+
   /* SUMAK Pattern Background (subtle) */
   .bg-sumak-pattern {
     background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60"><rect width="60" height="60" fill="%23f9fafb"/><path d="M30 15l-7.5 7.5L30 30l7.5-7.5L30 15z" fill="%23063A3D" opacity="0.05"/></svg>');

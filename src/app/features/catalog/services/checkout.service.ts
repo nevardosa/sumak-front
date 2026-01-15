@@ -218,15 +218,22 @@ export class CheckoutService {
       const encodedMessage = encodeURIComponent(message);
       const whatsappUrl = `${CHECKOUT_CONSTANTS.WHATSAPP_BASE_URL}${PAYMENT_INSTRUCTIONS.whatsappNumber}?text=${encodedMessage}`;
       
-      // Intentar abrir en nueva pestaña primero
+      // Abrir SIEMPRE en nueva pestaña (desktop y móvil)
       const newWindow = window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
       
-      // Si falla, intentar con location.href como fallback
-      if (!newWindow || newWindow.closed) {
-        // Fallback: abrir en la misma pestaña
-        window.location.href = whatsappUrl;
+      // Verificar si el popup fue bloqueado
+      if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
+        // Fallback: mostrar alerta y copiar mensaje
+        if (confirm('El navegador bloqueó la ventana de WhatsApp. ¿Deseas copiar el mensaje al portapapeles?')) {
+          navigator.clipboard.writeText(message).then(() => {
+            alert('Mensaje copiado. Abre WhatsApp manualmente y pégalo.');
+          }).catch(() => {
+            alert('No se pudo copiar. Por favor, envía el pedido manualmente.');
+          });
+        }
       }
     } catch (error) {
+      console.error('Error opening WhatsApp:', error);
       // Fallback final: copiar al portapapeles
       try {
         navigator.clipboard.writeText(message);
