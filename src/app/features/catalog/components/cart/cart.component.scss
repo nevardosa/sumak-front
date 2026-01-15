@@ -12,17 +12,12 @@
   animation: slideInRight 0.3s ease-out;
 }
 
-/* Header Styles */
 .cart-header {
   @apply flex items-center justify-between p-6 border-b border-sumak-green/10 bg-gradient-to-r from-white to-gray-50/50;
 }
 
 .header-content {
   @apply flex items-center gap-4;
-}
-
-.header-title {
-  @apply flex items-center gap-3;
 }
 
 .cart-icon {
@@ -38,16 +33,13 @@
 }
 
 .close-btn {
-  @apply p-2 text-gray-400 hover:text-sumak-green rounded-lg transition-colors duration-200
-         focus:outline-none focus:ring-2 focus:ring-sumak-gold/50;
+  @apply p-2 text-gray-400 hover:text-sumak-green rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-sumak-gold/50;
 }
 
-/* Content Styles */
 .cart-content {
   @apply flex-1 overflow-y-auto;
 }
 
-/* Empty State */
 .empty-state {
   @apply flex flex-col items-center justify-center h-full p-8 text-center;
 }
@@ -64,12 +56,6 @@
   @apply text-text-body mb-8 max-w-sm leading-relaxed;
 }
 
-.continue-shopping-btn {
-  @apply px-6 py-3 bg-sumak-green text-white font-medium rounded-lg hover:bg-sumak-green/90
-         transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-sumak-gold/50;
-}
-
-/* Items Container */
 .items-container {
   @apply p-4;
 }
@@ -78,7 +64,6 @@
   @apply space-y-4;
 }
 
-/* Footer Styles */
 .cart-footer {
   @apply border-t border-sumak-green/10 p-6 bg-gradient-to-r from-gray-50/50 to-white;
 }
@@ -116,21 +101,9 @@
 }
 
 .continue-btn {
-  @apply flex-1 px-4 py-3 border border-sumak-green/20 text-sumak-green font-medium rounded-lg
-         hover:bg-sumak-green/5 transition-colors duration-200
-         focus:outline-none focus:ring-2 focus:ring-sumak-gold/50
-         min-h-[44px] text-center;
+  @apply flex-1 px-4 py-3 border border-sumak-green/20 text-sumak-green font-medium rounded-lg hover:bg-sumak-green/5 transition-colors focus:outline-none focus:ring-2 focus:ring-sumak-gold/50 min-h-[44px];
 }
 
-.checkout-btn {
-  @apply flex-1;
-}
-
-.checkout-btn ::ng-deep button {
-  @apply min-h-[44px] w-full;
-}
-
-/* Animations */
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
@@ -141,78 +114,15 @@
   to { transform: translateX(0); }
 }
 
-/* Responsive Design */
 @media (max-width: 640px) {
-  .cart-container {
-    @apply max-w-full;
-  }
-
-  .cart-header {
-    @apply p-4;
-  }
-
-  .title-text {
-    @apply text-lg;
-  }
-
-  .items-container {
-    @apply p-3;
-  }
-
-  .cart-footer {
-    @apply p-4;
-  }
-
-  .action-buttons {
-    @apply flex-col gap-3;
-  }
-
-  .continue-btn {
-    @apply py-4 text-base min-h-[48px];
-  }
-
-  .checkout-btn ::ng-deep button {
-    @apply py-4 text-base min-h-[48px] px-6;
-  }
+  .cart-container { @apply max-w-full; }
+  .cart-header { @apply p-4; }
+  .title-text { @apply text-lg; }
+  .items-container { @apply p-3; }
+  .cart-footer { @apply p-4; }
+  .action-buttons { @apply flex-col gap-3; }
 }
 
-@media (max-width: 480px) {
-  .cart-footer {
-    @apply p-3;
-  }
-
-  .summary-section {
-    @apply mb-4;
-  }
-
-  .action-buttons {
-    @apply gap-2;
-  }
-
-  .continue-btn {
-    @apply text-sm px-4 py-3 min-h-[44px];
-  }
-
-  .checkout-btn ::ng-deep button {
-    @apply text-sm px-4 py-3 min-h-[44px];
-  }
-}
-
-/* Accessibility */
 @media (prefers-reduced-motion: reduce) {
-  .cart-overlay,
-  .cart-container {
-    animation: none;
-  }
-}
-
-/* High contrast mode */
-@media (prefers-contrast: high) {
-  .cart-header {
-    @apply border-b-2 border-sumak-green;
-  }
-
-  .cart-footer {
-    @apply border-t-2 border-sumak-green;
-  }
+  .cart-overlay, .cart-container { animation: none; }
 }
