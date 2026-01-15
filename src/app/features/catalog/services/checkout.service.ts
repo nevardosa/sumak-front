@@ -218,29 +218,25 @@ export class CheckoutService {
       const encodedMessage = encodeURIComponent(message);
       const whatsappUrl = `${CHECKOUT_CONSTANTS.WHATSAPP_BASE_URL}${PAYMENT_INSTRUCTIONS.whatsappNumber}?text=${encodedMessage}`;
       
-      // Abrir SIEMPRE en nueva pestaña (desktop y móvil)
-      const newWindow = window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+      // Detectar móvil
+      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
       
-      // Verificar si el popup fue bloqueado
-      if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
-        // Fallback: mostrar alerta y copiar mensaje
-        if (confirm('El navegador bloqueó la ventana de WhatsApp. ¿Deseas copiar el mensaje al portapapeles?')) {
-          navigator.clipboard.writeText(message).then(() => {
-            alert('Mensaje copiado. Abre WhatsApp manualmente y pégalo.');
-          }).catch(() => {
-            alert('No se pudo copiar. Por favor, envía el pedido manualmente.');
-          });
+      if (isMobile) {
+        // En móvil: abrir directamente (más confiable)
+        window.location.href = whatsappUrl;
+      } else {
+        // En desktop: nueva pestaña
+        const newWindow = window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+        
+        // Verificar si el popup fue bloqueado
+        if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
+          // Fallback: abrir en misma pestaña
+          window.location.href = whatsappUrl;
         }
       }
     } catch (error) {
       console.error('Error opening WhatsApp:', error);
-      // Fallback final: copiar al portapapeles
-      try {
-        navigator.clipboard.writeText(message);
-        alert('WhatsApp no pudo abrirse automáticamente. El mensaje se ha copiado al portapapeles. Pégalo manualmente en WhatsApp.');
-      } catch {
-        alert('No se pudo abrir WhatsApp. Por favor, envía el pedido manualmente.');
-      }
+      alert('No se pudo abrir WhatsApp. Por favor, envía el pedido manualmente.');
     }
   }
 }
