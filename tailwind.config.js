@@ -35,9 +35,12 @@ module.exports = {
         }
       },
       fontFamily: {
-        // SUMAK Gourmet Typography (usando Inter como fallback temporal)
-        'angainc': ['Angainc Regular', 'Georgia', 'serif'],     // Tipografía principal - títulos
-        'garet': ['Inter', 'system-ui', 'sans-serif'],          // Tipografía secundaria - texto (fallback)
+        // SUMAK Gourmet Typography
+        'against': ['Against', 'serif'],                        // Tipografía principal - títulos y headings
+        'garet': ['Garet', 'Inter', 'system-ui', 'sans-serif'], // Tipografía secundaria - texto y párrafos
+        // Aliases para consistencia
+        'primary': ['Against', 'serif'],                        // Alias para tipografía principal
+        'secondary': ['Garet', 'Inter', 'system-ui', 'sans-serif'], // Alias para tipografía secundaria
         // Fallbacks
         'serif': ['Georgia', 'Times New Roman', 'serif'],
         'sans': ['Inter', 'system-ui', 'sans-serif'],

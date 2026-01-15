@@ -74,7 +74,7 @@ import { QuantitySelectorComponent } from '../quantity-selector/quantity-selecto
     }
     
     .item-name {
-      @apply font-angainc text-base font-medium text-sumak-green leading-tight;
+      @apply font-against text-base font-medium text-sumak-green leading-tight;
     }
     
     .remove-btn {

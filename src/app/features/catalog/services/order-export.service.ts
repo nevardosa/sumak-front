@@ -17,7 +17,7 @@ export class OrderExportService {
     private auditService: SecurityAuditService
   ) {}
 
-  async exportOrderToPDF(checkoutData: CheckoutData): Promise<void> {
+  async exportOrderToPDF(checkoutData: CheckoutData): Promise<{ pdfBase64: string; orderNumber: string; filename: string }> {
     try {
       if (!this.validateCheckoutData(checkoutData)) {
         throw new Error('Datos de pedido inválidos');
@@ -28,17 +28,27 @@ export class OrderExportService {
         checkoutData.customer
       );
       
-      this.downloadPdfFile(pdfResult.pdfBase64, this.generateSecurePdfFilename());
+      const filename = this.generateSecurePdfFilename();
       
+      // Enviar email en background (no bloqueante)
       this.sendOrderBySecureEmail(pdfResult.pdfBase64, checkoutData).catch(() => {
         // Email failure is non-blocking
       });
       
-      (checkoutData as any).orderNumber = pdfResult.orderNumber;
+      // Retornar datos sin descargar aún
+      return {
+        pdfBase64: pdfResult.pdfBase64,
+        orderNumber: pdfResult.orderNumber,
+        filename
+      };
       
     } catch (error) {
       throw new Error('Error al generar pedido en PDF');
     }
+  }
+
+  downloadPDF(pdfBase64: string, filename: string): void {
+    this.downloadPdfFile(pdfBase64, filename);
   }
 
   private validateCheckoutData(data: CheckoutData): boolean {

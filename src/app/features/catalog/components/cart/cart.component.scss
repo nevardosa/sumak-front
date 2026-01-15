@@ -30,7 +30,7 @@
 }
 
 .title-text {
-  @apply font-angainc text-xl font-medium text-sumak-green;
+  @apply font-against text-xl font-medium text-sumak-green;
 }
 
 .item-count {
@@ -57,7 +57,7 @@
 }
 
 .empty-title {
-  @apply font-angainc text-xl font-medium text-sumak-green mb-3;
+  @apply font-against text-xl font-medium text-sumak-green mb-3;
 }
 
 .empty-description {
@@ -104,11 +104,11 @@
 }
 
 .total-label {
-  @apply font-angainc text-lg font-medium text-sumak-green;
+  @apply font-against text-lg font-medium text-sumak-green;
 }
 
 .total-value {
-  @apply font-angainc text-xl font-semibold text-sumak-brown;
+  @apply font-against text-xl font-semibold text-sumak-brown;
 }
 
 .action-buttons {
@@ -146,31 +146,31 @@
   .cart-container {
     @apply max-w-full;
   }
-  
+
   .cart-header {
     @apply p-4;
   }
-  
+
   .title-text {
     @apply text-lg;
   }
-  
+
   .items-container {
     @apply p-3;
   }
-  
+
   .cart-footer {
     @apply p-4;
   }
-  
+
   .action-buttons {
     @apply flex-col gap-3;
   }
-  
+
   .continue-btn {
     @apply py-4 text-base min-h-[48px];
   }
-  
+
   .checkout-btn ::ng-deep button {
     @apply py-4 text-base min-h-[48px] px-6;
   }
@@ -180,19 +180,19 @@
   .cart-footer {
     @apply p-3;
   }
-  
+
   .summary-section {
     @apply mb-4;
   }
-  
+
   .action-buttons {
     @apply gap-2;
   }
-  
+
   .continue-btn {
     @apply text-sm px-4 py-3 min-h-[44px];
   }
-  
+
   .checkout-btn ::ng-deep button {
     @apply text-sm px-4 py-3 min-h-[44px];
   }
@@ -211,7 +211,7 @@
   .cart-header {
     @apply border-b-2 border-sumak-green;
   }
-  
+
   .cart-footer {
     @apply border-t-2 border-sumak-green;
   }
