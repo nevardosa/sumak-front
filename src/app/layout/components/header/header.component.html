@@ -7,43 +7,48 @@
       </div>
 
       <!-- Navigation -->
-      <nav class="hidden md:flex space-x-8">
+      <nav class="hidden md:flex space-x-4">
         <a
           routerLink="/home"
           routerLinkActive="text-sumak-green border-sumak-gold"
-          class="text-text-secondary hover:text-sumak-green px-4 py-2 text-sm font-garet font-medium border-b-2 border-transparent hover:border-sumak-gold/50 transition-all duration-200"
+          class="text-text-secondary hover:text-sumak-green px-4 py-2 text-sm font-garet font-medium border-b-2 border-transparent hover:border-sumak-gold/50 transition-all duration-200 relative group"
         >
           Inicio
+          <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-sumak-gold group-hover:w-full transition-all duration-300 ease-out"></span>
         </a>
         <a
           routerLink="/catalog"
           routerLinkActive="text-sumak-green border-sumak-gold"
-          class="text-text-secondary hover:text-sumak-green px-4 py-2 text-sm font-garet font-medium border-b-2 border-transparent hover:border-sumak-gold/50 transition-all duration-200"
+          class="text-text-secondary hover:text-sumak-green px-4 py-2 text-sm font-garet font-medium border-b-2 border-transparent hover:border-sumak-gold/50 transition-all duration-200 relative group"
         >
           Nuestros Rituales
+          <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-sumak-gold group-hover:w-full transition-all duration-300 ease-out"></span>
         </a>
         <a
           routerLink="/faq"
           routerLinkActive="text-sumak-green border-sumak-gold"
-          class="text-text-secondary hover:text-sumak-green px-4 py-2 text-sm font-garet font-medium border-b-2 border-transparent hover:border-sumak-gold/50 transition-all duration-200"
+          class="text-text-secondary hover:text-sumak-green px-4 py-2 text-sm font-garet font-medium border-b-2 border-transparent hover:border-sumak-gold/50 transition-all duration-200 relative group"
         >
           Preguntas Frecuentes
+          <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-sumak-gold group-hover:w-full transition-all duration-300 ease-out"></span>
         </a>
         <!-- Admin only navigation -->
         <ng-container *ngIf="authService.isAuthenticated()">
           <a
             routerLink="/dashboard"
             routerLinkActive="text-sumak-green border-sumak-gold"
-            class="text-text-secondary hover:text-sumak-green px-4 py-2 text-sm font-garet font-medium border-b-2 border-transparent hover:border-sumak-gold/50 transition-all duration-200"
+            class="text-text-secondary hover:text-sumak-green px-4 py-2 text-sm font-garet font-medium border-b-2 border-transparent hover:border-sumak-gold/50 transition-all duration-200 relative group"
           >
             Dashboard
+            <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-sumak-gold group-hover:w-full transition-all duration-300 ease-out"></span>
           </a>
           <a
             routerLink="/profile"
             routerLinkActive="text-sumak-green border-sumak-gold"
-            class="text-text-secondary hover:text-sumak-green px-4 py-2 text-sm font-garet font-medium border-b-2 border-transparent hover:border-sumak-gold/50 transition-all duration-200"
+            class="text-text-secondary hover:text-sumak-green px-4 py-2 text-sm font-garet font-medium border-b-2 border-transparent hover:border-sumak-gold/50 transition-all duration-200 relative group"
           >
             Perfil
+            <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-sumak-gold group-hover:w-full transition-all duration-300 ease-out"></span>
           </a>
         </ng-container>
       </nav>
