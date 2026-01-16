@@ -34,20 +34,11 @@ export type LogoVariant = 'default' | 'compact';
       </div>
       
       <!-- Texto del logo -->
-      <div 
-        *ngIf="variant === 'default'" 
-        class="flex flex-col"
-      >
-        <span 
-          class="font-angainc font-normal text-sumak-green"
-          [ngClass]="brandTextClasses"
-        >
+      <div *ngIf="variant === 'default'" class="flex flex-col items-center -space-y-1">
+        <h1 class="font-angainc font-normal text-sumak-green"[ngClass]="brandTextClasses">
           SUMAK
-        </span>
-        <span 
-          class="font-garet text-sumak-gold tracking-wider"
-          [ngClass]="taglineTextClasses"
-        >
+        </h1>
+        <span class="font-garet text-sumak-gold tracking-wider" [ngClass]="taglineTextClasses">
           GOURMET
         </span>
       </div>

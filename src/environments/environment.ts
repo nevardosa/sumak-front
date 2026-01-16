@@ -10,7 +10,7 @@ export const environment = {
     enableOfflineMode: true,
   },
   payment: {
-    breAccount: '@DAVISUMAKGOURME',
+    breAccount: '@DAVISUMAK',
     whatsappNumber: '573208663691',
     whatsappBaseUrl: 'https://wa.me/'
   },
