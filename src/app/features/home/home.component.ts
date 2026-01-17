@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, signal, computed, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal, computed, ChangeDetectionStrategy, inject, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ButtonComponent } from '../../shared/components/button/button.component';
@@ -16,9 +16,12 @@ import { HomeDataService } from '../../core/services/home-data.service';
   styleUrls: ['./home.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HomeComponent implements OnInit, OnDestroy {
+export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   private readonly destroy$ = new Subject<void>();
   private readonly homeDataService = inject(HomeDataService);
+  private observer!: IntersectionObserver;
+  
+  @ViewChild('statsSection') statsSection!: ElementRef;
   
   readonly state = signal<HomeComponentState>({
     isLoading: false,
@@ -32,14 +35,78 @@ export class HomeComponent implements OnInit, OnDestroy {
   readonly features = this.homeDataService.features;
   readonly testimonials = this.homeDataService.testimonials;
   readonly stats = this.homeDataService.stats;
+  readonly animatedStats = signal<{ id: string; value: number; label: string }[]>(
+    this.stats.map(s => ({ ...s, value: 0 }))
+  );
+  private statsAnimated = false;
 
   ngOnInit(): void {
     this.initializeTestimonialRotation();
   }
 
+  ngAfterViewInit(): void {
+    this.initScrollAnimations();
+  }
+
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+    if (this.observer) {
+      this.observer.disconnect();
+    }
+  }
+
+  private initScrollAnimations(): void {
+    this.observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animate-in');
+            
+            if (entry.target === this.statsSection?.nativeElement && !this.statsAnimated) {
+              this.statsAnimated = true;
+              this.animateStats();
+            }
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    const sections = document.querySelectorAll('section');
+    sections.forEach(section => {
+      section.classList.add('fade-in-section');
+      this.observer.observe(section);
+    });
+  }
+
+  private animateStats(): void {
+    this.stats.forEach((stat, index) => {
+      const targetValue = parseInt(stat.value);
+      const duration = 2500;
+      const steps = 80;
+      const increment = targetValue / steps;
+      let currentValue = 0;
+      let currentStep = 0;
+
+      const timer = setInterval(() => {
+        currentStep++;
+        const progress = currentStep / steps;
+        const easeOut = 1 - Math.pow(1 - progress, 3);
+        currentValue = targetValue * easeOut;
+        
+        if (currentStep >= steps) {
+          currentValue = targetValue;
+          clearInterval(timer);
+        }
+        
+        this.animatedStats.update(stats => {
+          const newStats = [...stats];
+          newStats[index] = { ...stat, value: Math.floor(currentValue) };
+          return newStats;
+        });
+      }, duration / steps);
+    });
   }
 
   private initializeTestimonialRotation(): void {
@@ -88,7 +155,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     return testimonial.id;
   }
 
-  trackByStat(index: number, stat: Stat): string {
+  trackByStat(index: number, stat: { id: string; value: number; label: string }): string {
     return stat.id;
   }
 }
