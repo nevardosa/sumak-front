@@ -8,15 +8,15 @@ export class HomeDataService {
   private readonly _features: readonly FeatureCard[] = [
     {
       id: 'catalog',
-      title: 'Catálogo Gourmet',
-      description: 'Descubre nuestra selección premium de productos artesanales y gourmet.',
+      title: 'Curaduría Gastronómica',
+      description: 'Cada ritual es el resultado de una curaduría cuidadosa, donde sabores, texturas y aromas se seleccionan por su afinidad sensorial y equilibrio gastronómico.',
       icon: 'M3 3h2l.4 2M7 13h10l4-8H5.4m1.6 8L6 5H2m5 8v6a2 2 0 002 2h6a2 2 0 002-2v-6m-10 0h10',
       route: '/catalog'
     },
     {
       id: 'quality',
-      title: 'Calidad Premium',
-      description: 'Productos seleccionados con los más altos estándares de calidad.',
+      title: 'Ingredientes Premium',
+      description: 'Trabajamos con chocolate 70% de cacao, frutos secos seleccionados, mieles y bebidas de alta calidad, priorizando origen, frescura y carácter.',
       icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z',
       route: '/catalog'
     },
@@ -54,9 +54,8 @@ export class HomeDataService {
   ] as const;
 
   private readonly _stats: readonly Stat[] = [
-    { id: 'products', value: '500+', label: 'Productos Premium' },
-    { id: 'customers', value: '10K+', label: 'Clientes Satisfechos' },
-    { id: 'years', value: '5+', label: 'Años de Experiencia' },
+    { id: 'products', value: '14', label: 'Productos Premium' },
+    { id: 'customers', value: '50', label: 'Clientes Satisfechos' },
     { id: 'regions', value: '32', label: 'Departamentos' }
   ] as const;
 
