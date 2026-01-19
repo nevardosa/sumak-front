@@ -29,6 +29,10 @@ export const routes: Routes = [
         path: 'faq',
         loadComponent: () => import('./features/faq/faq.component').then(m => m.FaqComponent)
       },
+      {
+        path: 'about',
+        loadComponent: () => import('./features/about/about.component').then(m => m.AboutComponent)
+      },
       // Admin routes - protected
       {
         path: 'dashboard',
