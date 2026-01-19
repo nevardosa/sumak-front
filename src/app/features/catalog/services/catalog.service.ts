@@ -87,7 +87,7 @@ export class CatalogService {
   {
     id: '3',
     name: 'Zipa Real',
-    price: 476500,
+    price: 481600,
     description:
       'El zipa era el gobernante del pueblo muisca, una figura de autoridad serena y equilibrio. Zipa Real honra ese liderazgo tranquilo, donde el poder no se impone, se reconoce.',
     experience:
@@ -161,7 +161,7 @@ export class CatalogService {
   {
     id: '5',
     name: 'Mama Killa',
-    price: 331300,
+    price: 336400,
     description:
       'La luna protege, envuelve y calma. Mama Killa es un homenaje a la dulzura, la ternura y el descanso del alma.',
     experience: 'Un combo cremoso y reconfortante, pensado como un abrazo nocturno.',
@@ -269,7 +269,7 @@ export class CatalogService {
   {
     id: '8',
     name: 'Zipa Supremo',
-    price: 904300,
+    price: 909400,
     description:
       'Cuando el linaje alcanza su punto más alto, surge la excelencia. Zipa Supremo representa la madurez del poder, la profundidad del tiempo y el lujo que no necesita alzar la voz.',
     experience:
@@ -342,7 +342,7 @@ export class CatalogService {
   {
     id: '10',
     name: 'Killa Sagrada',
-    price: 278850,
+    price: 283900,
     description:
       'La luna, killa, ha sido símbolo de lo sagrado y lo íntimo desde tiempos ancestrales. Killa Sagrada es un pequeño ritual personal, delicado y luminoso.',
     experience: 'Intimidad y conexión espiritual.',
@@ -378,7 +378,7 @@ export class CatalogService {
   {
     id: '11',
     name: 'Kuntur Andino',
-    price: 452500,
+    price: 457500,
     description:
       'En las alturas de la cordillera, el kuntur vuela con calma y precisión. Kuntur Andino representa pureza, visión y sobriedad.',
     experience: 'Un combo limpio, elevado y elegante.',
@@ -414,7 +414,7 @@ export class CatalogService {
   {
     id: '12',
     name: 'Pasión Andina',
-    price: 366000,
+    price: 371200,
     description:
       'Vino Malbec Las Moras La cordillera es fuerza, emoción y carácter. Pasión Andina expresa esa intensidad que nace de la altura y se siente en cada sorbo.',
     experience: 'Un combo honesto, profundo y lleno de expresión frutal.',
@@ -450,7 +450,7 @@ export class CatalogService {
   {
     id: '13',
     name: 'Selva Nocturna',
-    price: 368000,
+    price: 373700,
     description:
       'Vino Cabernet Sauvignon Cuando la selva se sumerge en la noche, todo se vuelve más profundo.',
     experience: 'Selva Nocturna es contemplación, silencio y elegancia natural.',

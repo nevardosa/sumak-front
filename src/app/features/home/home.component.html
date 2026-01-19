@@ -63,11 +63,9 @@
     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
       <div
         *ngFor="let feature of features; trackBy: trackByFeature"
-        class="card group cursor-pointer hover:shadow-xl transition-all duration-300"
-        [routerLink]="feature.route"
-        (click)="onFeatureClick(feature)">
-        <div class="flex items-center justify-center w-16 h-16 bg-sumak-green/10 rounded-xl mb-6">
-          <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        class="card group cursor-default hover:shadow-xl hover:-translate-y-2 transition-all duration-300">
+        <div class="flex items-center justify-center w-16 h-16 bg-sumak-gold/20 rounded-xl mb-6 group-hover:bg-sumak-gold/30 transition-all duration-300">
+          <svg class="w-8 h-8 text-sumak-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="feature.icon"></path>
           </svg>
         </div>
@@ -87,14 +85,13 @@
   <div class="container-sumak">
     <div class="grid lg:grid-cols-2 gap-16 items-center">
       <div>
-        <h2 class="text-4xl font-angainc text-sumak-green mb-6">
+        <h2 class="text-4xl font-against text-sumak-green mb-6">
           Nuestra Historia
         </h2>
         <p class="text-lg text-text-body mb-6 leading-relaxed">
-          Sumak nace del amor por la gastronomía colombiana y el deseo de
-          preservar las tradiciones culinarias de nuestros ancestros.
+          Sumak nace del respeto profundo por el sabor y de la convicción de que regalar es un acto cargado de intención. Entendemos el regalo como un ritual: una forma de expresar cuidado, pausa y significado a través de la experiencia gastronómica.
         </p>
-        <app-button variant="primary" size="lg">
+        <app-button variant="primary" size="lg" routerLink="/about">
           Conoce Más Sobre Nosotros
         </app-button>
       </div>

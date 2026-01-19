@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Product, ProductCategory } from '../../models/catalog.models';
 import { SafeHtmlPipe, SecureTextPipe, SecurePricePipe } from '../../../../shared/pipes/security.pipes';
@@ -11,12 +11,20 @@ import { SafeHtmlPipe, SecureTextPipe, SecurePricePipe } from '../../../../share
   styleUrl: './product-modal.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProductModalComponent {
+export class ProductModalComponent implements OnInit, OnDestroy {
   @Input({ required: true }) product!: Product;
   @Output() close = new EventEmitter<void>();
   @Output() addToCart = new EventEmitter<Product>();
 
   showImageZoom = false;
+
+  ngOnInit(): void {
+    document.body.style.overflow = 'hidden';
+  }
+
+  ngOnDestroy(): void {
+    document.body.style.overflow = '';
+  }
 
   onClose(): void {
     this.close.emit();

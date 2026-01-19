@@ -1,5 +1,5 @@
-<div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50" (click)="onBackdropClick($event)">
-  <div class="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 overflow-y-auto" (click)="onBackdropClick($event)">
+  <div class="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto my-auto" (click)="$event.stopPropagation()">
     <!-- Header -->
     <div class="flex items-center justify-between p-6 border-b border-gray-100">
       <div>

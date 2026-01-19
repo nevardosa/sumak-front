@@ -1,0 +1,110 @@
+<!-- Hero Section -->
+<section class="relative bg-gradient-to-br from-sumak-green via-sumak-green/95 to-sumak-brown overflow-hidden">
+  <div class="absolute inset-0 bg-sumak-pattern opacity-10"></div>
+  <div class="relative container-sumak section-padding">
+    <div class="text-center max-w-4xl mx-auto">
+      <h1 class="text-5xl lg:text-6xl font-against text-white mb-6 leading-tight">
+        Conócenos
+      </h1>
+      <p class="text-xl text-gray-200 leading-relaxed">
+        Rituales gastronómicos inspirados en la diversidad cultural de Colombia
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- Historia Section -->
+<section class="section-padding bg-white">
+  <div class="container-sumak">
+    <div class="grid lg:grid-cols-2 gap-16 items-center">
+      <div>
+        <h2 class="text-4xl font-against text-sumak-green mb-6">
+          Nuestra Historia
+        </h2>
+        <p class="text-lg text-text-body mb-6 leading-relaxed">
+          Sumak nace del respeto profundo por el sabor y de la convicción de que regalar es un acto cargado de intención. Entendemos el regalo como un ritual: una forma de expresar cuidado, pausa y significado a través de la experiencia gastronómica.
+        </p>
+        <p class="text-lg text-text-body mb-6 leading-relaxed">
+          Inspirados en la riqueza cultural y simbólica de Colombia, diseñamos rituales gastronómicos que conectan tradición y contemporaneidad. Cada elemento es elegido por su afinidad sensorial y equilibrio, dando forma a experiencias pensadas no solo para degustar, sino para compartir, celebrar y recordar.
+        </p>
+      </div>
+      <div class="relative">
+        <div class="aspect-square bg-sumak-gold/10 rounded-2xl"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Valores Section -->
+<section class="section-padding bg-gray-50">
+  <div class="container-sumak">
+    <div class="text-center mb-16">
+      <h2 class="text-4xl font-against text-sumak-green mb-4">
+        Nuestros Valores
+      </h2>
+      <p class="text-xl text-text-secondary max-w-3xl mx-auto">
+        Los principios que guían cada uno de nuestros rituales gastronómicos
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-8">
+      <div
+        *ngFor="let value of values"
+        class="card text-center">
+        <div class="flex items-center justify-center w-16 h-16 bg-sumak-gold/20 rounded-xl mb-6 mx-auto">
+          <svg class="w-8 h-8 text-sumak-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="value.icon"></path>
+          </svg>
+        </div>
+        <h3 class="text-xl font-semibold text-sumak-green mb-3">
+          {{ value.title }}
+        </h3>
+        <p class="text-text-body leading-relaxed">
+          {{ value.description }}
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Misión y Visión Section -->
+<section class="section-padding bg-white">
+  <div class="container-sumak">
+    <div class="grid lg:grid-cols-2 gap-12">
+      <div class="card">
+        <h3 class="text-3xl font-against text-sumak-green mb-4">
+          Misión
+        </h3>
+        <p class="text-lg text-text-body leading-relaxed">
+          Crear rituales gastronómicos que transformen el acto de regalar y compartir en una experiencia sensorial con intención, inspirados en la cultura, los símbolos y la cosmovisión de Colombia, e interpretados desde una propuesta contemporánea a través de una curaduría precisa de ingredientes seleccionados por su calidad y afinidad sensorial.
+        </p>
+      </div>
+      <div class="card">
+        <h3 class="text-3xl font-against text-sumak-green mb-4">
+          Visión
+        </h3>
+        <p class="text-lg text-text-body leading-relaxed">
+          Consolidarnos como una marca referente en rituales gastronómicos premium en Colombia, reconocida por su criterio, sensibilidad y manera consciente de reinterpretar el sabor como una experiencia cultural y emocional.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="section-padding bg-gradient-to-r from-sumak-gold to-sumak-gold/90">
+  <div class="container-sumak text-center">
+    <h2 class="text-4xl font-against text-sumak-green mb-6">
+      Descubre Nuestros Rituales
+    </h2>
+    <p class="text-xl text-sumak-brown mb-8 max-w-2xl mx-auto">
+      Explora nuestra colección de experiencias gastronómicas cuidadosamente curadas
+    </p>
+    <app-button
+      variant="primary"
+      size="lg"
+      [routerLink]="'/catalog'">
+      Ver Catálogo
+    </app-button>
+  </div>
+</section>
