@@ -30,6 +30,8 @@ export type LogoVariant = 'default' | 'compact';
           alt="SUMAK Gourmet Logo" 
           class="w-full h-full object-cover rounded-full"
           loading="eager"
+          width="48"
+          height="48"
         >
       </div>
       

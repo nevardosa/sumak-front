@@ -70,7 +70,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
           }
         });
       },
-      { threshold: 0.1 }
+      { threshold: 0.05 }
     );
 
     const sections = document.querySelectorAll('section');
