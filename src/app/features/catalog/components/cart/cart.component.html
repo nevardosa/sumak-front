@@ -1,5 +1,5 @@
 <div class="cart-overlay" (click)="onBackdropClick($event)">
-  <div class="cart-container">
+  <div class="cart-container" (click)="$event.stopPropagation()">
     <!-- Header -->
     <header class="cart-header">
       <div class="header-content">

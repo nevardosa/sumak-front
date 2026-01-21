@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, inject, ChangeDetectionStrategy, signal } from '@angular/core';
+import { Component, Output, EventEmitter, inject, OnInit, OnDestroy, ChangeDetectionStrategy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CartService } from '../../services/cart.service';
 import { ButtonComponent } from '../../../../shared/components/button/button.component';
@@ -14,7 +14,7 @@ import { CartItem } from '../../models/catalog.models';
   styleUrl: './cart.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CartComponent {
+export class CartComponent implements OnInit, OnDestroy {
   @Output() close = new EventEmitter<void>();
   
   private readonly priceFormatter = new Intl.NumberFormat('es-CO', {
@@ -26,6 +26,14 @@ export class CartComponent {
   readonly cartService = inject(CartService);
   readonly showCheckoutModal = signal(false);
   readonly isProcessing = signal(false);
+
+  ngOnInit(): void {
+    document.body.style.overflow = 'hidden';
+  }
+
+  ngOnDestroy(): void {
+    document.body.style.overflow = '';
+  }
 
   onClose(): void {
     this.close.emit();

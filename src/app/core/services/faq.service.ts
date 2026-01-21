@@ -17,8 +17,8 @@ export class FaqService {
   private readonly faqItems: readonly FaqItem[] = [
     {
       id: '1',
-      question: '¿Qué es Sumak Gourmet?',
-      answer: 'Sumak Gourmet es una plataforma especializada en productos gastronómicos premium de Colombia, conectando sabores auténticos con paladares exigentes.',
+      question: '¿Qué es Sumak?',
+      answer: 'Sumak es una marca de rituales gastronómicos pensados para regalar con intención. Diseñamos experiencias que combinan sabor, curaduría y significado.',
       category: APP_CONSTANTS.FAQ.CATEGORIES.GENERAL,
       priority: 1
     },
@@ -38,8 +38,8 @@ export class FaqService {
     },
     {
       id: '4',
-      question: '¿Los productos son artesanales?',
-      answer: 'Sí, trabajamos directamente con productores locales que mantienen técnicas tradicionales y artesanales transmitidas de generación en generación.',
+      question: '¿Qué tipo de productos incluye Sumak?',
+      answer: 'Cada ritual combina ingredientes seleccionados por su afinidad sensorial y equilibrio, pensados como una experiencia completa, no como productos aislados.',
       category: APP_CONSTANTS.FAQ.CATEGORIES.PRODUCTS,
       priority: 1
     },

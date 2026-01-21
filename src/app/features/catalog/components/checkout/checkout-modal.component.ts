@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, inject, OnInit, ChangeDetectionStrategy, signal, computed } from '@angular/core';
+import { Component, Output, EventEmitter, inject, OnInit, OnDestroy, ChangeDetectionStrategy, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CartService } from '../../services/cart.service';
@@ -32,7 +32,7 @@ import { SecureValidators } from '../../../../shared/validators/secure-validator
   styleUrl: './checkout-modal.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CheckoutModalComponent implements OnInit {
+export class CheckoutModalComponent implements OnInit, OnDestroy {
   @Output() close = new EventEmitter<void>();
 
   private readonly fb = inject(FormBuilder);
@@ -80,6 +80,11 @@ export class CheckoutModalComponent implements OnInit {
 
   ngOnInit(): void {
     this.setupFormSubscriptions();
+    document.body.style.overflow = 'hidden';
+  }
+
+  ngOnDestroy(): void {
+    document.body.style.overflow = '';
   }
 
   private initializeForm(): FormGroup {
