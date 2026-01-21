@@ -30,6 +30,7 @@ export class CatalogComponent implements OnInit {
   showToast = signal(false);
   toastTitle = signal('');
   toastMessage = signal('');
+  cartShake = signal(false);
 
   readonly categories = [
     { value: 'all', label: 'Todos los Productos', count: 0 },
@@ -83,6 +84,12 @@ export class CatalogComponent implements OnInit {
   onAddToCart(product: Product): void {
     this.cartService.addToCart(product);
     this.showAddToCartNotification(product);
+    this.triggerCartShake();
+  }
+
+  private triggerCartShake(): void {
+    this.cartShake.set(true);
+    setTimeout(() => this.cartShake.set(false), 600);
   }
 
   private showAddToCartNotification(product: Product): void {
