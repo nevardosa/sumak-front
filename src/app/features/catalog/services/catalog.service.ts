@@ -13,7 +13,7 @@ export class CatalogService {
   {
     id: '1',
     name: 'Kuntur Dorado',
-    price: 524500,
+    price: 426700,
     description:
       'En las culturas andinas, el kuntur es el ave que habita las mayores alturas, símbolo de visión clara y conexión entre el cielo y la tierra. Kuntur Dorado representa ese vuelo amplio que desciende hacia los valles cálidos, donde los aromas cítricos se mezclan con la fruta y el aire se vuelve luminoso.',
     experience: 'Un combo fresco, vivo y elegante, pensado para abrir los sentidos.',
@@ -51,7 +51,7 @@ export class CatalogService {
   {
     id: '2',
     name: 'Sol Caribeño',
-    price: 379500,
+    price: 310650,
     description:
       'El Caribe no solo se vive: se siente en la piel y se guarda en la memoria. Sol Caribeño rinde homenaje a la luz que madura la caña, al tiempo que transforma la bebida y a la dulzura natural de las tierras cálidas.',
     experience: 'Este combo evoca tardes doradas, calma tropical y un sabor que abraza sin prisa.',
@@ -87,7 +87,7 @@ export class CatalogService {
   {
     id: '3',
     name: 'Zipa Real',
-    price: 481600,
+    price: 392300,
     description:
       'El zipa era el gobernante del pueblo muisca, una figura de autoridad serena y equilibrio. Zipa Real honra ese liderazgo tranquilo, donde el poder no se impone, se reconoce.',
     experience:
@@ -124,7 +124,7 @@ export class CatalogService {
   {
     id: '4',
     name: 'Magia Colombiana',
-    price: 659900,
+    price: 535000,
     description:
       'Colombia es selva, cacao, madera y misterio. Magia Colombiana celebra esa profundidad que no se explica, se siente.',
     experience:
@@ -161,7 +161,7 @@ export class CatalogService {
   {
     id: '5',
     name: 'Mama Killa',
-    price: 336400,
+    price: 276100,
     description:
       'La luna protege, envuelve y calma. Mama Killa es un homenaje a la dulzura, la ternura y el descanso del alma.',
     experience: 'Un combo cremoso y reconfortante, pensado como un abrazo nocturno.',
@@ -197,7 +197,7 @@ export class CatalogService {
   {
     id: '6',
     name: 'Raíz de Fuego',
-    price: 713000,
+    price: 578000,
     description:
       'El fuego nace de la raíz. Este combo honra la energía ancestral del agave y la fuerza de la tierra.',
     experience: 'Intensidad y carácter en cada sorbo.',
@@ -233,7 +233,7 @@ export class CatalogService {
   {
     id: '7',
     name: 'Viejo Amigo',
-    price: 470700,
+    price: 383600,
     description:
       'Hay sabores que siempre están. Viejo Amigo representa la confianza, la memoria y la tradición.',
     experience: 'Familiaridad y calidez en cada momento.',
@@ -269,7 +269,7 @@ export class CatalogService {
   {
     id: '8',
     name: 'Zipa Supremo',
-    price: 909400,
+    price: 734550,
     description:
       'Cuando el linaje alcanza su punto más alto, surge la excelencia. Zipa Supremo representa la madurez del poder, la profundidad del tiempo y el lujo que no necesita alzar la voz.',
     experience:
@@ -306,7 +306,7 @@ export class CatalogService {
   {
     id: '9',
     name: 'Ritual de Agave',
-    price: 618700,
+    price: 502000,
     description:
       'Hay bebidas que no se toman con prisa, se honran. Ritual del Agave invita a detener el tiempo, a conectar con la tierra, con el origen y con el pulso sereno del agave reposado.',
     experience: 'Es un momento consciente, profundo y cálido, pensado para disfrutar lentamente.',
@@ -342,7 +342,7 @@ export class CatalogService {
   {
     id: '10',
     name: 'Killa Sagrada',
-    price: 283900,
+    price: 234200,
     description:
       'La luna, killa, ha sido símbolo de lo sagrado y lo íntimo desde tiempos ancestrales. Killa Sagrada es un pequeño ritual personal, delicado y luminoso.',
     experience: 'Intimidad y conexión espiritual.',
@@ -378,7 +378,7 @@ export class CatalogService {
   {
     id: '11',
     name: 'Kuntur Andino',
-    price: 457500,
+    price: 373100,
     description:
       'En las alturas de la cordillera, el kuntur vuela con calma y precisión. Kuntur Andino representa pureza, visión y sobriedad.',
     experience: 'Un combo limpio, elevado y elegante.',
@@ -414,7 +414,7 @@ export class CatalogService {
   {
     id: '12',
     name: 'Pasión Andina',
-    price: 371200,
+    price: 304000,
     description:
       'Vino Malbec Las Moras La cordillera es fuerza, emoción y carácter. Pasión Andina expresa esa intensidad que nace de la altura y se siente en cada sorbo.',
     experience: 'Un combo honesto, profundo y lleno de expresión frutal.',
@@ -450,7 +450,7 @@ export class CatalogService {
   {
     id: '13',
     name: 'Selva Nocturna',
-    price: 373700,
+    price: 306000,
     description:
       'Vino Cabernet Sauvignon Cuando la selva se sumerge en la noche, todo se vuelve más profundo.',
     experience: 'Selva Nocturna es contemplación, silencio y elegancia natural.',
@@ -486,7 +486,7 @@ export class CatalogService {
   {
     id: '14',
     name: 'Parche Fino',
-    price: 459000,
+    price: 374200,
     description:
       'Chivas Regal 12 años, Un parche fino es ese encuentro donde la conversación fluye sin esfuerzo y el tiempo se vuelve secundario.',
     experience: 'Este combo celebra la amistad desde la elegancia y el equilibrio.',
