@@ -31,8 +31,8 @@ export class FaqService {
     },
     {
       id: '3',
-      question: '¿Cuáles son los tiempos de entrega?',
-      answer: 'Los tiempos de entrega varían según tu ubicación. En Bogotá: 1-2 días hábiles. Otras ciudades principales: 2-4 días hábiles. Municipios: 3-7 días hábiles.',
+      question: '¿Cuándo llega mi pedido?',
+      answer: 'En Bogotá, los pedidos pueden entregarse el mismo día o dentro de un plazo máximo de 24 horas, según disponibilidad.\n\nPara envíos fuera de Bogotá, el plazo de entrega es de hasta 4 días hábiles. En estos casos, el costo de envío es asumido por el cliente y, como apoyo, Sumak otorga un bono de $25.000 COP que se descuenta directamente del valor del ritual.\n\nCada pedido se prepara con cuidado para que llegue en perfectas condiciones, listo para regalar.',
       category: APP_CONSTANTS.FAQ.CATEGORIES.SHIPPING,
       priority: 1
     },
