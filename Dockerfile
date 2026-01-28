@@ -13,19 +13,20 @@ RUN npm run build:prod
 # Stage 2: Runtime
 FROM nginx:alpine
 
+# Remove default configs
 RUN rm -f /etc/nginx/conf.d/default.conf
 RUN rm -rf /usr/share/nginx/html/*
 
+# Copy built app
 COPY --from=build /app/dist/sumak-front/browser/ /usr/share/nginx/html/
 
-RUN echo "=== HTML DIR ===" && ls -la /usr/share/nginx/html
-RUN echo "=== HTML/BROWSER DIR ===" && ls -la /usr/share/nginx/html/browser || true
-RUN echo "=== HTML INDEX ===" && ls -la /usr/share/nginx/html/index.html || true
-
-
-
+# Copy optimized nginx config
 COPY nginx.conf /etc/nginx/nginx.conf
+
+# Verify setup
+RUN echo "=== Nginx HTML Directory ===" && ls -la /usr/share/nginx/html
+RUN echo "=== Nginx Config Test ===" && nginx -t
 
 EXPOSE 8080
 
-CMD ["sh", "-c", "nginx -t && nginx -g 'daemon off;'"]
+CMD ["nginx", "-g", "daemon off;"]
