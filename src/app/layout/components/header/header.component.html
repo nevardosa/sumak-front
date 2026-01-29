@@ -7,7 +7,7 @@
       </div>
 
       <!-- Navigation -->
-      <nav class="hidden md:flex space-x-4">
+      <nav class="hidden lg:flex space-x-4">
         <a
           routerLink="/home"
           routerLinkActive="text-sumak-green border-sumak-gold"
@@ -137,7 +137,7 @@
       </div>
 
       <!-- Mobile menu button -->
-      <div class="md:hidden">
+      <div class="lg:hidden">
         <button
           (click)="toggleMobileMenu()"
           class="p-2 rounded-lg text-text-secondary hover:text-sumak-green hover:bg-gray-50 transition-colors duration-200"
@@ -163,7 +163,7 @@
     </div>
 
     <!-- Mobile Navigation -->
-    <div *ngIf="showMobileMenu" class="md:hidden border-t border-gray-100 py-4">
+    <div *ngIf="showMobileMenu" class="lg:hidden border-t border-gray-100 py-4">
       <div class="space-y-2">
         <a
           routerLink="/catalog"
