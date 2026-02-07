@@ -1,0 +1,90 @@
+:host {
+  display: block;
+}
+
+.corporate-quote-page {
+  min-height: calc(100vh - 80px);
+  background: linear-gradient(to bottom, #F9FAFB, white);
+}
+
+.quote-container {
+  max-width: 48rem;
+  margin: 0 auto;
+}
+
+.quote-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.quote-title {
+  font-family: 'Against', serif;
+  font-size: 2.5rem;
+  font-weight: 400;
+  color: #063A3D;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+
+.quote-subtitle {
+  font-family: 'Garet', sans-serif;
+  font-size: 1.125rem;
+  color: #6B6B6B;
+  line-height: 1.6;
+  max-width: 36rem;
+  margin: 0 auto;
+
+  strong {
+    font-weight: 500;
+    color: #063A3D;
+  }
+}
+
+.quote-form-wrapper {
+  background: white;
+  border-radius: 1rem;
+  padding: 2.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.quote-footer {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.quote-footer-text {
+  font-family: 'Garet', sans-serif;
+  font-size: 0.8125rem;
+  color: #9CA3AF;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.quote-footer-link {
+  color: #C5A572;
+  text-decoration: underline;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: #063A3D;
+  }
+}
+
+@media (max-width: 767px) {
+  .quote-title {
+    font-size: 2rem;
+  }
+
+  .quote-subtitle {
+    font-size: 1rem;
+  }
+
+  .quote-form-wrapper {
+    padding: 1.5rem;
+  }
+
+  .quote-header {
+    margin-bottom: 2rem;
+  }
+}

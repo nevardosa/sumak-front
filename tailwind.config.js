@@ -53,6 +53,9 @@ module.exports = {
         'wider': '0.05em',
         'widest': '0.1em',
       },
+      lineHeight: {
+        'premium': '1.1',
+      },
       animation: {
         'shake': 'shake 0.5s ease-in-out',
       },

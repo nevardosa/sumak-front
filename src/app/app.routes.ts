@@ -37,6 +37,22 @@ export const routes: Routes = [
         path: 'contact',
         loadComponent: () => import('./features/contact/contact.component').then(m => m.ContactComponent)
       },
+      {
+        path: 'regalos-corporativos',
+        loadComponent: () => import('./features/corporate-gifts/corporate-gifts.component').then(m => m.CorporateGiftsComponent)
+      },
+      {
+        path: 'experiencias',
+        loadComponent: () => import('./features/experiences/experiences.component').then(m => m.ExperiencesComponent)
+      },
+      {
+        path: 'cotizacion-corporativa',
+        loadComponent: () => import('./features/corporate-quote/corporate-quote.component').then(m => m.CorporateQuoteComponent)
+      },
+      {
+        path: 'politica-tratamiento-datos',
+        loadComponent: () => import('./features/legal/privacy-policy/privacy-policy.component').then(m => m.PrivacyPolicyComponent)
+      },
       // Admin routes - protected
       {
         path: 'dashboard',

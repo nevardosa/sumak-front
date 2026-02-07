@@ -3,15 +3,17 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ButtonComponent } from '../../shared/components/button/button.component';
 import { SocialLinksComponent } from '../../shared/components/social-links/social-links.component';
+import { CorporateSolutionsSectionComponent } from './components/corporate-solutions-section/corporate-solutions-section.component';
 import { Subject, interval, takeUntil } from 'rxjs';
 import { FeatureCard, Testimonial, Stat, HomeComponentState } from '../../core/models';
 import { APP_CONSTANTS } from '../../core/constants/app.constants';
 import { HomeDataService } from '../../core/services/home-data.service';
+import { SeoService } from '../../core/services/seo.service';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, RouterModule, ButtonComponent, SocialLinksComponent],
+  imports: [CommonModule, RouterModule, ButtonComponent, SocialLinksComponent, CorporateSolutionsSectionComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -19,6 +21,7 @@ import { HomeDataService } from '../../core/services/home-data.service';
 export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   private readonly destroy$ = new Subject<void>();
   private readonly homeDataService = inject(HomeDataService);
+  private readonly seoService = inject(SeoService);
   private observer!: IntersectionObserver;
   
   @ViewChild('statsSection') statsSection!: ElementRef;
@@ -35,12 +38,13 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   readonly features = this.homeDataService.features;
   readonly testimonials = this.homeDataService.testimonials;
   readonly stats = this.homeDataService.stats;
-  readonly animatedStats = signal<{ id: string; value: number; label: string }[]>(
-    this.stats.map(s => ({ ...s, value: 0 }))
+  readonly animatedStats = signal<Stat[]>(
+    this.stats.map(s => ({ ...s }))
   );
   private statsAnimated = false;
 
   ngOnInit(): void {
+    this.setSeoMetadata();
     this.initializeTestimonialRotation();
   }
 
@@ -54,6 +58,25 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.observer) {
       this.observer.disconnect();
     }
+    this.seoService.removeSchema('breadcrumb-schema');
+  }
+
+  private setSeoMetadata(): void {
+    this.seoService.updateMetaTags({
+      title: 'Rituales Gastronómicos Premium | Sumak Gourmet Colombia',
+      description: 'Rituales gastronómicos premium con curaduría experta. Regalos corporativos y experiencias gourmet únicas en Colombia. Chocolate 70% cacao, frutos secos seleccionados, mieles infusionadas.',
+      keywords: 'rituales gastronómicos, regalos corporativos premium, experiencias gourmet Colombia, chocolate premium, curaduría gastronómica, regalos empresariales',
+      ogTitle: 'Rituales Gastronómicos Premium | Sumak Gourmet',
+      ogDescription: 'Experiencias gastronómicas curadas para empresas y personas que valoran el detalle, la intención y el significado.',
+      ogImage: 'https://sumakgourmet.co/assets/images/og-cover.jpg',
+      ogUrl: 'https://sumakgourmet.co/',
+      canonicalUrl: '/'
+    });
+
+    this.seoService.addOrganizationSchema();
+    this.seoService.addBreadcrumbSchema([
+      { name: 'Inicio', url: '/' }
+    ]);
   }
 
   private initScrollAnimations(): void {
@@ -82,29 +105,42 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private animateStats(): void {
     this.stats.forEach((stat, index) => {
-      const targetValue = parseInt(stat.value);
+      // Solo animar métricas numéricas
+      if (stat.type === 'qualitative') {
+        return;
+      }
+      
+      const numericValue = parseInt(stat.value);
+      
+      if (isNaN(numericValue)) {
+        return;
+      }
+      
+      const targetValue = numericValue;
       const duration = 2500;
       const steps = 80;
-      const increment = targetValue / steps;
-      let currentValue = 0;
       let currentStep = 0;
 
       const timer = setInterval(() => {
         currentStep++;
         const progress = currentStep / steps;
         const easeOut = 1 - Math.pow(1 - progress, 3);
-        currentValue = targetValue * easeOut;
+        const currentValue = targetValue * easeOut;
         
         if (currentStep >= steps) {
-          currentValue = targetValue;
           clearInterval(timer);
+          this.animatedStats.update(stats => {
+            const newStats = [...stats];
+            newStats[index] = { ...stat, value: targetValue.toString() };
+            return newStats;
+          });
+        } else {
+          this.animatedStats.update(stats => {
+            const newStats = [...stats];
+            newStats[index] = { ...stat, value: Math.floor(currentValue).toString() };
+            return newStats;
+          });
         }
-        
-        this.animatedStats.update(stats => {
-          const newStats = [...stats];
-          newStats[index] = { ...stat, value: Math.floor(currentValue) };
-          return newStats;
-        });
       }, duration / steps);
     });
   }
@@ -155,7 +191,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     return testimonial.id;
   }
 
-  trackByStat(index: number, stat: { id: string; value: number; label: string }): string {
+  trackByStat(index: number, stat: Stat): string {
     return stat.id;
   }
 }

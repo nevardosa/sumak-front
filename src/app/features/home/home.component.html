@@ -2,16 +2,18 @@
 <section class="relative bg-gradient-to-br from-sumak-green via-sumak-green/95 to-sumak-brown overflow-hidden">
   <div class="absolute inset-0 bg-sumak-pattern opacity-10"></div>
   <div class="relative container-sumak section-padding">
-    <div class="grid lg:grid-cols-2 gap-12 items-center">
+    <div class="grid lg:grid-cols-[4fr_1fr] gap-12 items-center">
       <div class="text-center lg:text-left">
-        <h1 class="text-5xl lg:text-6xl text-white mb-6 leading-tight">
-          Sabores
-          <span class="text-sumak-gold font-against">Auténticos</span>
-          de Colombia
-        </h1>
+        <h2 class="text-6xl lg:text-6xl text-white mb-6 leading-premium">
+          Rituales gourmet <span class="text-sumak-gold font-against">premium para reconocer</span> lo que importa.
+        </h2>
+        <p class="text-xl text-gray-200 leading-relaxed max-w-2xl">
+          Rituales gastronómicos curados con ingredientes nacionales e internacionales, seleccionados por su calidad, origen y afinidad sensorial.
+        </p>
         <p class="text-xl text-gray-200 mb-8 leading-relaxed max-w-2xl">
-            Rituales gastronómicos inspirados en la diversidad cultural del país, concebidos a partir de una curaduría cuidadosa de ingredientes nacionales e internacionales, seleccionados por su calidad, origen y afinidad sensorial.
-          <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+          Diseñados para regalar con intención y elegancia.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
           <app-button
             variant="secondary"
             size="lg"
@@ -24,22 +26,42 @@
   </div>
 </section>
 
+<!-- Corporate Solutions Section -->
+<app-corporate-solutions-section></app-corporate-solutions-section>
+
 <!-- Stats Section -->
 <section #statsSection class="bg-white py-16">
   <div class="container-sumak">
     <div class="text-center mb-8">
-      <p class="text-2xl font-semibold text-sumak-green">Desde Octubre 2025</p>
+      <p class="text-2xl font-semibold text-sumak-green">Confianza construida a través de cada ritual</p>
     </div>
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
       <div
         *ngFor="let stat of animatedStats(); trackBy: trackByStat"
         class="text-center group transform transition-all duration-500 hover:scale-110">
-        <div class="text-4xl lg:text-5xl font-bold text-sumak-green mb-2 transition-all duration-300">
-          {{ stat.id === 'customers' ? '+' : '' }}{{ stat.value }}
-        </div>
-        <div class="text-text-secondary font-medium">
-          {{ stat.label }}
-        </div>
+
+        <!-- Numeric Stat -->
+        <ng-container *ngIf="stat.type === 'numeric'">
+          <div class="text-4xl lg:text-5xl font-bold text-sumak-green mb-2 transition-all duration-300">
+            {{ stat.id === 'customers' ? '+' : '' }}{{ stat.value }}
+          </div>
+          <div class="text-text-secondary font-medium">
+            {{ stat.label }}
+          </div>
+        </ng-container>
+
+        <!-- Qualitative Stat -->
+        <ng-container *ngIf="stat.type === 'qualitative'">
+          <div class="flex flex-col items-center justify-center h-full">
+            <div class="text-2xl lg:text-3xl font-semibold text-sumak-green mb-2 transition-all duration-300">
+              {{ stat.value }}
+            </div>
+            <div class="text-text-secondary font-medium">
+              {{ stat.label }}
+            </div>
+          </div>
+        </ng-container>
+
       </div>
     </div>
   </div>
@@ -53,8 +75,7 @@
         ¿Por qué elegir Sumak?
       </h2>
       <p class="text-xl text-text-secondary max-w-3xl mx-auto">
-        Nos especializamos en conectar los sabores auténticos de Colombia
-        con tu mesa, garantizando calidad y tradición en cada producto.
+        Diseñamos rituales gastronómicos que convierten un regalo en una experiencia con significado, cuidando cada detalle desde la curaduría hasta la entrega final.
       </p>
     </div>
 
@@ -87,10 +108,10 @@
           Nuestra Historia
         </h2>
         <p class="text-lg text-text-body mb-6 leading-relaxed">
-          Sumak nace del respeto profundo por el sabor y de la convicción de que regalar es un acto cargado de intención. Entendemos el regalo como un ritual: una forma de expresar cuidado, pausa y significado a través de la experiencia gastronómica.
+          Sumak nace del respeto profundo por el sabor y de la convicción de que regalar es un acto cargado de intención. Entendemos cada regalo como un ritual: una forma de expresar cuidado, pausa y significado a través de la experiencia gastronómica.
         </p>
         <app-button variant="primary" size="lg" routerLink="/about">
-          Conoce Más Sobre Nosotros
+          Conoce más sobre Sumak
         </app-button>
       </div>
     </div>

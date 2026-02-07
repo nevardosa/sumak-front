@@ -1,0 +1,28 @@
+<section class="corporate-quote-page">
+  <div class="container-sumak section-padding">
+    <div class="quote-container">
+      <!-- Header -->
+      <header class="quote-header" *ngIf="!showSuccessScreen()">
+        <h1 class="quote-title">
+          Cotización corporativa personalizada
+        </h1>
+        <p class="quote-subtitle">
+          Completa el formulario y nuestro equipo se pondrá en contacto contigo en un plazo máximo de <strong>24 horas hábiles</strong> para diseñar una propuesta a la medida de tu organización.
+        </p>
+      </header>
+
+      <!-- Form -->
+      <div class="quote-form-wrapper">
+        <app-corporate-quote-form (successScreenChange)="onSuccessScreenChange($event)"></app-corporate-quote-form>
+      </div>
+
+      <!-- Footer Info -->
+      <footer class="quote-footer" *ngIf="!showSuccessScreen()">
+        <p class="quote-footer-text">
+          Al enviar este formulario, autorizas a Sumak Gourmet a tratar tus datos personales para responder a tu solicitud de cotización.
+          Consulta nuestra <a routerLink="/politica-tratamiento-datos" class="quote-footer-link">Política de Tratamiento de Datos Personales</a>.
+        </p>
+      </footer>
+    </div>
+  </div>
+</section>

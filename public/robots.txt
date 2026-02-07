@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /auth/
+Disallow: /dashboard/
+Disallow: /profile/
+Disallow: /settings/
+Disallow: /register
+
+Sitemap: https://sumakgourmet.co/sitemap.xml

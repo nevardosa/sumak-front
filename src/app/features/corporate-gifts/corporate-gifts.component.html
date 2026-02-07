@@ -1,0 +1,201 @@
+<!-- Hero B2B Section -->
+<section class="relative bg-gradient-to-br from-sumak-green via-sumak-green/95 to-sumak-brown overflow-hidden">
+  <div class="absolute inset-0 bg-sumak-pattern opacity-10"></div>
+  <div class="relative container-sumak section-padding">
+    <div class="max-w-4xl mx-auto text-center">
+      <h1 class="text-4xl lg:text-6xl font-against text-white mb-6 leading-tight">
+        {{ content.hero.title }}
+      </h1>
+      <p class="text-xl text-gray-200 mb-8 leading-relaxed max-w-3xl mx-auto">
+        {{ content.hero.subtitle }}
+      </p>
+      
+      <!-- Bullets -->
+      <ul class="space-y-3 mb-10 text-left max-w-2xl mx-auto">
+        <li *ngFor="let bullet of content.hero.bullets" class="flex items-start text-gray-200">
+          <svg class="w-6 h-6 text-sumak-gold mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+          </svg>
+          <span class="text-lg">{{ bullet }}</span>
+        </li>
+      </ul>
+
+      <!-- CTAs -->
+      <div class="flex flex-col sm:flex-row gap-4 justify-center mb-4">
+        <app-button
+          variant="secondary"
+          size="lg"
+          [routerLink]="'/cotizacion-corporativa'">
+          {{ content.hero.primaryCta }}
+        </app-button>
+        <app-button
+          variant="outline"
+          size="lg"
+          [routerLink]="'/catalog'">
+          {{ content.hero.secondaryCta }}
+        </app-button>
+      </div>
+
+      <!-- Microcopy -->
+      <p class="text-sm text-gray-300">
+        {{ content.hero.microcopy }}
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- Segments Section -->
+<section class="section-padding bg-white fade-in-section">
+  <div class="container-sumak">
+    <div class="text-center mb-16">
+      <h2 class="text-4xl font-against text-sumak-green mb-4">
+        {{ content.segments.title }}
+      </h2>
+      <p class="text-xl text-text-secondary max-w-3xl mx-auto leading-relaxed">
+        {{ content.segments.subtitle }}
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div
+        *ngFor="let segment of content.segments.items; trackBy: trackBySegmentId"
+        class="card text-center hover:shadow-xl transition-all duration-300">
+        <h3 class="text-xl font-semibold text-sumak-green mb-3">
+          {{ segment.title }}
+        </h3>
+        <p class="text-text-body leading-relaxed">
+          {{ segment.description }}
+        </p>
+      </div>
+    </div>
+
+    <div class="text-center">
+      <app-button
+        variant="outline"
+        size="md"
+        [routerLink]="'/cotizacion-corporativa'">
+        Hablar con un asesor
+      </app-button>
+    </div>
+  </div>
+</section>
+
+<!-- Differentiators Section -->
+<section class="section-padding bg-gray-50 fade-in-section">
+  <div class="container-sumak">
+    <div class="text-center mb-16">
+      <h2 class="text-4xl font-against text-sumak-green mb-4">
+        {{ content.differentiators.title }}
+      </h2>
+      <p class="text-xl text-text-secondary max-w-3xl mx-auto leading-relaxed">
+        {{ content.differentiators.subtitle }}
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div
+        *ngFor="let item of content.differentiators.items; trackBy: trackBySegmentId"
+        class="card group hover:shadow-xl transition-all duration-300">
+        <div class="flex items-center justify-center w-16 h-16 bg-sumak-gold/20 rounded-xl mb-6 group-hover:bg-sumak-gold/30 transition-all duration-300">
+          <svg class="w-8 h-8 text-sumak-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="item.icon"></path>
+          </svg>
+        </div>
+        <h3 class="text-xl font-semibold text-sumak-green mb-3">
+          {{ item.title }}
+        </h3>
+        <p class="text-text-body leading-relaxed">
+          {{ item.description }}
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Process Section -->
+<section class="section-padding bg-white fade-in-section">
+  <div class="container-sumak">
+    <div class="text-center mb-16">
+      <h2 class="text-4xl font-against text-sumak-green mb-4">
+        {{ content.process.title }}
+      </h2>
+    </div>
+
+    <div class="max-w-4xl mx-auto">
+      <div class="grid md:grid-cols-2 gap-8 mb-8">
+        <div
+          *ngFor="let step of content.process.steps; trackBy: trackByStepNumber"
+          class="flex gap-4">
+          <div class="flex-shrink-0">
+            <div class="w-12 h-12 rounded-full bg-sumak-gold/20 flex items-center justify-center">
+              <span class="text-2xl font-bold text-sumak-green">{{ step.number }}</span>
+            </div>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold text-sumak-green mb-2">
+              {{ step.title }}
+            </h3>
+            <p class="text-text-body leading-relaxed">
+              {{ step.description }}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card bg-sumak-gold/10 border-l-4 border-sumak-gold">
+        <p class="text-text-body leading-relaxed">
+          {{ content.process.note }}
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Trust/Stats Section -->
+<section class="section-padding bg-gray-50 fade-in-section">
+  <div class="container-sumak">
+    <div class="text-center mb-12">
+      <h2 class="text-4xl font-against text-sumak-green mb-4">
+        {{ content.trust.title }}
+      </h2>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-6">
+      <div
+        *ngFor="let stat of content.trust.stats"
+        class="text-center">
+        <div class="text-4xl lg:text-5xl font-bold text-sumak-green mb-2">
+          {{ stat.value }}
+        </div>
+        <div class="text-text-secondary font-medium">
+          {{ stat.label }}
+        </div>
+      </div>
+    </div>
+
+    <p class="text-center text-text-secondary text-lg">
+      {{ content.trust.subtitle }}
+    </p>
+  </div>
+</section>
+
+<!-- Final CTA Section -->
+<section class="section-padding bg-gradient-to-r from-sumak-gold to-sumak-gold/90 fade-in-section">
+  <div class="container-sumak text-center">
+    <h2 class="text-4xl font-against text-sumak-green mb-4">
+      {{ content.finalCta.title }}
+    </h2>
+    <p class="text-xl text-sumak-brown mb-8 max-w-2xl mx-auto">
+      {{ content.finalCta.subtitle }}
+    </p>
+    <app-button
+      variant="primary"
+      size="lg"
+      [routerLink]="'/cotizacion-corporativa'">
+      {{ content.finalCta.cta }}
+    </app-button>
+    <p class="text-sm text-sumak-brown mt-4">
+      {{ content.finalCta.microcopy }}
+    </p>
+  </div>
+</section>
