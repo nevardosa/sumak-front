@@ -19,6 +19,7 @@ export class ButtonComponent {
   @Input() loading = false;
   @Input() fullWidth = false;
   @Input() icon: ButtonIcon = 'none';
+  @Input() customClass = '';
   
   @Output() clicked = new EventEmitter<Event>();
 
@@ -41,7 +42,7 @@ export class ButtonComponent {
     
     const widthClass = this.fullWidth ? 'w-full' : '';
     
-    return `${baseClasses} ${variantClasses[this.variant]} ${sizeClasses[this.size]} ${widthClass}`.trim();
+    return `${baseClasses} ${variantClasses[this.variant]} ${sizeClasses[this.size]} ${widthClass} ${this.customClass}`.trim();
   }
 
   handleClick(event: Event): void {

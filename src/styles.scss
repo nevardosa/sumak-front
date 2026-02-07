@@ -157,7 +157,19 @@
 
   /* SUMAK Gourmet Layout */
   .section-padding {
-    @apply py-16 px-4 sm:px-6 lg:px-8;
+    @apply py-4 px-4;
+  }
+
+  @media (min-width: 768px) {
+    .section-padding {
+      @apply py-16 px-6;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .section-padding {
+      @apply py-16 px-8;
+    }
   }
 
   .container-sumak {
