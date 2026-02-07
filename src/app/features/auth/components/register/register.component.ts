@@ -1,5 +1,5 @@
-import { Component, OnInit, OnDestroy, inject, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, OnDestroy, inject, signal, PLATFORM_ID, Inject } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { ButtonComponent } from '../../../../shared/components/button/button.component';
 import { ROUTES } from '../../../../core/constants/app.constants';
@@ -26,21 +26,27 @@ import { ROUTES } from '../../../../core/constants/app.constants';
 })
 export class RegisterComponent implements OnInit, OnDestroy {
   private readonly router = inject(Router);
+  private readonly platformId = inject(PLATFORM_ID);
+  private readonly isBrowser = isPlatformBrowser(this.platformId);
   
   // Security state
   private readonly securityViolations = signal(0);
-  private securityIntervals: number[] = [];
+  private securityIntervals: ReturnType<typeof setInterval>[] = [];
   
   // Component state
   readonly routes = ROUTES;
   
   constructor() {
-    this.initializeSecurityMeasures();
+    if (this.isBrowser) {
+      this.initializeSecurityMeasures();
+    }
   }
 
   ngOnInit(): void {
-    this.startSecurityMonitoring();
-    this.logSecurityAccess();
+    if (this.isBrowser) {
+      this.startSecurityMonitoring();
+      this.logSecurityAccess();
+    }
   }
 
   ngOnDestroy(): void {
@@ -61,6 +67,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
    * Prevent developer tools access
    */
   private preventDevTools(): void {
+    if (!this.isBrowser) return;
+    
     // Disable F12, Ctrl+Shift+I, Ctrl+U, Ctrl+S, Ctrl+A
     document.addEventListener('keydown', (e) => {
       if (e.key === 'F12' || 
@@ -88,6 +96,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
    * Prevent code inspection and tampering
    */
   private preventInspection(): void {
+    if (!this.isBrowser) return;
+    
     // Clear console periodically
     const consoleInterval = setInterval(() => {
       console.clear();
@@ -103,6 +113,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
    * Advanced anti-tampering measures
    */
   private preventTampering(): void {
+    if (!this.isBrowser) return;
+    
     // Detect DevTools by window size changes
     const tamperInterval = setInterval(() => {
       const threshold = 160;
@@ -131,6 +143,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
    * Start continuous security monitoring
    */
   private startSecurityMonitoring(): void {
+    if (!this.isBrowser) return;
+    
     // Monitor for DOM manipulation attempts
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
@@ -176,6 +190,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
    * Execute security lockdown procedures
    */
   private executeSecurityLockdown(): void {
+    if (!this.isBrowser) return;
+    
     // Clear all sensitive data
     sessionStorage.clear();
     localStorage.clear();
@@ -197,6 +213,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
    * Log security access for audit purposes
    */
   private logSecurityAccess(): void {
+    if (!this.isBrowser) return;
+    
     const accessLog = {
       timestamp: new Date().toISOString(),
       component: 'RegisterComponent',

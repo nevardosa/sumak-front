@@ -39,15 +39,17 @@ export function provideAnalyticsRouteTracking() {
       const analytics = inject(AnalyticsService);
       const titleService = inject(Title);
 
-      // Track initial page view
+      // Track initial page view (only in browser)
       if (typeof window !== 'undefined') {
         const initialPath = window.location.pathname;
         const initialTitle = titleService.getTitle();
         
         // Small delay to ensure GTM is loaded
         setTimeout(() => {
-          analytics.trackPageView(initialPath, initialTitle);
-          trackSpecificViewEvent(initialPath, analytics);
+          if (typeof window !== 'undefined') {
+            analytics.trackPageView(initialPath, initialTitle);
+            trackSpecificViewEvent(initialPath, analytics);
+          }
         }, 100);
       }
 

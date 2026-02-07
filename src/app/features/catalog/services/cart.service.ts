@@ -35,6 +35,11 @@ export class CartService implements OnDestroy {
   }
 
   private setupCacheCleanup(): void {
+    // Only setup cleanup in browser environment
+    if (typeof window === 'undefined') {
+      return;
+    }
+    
     this.cacheCleanupTimer = window.setInterval(() => {
       const now = Date.now();
       

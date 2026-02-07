@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { Title, Meta } from '@angular/platform-browser';
 import { ButtonComponent } from '../../shared/components/button/button.component';
+import { SeoService } from '../../core/services/seo.service';
 import { CORPORATE_GIFTS_CONTENT } from './constants/corporate-gifts.constants';
 
 @Component({
@@ -18,10 +18,7 @@ export class CorporateGiftsComponent implements OnInit, OnDestroy {
 
   readonly content = CORPORATE_GIFTS_CONTENT;
 
-  constructor(
-    private readonly titleService: Title,
-    private readonly metaService: Meta
-  ) {}
+  constructor(private readonly seoService: SeoService) {}
 
   ngOnInit(): void {
     this.setSeoMetadata();
@@ -30,35 +27,25 @@ export class CorporateGiftsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.observer?.disconnect();
+    this.seoService.removeSchema('breadcrumb-schema');
   }
 
   private setSeoMetadata(): void {
-    this.titleService.setTitle('Regalos Corporativos Premium | Sumak Gourmet');
-    
-    this.metaService.updateTag({
-      name: 'description',
-      content: 'Regalos corporativos premium con curaduría gastronómica y cobertura nacional. Propuestas a la medida para empresas y equipos. Cotiza en Sumak.'
+    this.seoService.updateMetaTags({
+      title: 'Regalos Corporativos Premium | Sumak Gourmet',
+      description: 'Rituales gastronómicos curados para empresas. Regalos corporativos premium con presentación impecable y entrega en 24h en Bogotá. Cobertura nacional.',
+      keywords: 'regalos corporativos premium, regalos empresariales colombia, detalles corporativos, propuestas a medida, regalos ejecutivos',
+      ogTitle: 'Regalos Corporativos Premium | Sumak Gourmet',
+      ogDescription: 'Rituales gastronómicos curados para empresas con presentación premium y cobertura nacional.',
+      ogImage: 'https://sumakgourmet.co/assets/images/og-cover.jpg',
+      ogUrl: 'https://sumakgourmet.co/regalos-corporativos',
+      canonicalUrl: '/regalos-corporativos'
     });
 
-    this.metaService.updateTag({
-      name: 'keywords',
-      content: 'regalos corporativos premium, regalos empresariales, propuestas a la medida, Colombia, curaduría gastronómica'
-    });
-
-    this.metaService.updateTag({
-      property: 'og:title',
-      content: 'Regalos Corporativos Premium | Sumak Gourmet'
-    });
-
-    this.metaService.updateTag({
-      property: 'og:description',
-      content: 'Regalos corporativos premium con curaduría gastronómica y cobertura nacional. Propuestas a la medida para empresas y equipos.'
-    });
-
-    this.metaService.updateTag({
-      property: 'og:type',
-      content: 'website'
-    });
+    this.seoService.addBreadcrumbSchema([
+      { name: 'Inicio', url: '/' },
+      { name: 'Regalos Corporativos', url: '/regalos-corporativos' }
+    ]);
   }
 
   private initScrollAnimations(): void {
