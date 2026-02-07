@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { Title, Meta } from '@angular/platform-browser';
 import { ButtonComponent } from '../../shared/components/button/button.component';
+import { SeoService } from '../../core/services/seo.service';
 import { EXPERIENCES_CONTENT } from './constants/experiences.constants';
 
 @Component({
@@ -18,10 +18,7 @@ export class ExperiencesComponent implements OnInit, OnDestroy {
 
   readonly content = EXPERIENCES_CONTENT;
 
-  constructor(
-    private readonly titleService: Title,
-    private readonly metaService: Meta
-  ) {}
+  constructor(private readonly seoService: SeoService) {}
 
   ngOnInit(): void {
     this.setSeoMetadata();
@@ -30,35 +27,25 @@ export class ExperiencesComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.observer?.disconnect();
+    this.seoService.removeSchema('breadcrumb-schema');
   }
 
   private setSeoMetadata(): void {
-    this.titleService.setTitle('Experiencias | Sumak Gourmet');
-    
-    this.metaService.updateTag({
-      name: 'description',
-      content: 'Experiencias gastronómicas premium para regalar con intención. Rituales curados, presentación impecable y propuestas corporativas a la medida.'
+    this.seoService.updateMetaTags({
+      title: 'Experiencias Gastronómicas Premium | Sumak Gourmet',
+      description: 'Rituales gastronómicos que transforman el acto de regalar en una experiencia sensorial y emocional. Curaduría experta, presentación impecable.',
+      keywords: 'experiencias gastronómicas premium, rituales sensoriales, regalos con intención, curaduría gastronómica colombia',
+      ogTitle: 'Experiencias Gastronómicas Premium | Sumak Gourmet',
+      ogDescription: 'Rituales gastronómicos que transforman el acto de regalar en una experiencia sensorial y emocional.',
+      ogImage: 'https://sumakgourmet.co/assets/images/og-cover.jpg',
+      ogUrl: 'https://sumakgourmet.co/experiencias',
+      canonicalUrl: '/experiencias'
     });
 
-    this.metaService.updateTag({
-      name: 'keywords',
-      content: 'experiencias gastronómicas, rituales premium, regalos con intención, curaduría gastronómica, Colombia'
-    });
-
-    this.metaService.updateTag({
-      property: 'og:title',
-      content: 'Experiencias | Sumak Gourmet'
-    });
-
-    this.metaService.updateTag({
-      property: 'og:description',
-      content: 'Experiencias gastronómicas premium para regalar con intención. Rituales curados, presentación impecable y propuestas corporativas a la medida.'
-    });
-
-    this.metaService.updateTag({
-      property: 'og:type',
-      content: 'website'
-    });
+    this.seoService.addBreadcrumbSchema([
+      { name: 'Inicio', url: '/' },
+      { name: 'Experiencias', url: '/experiencias' }
+    ]);
   }
 
   private initScrollAnimations(): void {

@@ -1,9 +1,9 @@
-import { Component, OnInit, OnDestroy, signal, computed, ChangeDetectionStrategy, inject, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, OnDestroy, signal, computed, ChangeDetectionStrategy, inject, ElementRef, ViewChild, AfterViewInit, PLATFORM_ID, Inject } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ButtonComponent } from '../../shared/components/button/button.component';
 import { SocialLinksComponent } from '../../shared/components/social-links/social-links.component';
-import { CorporateSolutionsSectionComponent } from './components/corporate-solutions-section/corporate-solutions-section.component';
+
 import { Subject, interval, takeUntil } from 'rxjs';
 import { FeatureCard, Testimonial, Stat, HomeComponentState } from '../../core/models';
 import { APP_CONSTANTS } from '../../core/constants/app.constants';
@@ -13,7 +13,7 @@ import { SeoService } from '../../core/services/seo.service';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, RouterModule, ButtonComponent, SocialLinksComponent, CorporateSolutionsSectionComponent],
+  imports: [CommonModule, RouterModule, ButtonComponent, SocialLinksComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -22,7 +22,9 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   private readonly destroy$ = new Subject<void>();
   private readonly homeDataService = inject(HomeDataService);
   private readonly seoService = inject(SeoService);
-  private observer!: IntersectionObserver;
+  private readonly platformId = inject(PLATFORM_ID);
+  private readonly isBrowser = isPlatformBrowser(this.platformId);
+  private observer?: IntersectionObserver;
   
   @ViewChild('statsSection') statsSection!: ElementRef;
   
@@ -45,11 +47,15 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnInit(): void {
     this.setSeoMetadata();
-    this.initializeTestimonialRotation();
+    if (this.isBrowser) {
+      this.initializeTestimonialRotation();
+    }
   }
 
   ngAfterViewInit(): void {
-    this.initScrollAnimations();
+    if (this.isBrowser) {
+      this.initScrollAnimations();
+    }
   }
 
   ngOnDestroy(): void {
@@ -81,6 +87,10 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private initScrollAnimations(): void {
+    if (!this.isBrowser || typeof IntersectionObserver === 'undefined') {
+      return;
+    }
+    
     this.observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -106,11 +116,15 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     const sections = document.querySelectorAll('section');
     sections.forEach(section => {
       section.classList.add('fade-in-section');
-      this.observer.observe(section);
+      this.observer?.observe(section);
     });
   }
 
   private animateStats(): void {
+    if (!this.isBrowser) {
+      return;
+    }
+    
     this.stats.forEach((stat, index) => {
       // Solo animar métricas numéricas
       if (stat.type === 'qualitative') {
@@ -175,6 +189,8 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   onTestimonialChange(index: number): void {
+    if (!this.isBrowser) return;
+    
     this.state.update(current => ({
       ...current,
       currentTestimonial: index,

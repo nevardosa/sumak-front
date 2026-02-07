@@ -113,8 +113,8 @@ export class AnalyticsService {
       // Sanitize parameters to remove PII
       const sanitizedParams = this.sanitizeParams(params);
 
-      // Add default page_path if not provided
-      if (!sanitizedParams.page_path) {
+      // Add default page_path if not provided (only in browser)
+      if (!sanitizedParams.page_path && typeof window !== 'undefined') {
         sanitizedParams.page_path = window.location.pathname;
       }
 
