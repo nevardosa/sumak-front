@@ -4,11 +4,11 @@
     <div class="flex items-center justify-between p-6 border-b border-gray-100">
       <div>
         <h2 class="font-angainc text-2xl font-normal text-sumak-green">{{ product.name }}</h2>
-        <span class="inline-block px-3 py-1 text-xs font-garet font-medium rounded-full mt-2" 
+        <span class="inline-block px-3 py-1 text-xs font-garet font-medium rounded-full mt-2"
               [ngClass]="getCategoryClass(product.category)">{{ getCategoryLabel(product.category) }}</span>
       </div>
-      <button 
-        (click)="onClose()" 
+      <button
+        (click)="onClose()"
         class="w-10 h-10 bg-gray-100 hover:bg-gray-200 text-gray-500 hover:text-gray-700 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-gray-300">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -23,7 +23,7 @@
         <!-- Image Section -->
         <div class="space-y-4">
           <div class="relative cursor-zoom-in group" (click)="onImageClick()">
-            <img [src]="product.imageUrl" [alt]="product.name" 
+            <img [src]="product.imageUrl" [alt]="product.name"
                  class="w-full aspect-square object-cover rounded-xl hover:opacity-90 transition-opacity">
             <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/20 rounded-xl">
               <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -75,7 +75,7 @@
           <div>
             <h4 class="font-garet font-semibold text-sumak-green mb-4">Ocasiones Ideales</h4>
             <div class="flex flex-wrap gap-2">
-              <span *ngFor="let occasion of product.occasions" 
+              <span *ngFor="let occasion of product.occasions"
                     class="px-3 py-1 bg-sumak-green/10 text-sumak-green text-xs font-garet rounded-full">
                 {{ occasion }}
               </span>
@@ -92,7 +92,7 @@
               <div>
                 <h5 class="font-garet font-medium text-sumak-brown text-sm mb-2">Temperamento</h5>
                 <div class="flex flex-wrap gap-1">
-                  <span *ngFor="let temp of product.affinity.temperament" 
+                  <span *ngFor="let temp of product.affinity.temperament"
                         class="px-2 py-1 bg-sumak-brown/10 text-sumak-brown text-xs font-garet rounded">
                     {{ temp }}
                   </span>
@@ -101,7 +101,7 @@
               <div>
                 <h5 class="font-garet font-medium text-sumak-wine text-sm mb-2">Paladar</h5>
                 <div class="flex flex-wrap gap-1">
-                  <span *ngFor="let palate of product.affinity.palate" 
+                  <span *ngFor="let palate of product.affinity.palate"
                         class="px-2 py-1 bg-sumak-wine/10 text-sumak-wine text-xs font-garet rounded">
                     {{ palate }}
                   </span>
@@ -134,7 +134,7 @@
       <div class="bg-gray-50/50 -mx-6 -mb-6 px-6 py-6 mt-8">
         <div class="flex flex-col sm:flex-row gap-4">
           <!-- Secondary Action -->
-          <button 
+          <button
             (click)="onClose()"
             class="flex-1 sm:flex-none sm:min-w-[140px] px-6 py-3 bg-white border-2 border-gray-200 hover:border-sumak-green/30 text-gray-700 hover:text-sumak-green font-garet font-medium rounded-xl transition-all duration-200 hover:shadow-sm focus:outline-none focus:ring-2 focus:ring-sumak-green/20 focus:border-sumak-green">
             <span class="flex items-center justify-center space-x-2">
@@ -144,9 +144,9 @@
               <span>Cerrar</span>
             </span>
           </button>
-          
+
           <!-- Primary Action -->
-          <button 
+          <button
             (click)="onAddToCart()"
             class="flex-1 px-8 py-3 bg-gradient-to-r from-sumak-green to-sumak-green/90 hover:from-sumak-green/90 hover:to-sumak-green text-white font-garet font-semibold rounded-xl transition-all duration-200 hover:shadow-lg hover:shadow-sumak-green/25 focus:outline-none focus:ring-2 focus:ring-sumak-green/30 focus:ring-offset-2 transform hover:scale-[1.02] active:scale-[0.98]">
             <span class="flex items-center justify-center space-x-2">
@@ -157,12 +157,9 @@
             </span>
           </button>
         </div>
-        
+
         <!-- Additional Info -->
         <div class="mt-4 text-center">
-          <p class="font-garet text-xs text-gray-500">
-            Envío gratuito en pedidos superiores a $200.000
-          </p>
         </div>
       </div>
     </div>
@@ -172,10 +169,10 @@
 <!-- Image Zoom Modal -->
 <div *ngIf="showImageZoom" class="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/90" (click)="onCloseImageZoom()">
   <div class="relative w-full h-full flex items-center justify-center">
-    <img [src]="product.imageUrl" [alt]="product.name" 
+    <img [src]="product.imageUrl" [alt]="product.name"
          class="max-w-[90vw] max-h-[90vh] w-auto h-auto object-contain rounded-lg shadow-2xl">
-    <button 
-      (click)="onCloseImageZoom()" 
+    <button
+      (click)="onCloseImageZoom()"
       class="absolute top-6 right-6 w-12 h-12 bg-black/60 hover:bg-black/80 text-white rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-white/50 backdrop-blur-sm">
       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
