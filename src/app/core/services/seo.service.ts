@@ -153,6 +153,29 @@ export class SeoService {
     this.doc.head.appendChild(script);
   }
 
+  addWebSiteSchema(): void {
+    const existingScript = this.doc.getElementById('website-schema');
+    if (existingScript) {
+      return;
+    }
+
+    const script = this.doc.createElement('script');
+    script.id = 'website-schema';
+    script.type = 'application/ld+json';
+    script.text = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Sumak Gourmet",
+      "url": "https://sumakgourmet.co",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://sumakgourmet.co/catalog?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    });
+    this.doc.head.appendChild(script);
+  }
+
   addBreadcrumbSchema(items: Array<{name: string, url: string}>): void {
     const existingScript = this.doc.getElementById('breadcrumb-schema');
     if (existingScript) {
