@@ -6,6 +6,7 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { routes } from './app.routes';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
 import { errorInterceptor } from './core/interceptors/error.interceptor';
+import { provideAnalyticsRouteTracking } from './core/providers/analytics-route-tracking.provider';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -17,6 +18,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(
       withInterceptors([authInterceptor, errorInterceptor])
     ),
-    provideAnimations()
+    provideAnimations(),
+    provideAnalyticsRouteTracking() // ← Analytics auto-tracking
   ]
 };
