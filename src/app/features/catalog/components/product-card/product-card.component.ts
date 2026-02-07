@@ -24,6 +24,13 @@ export class ProductCardComponent {
     this.productClick.emit(this.product);
   }
 
+  onCardClick(event: Event): void {
+    const target = event.target as HTMLElement;
+    if (!target.closest('button')) {
+      this.productClick.emit(this.product);
+    }
+  }
+
   onAddToCart(event: Event): void {
     event.stopPropagation();
     this.addToCart.emit(this.product);

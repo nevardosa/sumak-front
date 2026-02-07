@@ -86,6 +86,12 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
           if (entry.isIntersecting) {
             entry.target.classList.add('animate-in');
             
+            // Animate benefit items with stagger
+            const benefitItems = entry.target.querySelectorAll('.benefit-item');
+            benefitItems.forEach((item) => {
+              item.classList.add('animate-in');
+            });
+            
             if (entry.target === this.statsSection?.nativeElement && !this.statsAnimated) {
               this.statsAnimated = true;
               this.animateStats();

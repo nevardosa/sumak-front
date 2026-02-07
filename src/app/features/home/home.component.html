@@ -1,17 +1,23 @@
 <!-- Hero Section -->
 <section class="relative bg-gradient-to-br from-sumak-green via-sumak-green/95 to-sumak-brown overflow-hidden">
+  <!-- GIF Background -->
+  <div class="absolute inset-0">
+    <img
+      src="assets/images/hero-animation.GIF"
+      alt="Sumak Background"
+      class="w-full h-full object-cover object-center scale-[2.5] sm:scale-150 lg:scale-125 xl:scale-100 opacity-10 xl:opacity-20" />
+  </div>
   <div class="absolute inset-0 bg-sumak-pattern opacity-10"></div>
   <div class="relative container-sumak section-padding">
     <div class="grid lg:grid-cols-[4fr_1fr] gap-12 items-center">
       <div class="text-center lg:text-left">
-        <h2 class="text-6xl lg:text-6xl text-white mb-6 leading-premium">
-          Rituales gourmet <span class="text-sumak-gold font-against">premium para reconocer</span> lo que importa.
-        </h2>
-        <p class="text-xl text-gray-200 leading-relaxed max-w-2xl">
-          Rituales gastronómicos curados con ingredientes nacionales e internacionales, seleccionados por su calidad, origen y afinidad sensorial.
-        </p>
-        <p class="text-xl text-gray-200 mb-8 leading-relaxed max-w-2xl">
-          Diseñados para regalar con intención y elegancia.
+        <h1 class="text-4xl md:text-5xl lg:text-5xl xl:text-6xl text-white mb-6 leading-tight">
+          Sabores
+          <span class="text-sumak-gold font-against">Auténticos</span>
+          de Colombia
+        </h1>
+        <p class="text-lg md:text-xl lg:text-lg xl:text-xl text-gray-200 mb-8 leading-relaxed max-w-2xl mx-auto lg:mx-0">
+          Rituales gastronómicos inspirados en la diversidad cultural del país, concebidos a partir de una curaduría cuidadosa de ingredientes nacionales e internacionales, seleccionados por su calidad, origen y afinidad sensorial.
         </p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
           <app-button
@@ -26,42 +32,106 @@
   </div>
 </section>
 
-<!-- Corporate Solutions Section -->
-<app-corporate-solutions-section></app-corporate-solutions-section>
-
-<!-- Stats Section -->
-<section #statsSection class="bg-white py-16">
+<!-- Beneficios Section -->
+<section class="bg-white py-12 fade-in-section">
   <div class="container-sumak">
-    <div class="text-center mb-8">
-      <p class="text-2xl font-semibold text-sumak-green">Confianza construida a través de cada ritual</p>
+    <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <!-- Beneficio 1 -->
+      <div class="benefit-item flex items-start gap-4 p-6 rounded-xl hover:bg-gray-50 transition-colors" style="transition-delay: 0ms;">
+        <div class="flex-shrink-0">
+          <svg class="w-8 h-8 text-sumak-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+          </svg>
+        </div>
+        <div>
+          <h3 class="font-semibold text-sumak-green mb-1">Entrega rápida</h3>
+          <p class="text-sm text-text-secondary">Bogotá en menos de 24h listo para regalar</p>
+        </div>
+      </div>
+
+      <!-- Beneficio 2 -->
+      <div class="benefit-item flex items-start gap-4 p-6 rounded-xl hover:bg-gray-50 transition-colors" style="transition-delay: 250ms;">
+        <div class="flex-shrink-0">
+          <svg class="w-8 h-8 text-sumak-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/>
+          </svg>
+        </div>
+        <div>
+          <h3 class="font-semibold text-sumak-green mb-1">Listo para regalar</h3>
+          <p class="text-sm text-text-secondary">Presentación premium incluida</p>
+        </div>
+      </div>
+
+      <!-- Beneficio 3 -->
+      <div class="benefit-item flex items-start gap-4 p-6 rounded-xl hover:bg-gray-50 transition-colors" style="transition-delay: 500ms;">
+        <div class="flex-shrink-0">
+          <svg class="w-8 h-8 text-sumak-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
+          </svg>
+        </div>
+        <div>
+          <h3 class="font-semibold text-sumak-green mb-1">Experiencia curada</h3>
+          <p class="text-sm text-text-secondary">Maridaje pensado, no productos sueltos</p>
+        </div>
+      </div>
+
+      <!-- Beneficio 4 -->
+      <div class="benefit-item flex items-start gap-4 p-6 rounded-xl hover:bg-gray-50 transition-colors" style="transition-delay: 750ms;">
+        <div class="flex-shrink-0">
+          <svg class="w-8 h-8 text-sumak-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+        </div>
+        <div>
+          <h3 class="font-semibold text-sumak-green mb-1">Envío nacional</h3>
+          <p class="text-sm text-text-secondary">Descuento de $25.000 sobre el ritual</p>
+        </div>
+      </div>
     </div>
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-      <div
-        *ngFor="let stat of animatedStats(); trackBy: trackByStat"
-        class="text-center group transform transition-all duration-500 hover:scale-110">
+  </div>
+</section>
 
-        <!-- Numeric Stat -->
-        <ng-container *ngIf="stat.type === 'numeric'">
-          <div class="text-4xl lg:text-5xl font-bold text-sumak-green mb-2 transition-all duration-300">
-            {{ stat.id === 'customers' ? '+' : '' }}{{ stat.value }}
-          </div>
-          <div class="text-text-secondary font-medium">
-            {{ stat.label }}
-          </div>
-        </ng-container>
+<!-- Rituales Destacados -->
+<section class="section-padding bg-white">
+  <div class="container-sumak">
+    <div class="text-center mb-16">
+      <h2 class="text-3xl lg:text-4xl font-against text-sumak-green mb-4">
+        Empieza por los favoritos de nuestros clientes
+      </h2>
+    </div>
 
-        <!-- Qualitative Stat -->
-        <ng-container *ngIf="stat.type === 'qualitative'">
-          <div class="flex flex-col items-center justify-center h-full">
-            <div class="text-2xl lg:text-3xl font-semibold text-sumak-green mb-2 transition-all duration-300">
-              {{ stat.value }}
-            </div>
-            <div class="text-text-secondary font-medium">
-              {{ stat.label }}
-            </div>
-          </div>
-        </ng-container>
+    <div class="grid md:grid-cols-3 gap-12 max-w-6xl mx-auto">
+      <!-- Sol Caribeño -->
+      <div class="group cursor-pointer transition-all duration-300 hover:-translate-y-2" [routerLink]="['/catalog']">
+        <div class="relative overflow-hidden rounded-full w-64 h-64 mx-auto mb-6 shadow-lg group-hover:shadow-2xl transition-shadow duration-300">
+          <img
+            src="assets/images/sol_caribeno.jpg"
+            alt="Sol Caribeño"
+            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+        </div>
+        <h3 class="text-2xl font-against text-sumak-green text-center">Sol Caribeño</h3>
+      </div>
 
+      <!-- Zipa Real -->
+      <div class="group cursor-pointer transition-all duration-300 hover:-translate-y-2" [routerLink]="['/catalog']">
+        <div class="relative overflow-hidden rounded-full w-64 h-64 mx-auto mb-6 shadow-lg group-hover:shadow-2xl transition-shadow duration-300">
+          <img
+            src="assets/images/zipa_real.jpg"
+            alt="Zipa Real"
+            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+        </div>
+        <h3 class="text-2xl font-against text-sumak-green text-center">Zipa Real</h3>
+      </div>
+
+      <!-- Pasión Andina -->
+      <div class="group cursor-pointer transition-all duration-300 hover:-translate-y-2" [routerLink]="['/catalog']">
+        <div class="relative overflow-hidden rounded-full w-64 h-64 mx-auto mb-6 shadow-lg group-hover:shadow-2xl transition-shadow duration-300">
+          <img
+            src="assets/images/pasion_andina.jpg"
+            alt="Pasión Andina"
+            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+        </div>
+        <h3 class="text-2xl font-against text-sumak-green text-center">Pasión Andina</h3>
       </div>
     </div>
   </div>
