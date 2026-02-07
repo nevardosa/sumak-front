@@ -6,7 +6,7 @@ export const APP_CONSTANTS = {
     THEME: 'theme_preference',
     LANGUAGE: 'language_preference'
   },
-  
+
   API_ENDPOINTS: {
     AUTH: {
       LOGIN: '/auth/login',
@@ -17,25 +17,25 @@ export const APP_CONSTANTS = {
     },
     USERS: '/users'
   },
-  
+
   PAGINATION: {
     DEFAULT_PAGE: 1,
     DEFAULT_LIMIT: 10,
     MAX_LIMIT: 100
   },
-  
+
   VALIDATION: {
     PASSWORD_MIN_LENGTH: 8,
     EMAIL_PATTERN: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
     PHONE_PATTERN: /^\+?[\d\s\-\(\)]+$/
   },
-  
+
   TIMEOUTS: {
     API_REQUEST: 30000,
     DEBOUNCE_SEARCH: 300,
     TOAST_DURATION: 5000
   },
-  
+
   // Home Page Constants
   HOME: {
     TESTIMONIAL_ROTATION_INTERVAL: 5000,
@@ -45,7 +45,7 @@ export const APP_CONSTANTS = {
       SECONDARY: '/about'
     }
   },
-  
+
   // Social Media Constants
   SOCIAL_MEDIA: {
     INSTAGRAM: {
@@ -64,7 +64,7 @@ export const APP_CONSTANTS = {
       HANDLE: '@sumak_gourmet'
     }
   },
-  
+
   // FAQ Constants
   FAQ: {
     CATEGORIES: {

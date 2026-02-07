@@ -1,0 +1,211 @@
+<!-- (1) Hero Section -->
+<section class="relative bg-gradient-to-br from-sumak-green via-sumak-green/95 to-sumak-brown overflow-hidden">
+  <div class="absolute inset-0 bg-sumak-pattern opacity-10"></div>
+  <div class="relative container-sumak section-padding">
+    <div class="max-w-4xl mx-auto text-center">
+      <h1 class="text-4xl lg:text-6xl font-against text-white mb-6 leading-tight">
+        {{ content.hero.title }}
+      </h1>
+      <p class="text-xl text-gray-200 mb-8 leading-relaxed max-w-3xl mx-auto">
+        {{ content.hero.subtitle }}
+      </p>
+      
+      <!-- Bullets -->
+      <ul class="space-y-3 mb-10 text-left max-w-2xl mx-auto">
+        <li *ngFor="let bullet of content.hero.bullets" class="flex items-start text-gray-200">
+          <svg class="w-6 h-6 text-sumak-gold mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+          </svg>
+          <span class="text-lg">{{ bullet }}</span>
+        </li>
+      </ul>
+
+      <!-- CTAs -->
+      <div class="flex flex-col sm:flex-row gap-4 justify-center mb-4">
+        <app-button
+          variant="secondary"
+          size="lg"
+          [routerLink]="'/cotizacion-corporativa'">
+          {{ content.hero.primaryCta }}
+        </app-button>
+        <app-button
+          variant="outline"
+          size="lg"
+          [routerLink]="'/catalog'">
+          {{ content.hero.secondaryCta }}
+        </app-button>
+      </div>
+
+      <!-- Microcopy -->
+      <p class="text-sm text-gray-300">
+        {{ content.hero.microcopy }}
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- (2) Meaning Section -->
+<section class="section-padding bg-white fade-in-section">
+  <div class="container-sumak">
+    <div class="max-w-3xl mx-auto text-center">
+      <h2 class="text-4xl font-against text-sumak-green mb-6">
+        {{ content.meaning.title }}
+      </h2>
+      <p *ngFor="let paragraph of content.meaning.paragraphs" class="text-lg text-text-body mb-4 leading-relaxed">
+        {{ paragraph }}
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- (3) Sensory Experience Section -->
+<section class="section-padding bg-gray-50 fade-in-section">
+  <div class="container-sumak">
+    <div class="text-center mb-16">
+      <h2 class="text-4xl font-against text-sumak-green mb-4">
+        {{ content.sensory.title }}
+      </h2>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-8">
+      <div
+        *ngFor="let card of content.sensory.cards; trackBy: trackById"
+        class="card text-center hover:shadow-xl transition-all duration-300">
+        <h3 class="text-2xl font-semibold text-sumak-green mb-4">
+          {{ card.title }}
+        </h3>
+        <p class="text-text-body leading-relaxed">
+          {{ card.description }}
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- (4) Emotional Experience Section -->
+<section class="section-padding bg-white fade-in-section">
+  <div class="container-sumak">
+    <div class="max-w-3xl mx-auto text-center">
+      <h2 class="text-4xl font-against text-sumak-green mb-6">
+        {{ content.emotional.title }}
+      </h2>
+      <p *ngFor="let paragraph of content.emotional.paragraphs" class="text-lg text-text-body mb-4 leading-relaxed">
+        {{ paragraph }}
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- (5) Ideal Moments Section -->
+<section class="section-padding bg-gray-50 fade-in-section">
+  <div class="container-sumak">
+    <div class="text-center mb-12">
+      <h2 class="text-4xl font-against text-sumak-green mb-4">
+        {{ content.moments.title }}
+      </h2>
+    </div>
+
+    <div class="max-w-3xl mx-auto grid md:grid-cols-2 gap-6">
+      <div
+        *ngFor="let moment of content.moments.items; trackBy: trackByIndex"
+        class="flex items-center">
+        <svg class="w-6 h-6 text-sumak-gold mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+        </svg>
+        <span class="text-lg text-text-body">{{ moment.text }}</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- (6) Ritual Steps Section -->
+<section class="section-padding bg-white fade-in-section">
+  <div class="container-sumak">
+    <div class="text-center mb-16">
+      <h2 class="text-4xl font-against text-sumak-green mb-4">
+        {{ content.ritual.title }}
+      </h2>
+    </div>
+
+    <div class="max-w-4xl mx-auto">
+      <ol class="grid md:grid-cols-2 gap-8">
+        <li
+          *ngFor="let step of content.ritual.steps; trackBy: trackByNumber"
+          class="flex gap-4">
+          <div class="flex-shrink-0">
+            <div class="w-12 h-12 rounded-full bg-sumak-gold/20 flex items-center justify-center">
+              <span class="text-2xl font-bold text-sumak-green">{{ step.number }}</span>
+            </div>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold text-sumak-green mb-2">
+              {{ step.title }}
+            </h3>
+            <p class="text-text-body leading-relaxed">
+              {{ step.description }}
+            </p>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- (7) Differentiators Section -->
+<section class="section-padding bg-gray-50 fade-in-section">
+  <div class="container-sumak">
+    <div class="text-center mb-12">
+      <h2 class="text-4xl font-against text-sumak-green mb-4">
+        {{ content.differentiators.title }}
+      </h2>
+    </div>
+
+    <div class="max-w-2xl mx-auto">
+      <ul class="space-y-4 mb-8">
+        <li
+          *ngFor="let feature of content.differentiators.features; trackBy: trackByIndex"
+          class="flex items-center">
+          <svg class="w-6 h-6 text-sumak-gold mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+          </svg>
+          <span class="text-lg text-text-body">{{ feature.text }}</span>
+        </li>
+      </ul>
+
+      <p class="text-center text-text-secondary italic">
+        {{ content.differentiators.microcopy }}
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- (8) Final CTA Section -->
+<section class="section-padding bg-gradient-to-r from-sumak-gold to-sumak-gold/90 fade-in-section">
+  <div class="container-sumak text-center">
+    <h2 class="text-4xl font-against text-sumak-green mb-4">
+      {{ content.finalCta.title }}
+    </h2>
+    <p class="text-xl text-sumak-brown mb-8 max-w-2xl mx-auto">
+      {{ content.finalCta.subtitle }}
+    </p>
+    
+    <div class="flex flex-col sm:flex-row gap-4 justify-center mb-4">
+      <app-button
+        variant="primary"
+        size="lg"
+        [routerLink]="'/cotizacion-corporativa'">
+        {{ content.finalCta.primaryCta }}
+      </app-button>
+      <app-button
+        variant="outline"
+        size="lg"
+        [routerLink]="'/catalog'">
+        {{ content.finalCta.secondaryCta }}
+      </app-button>
+    </div>
+
+    <p class="text-sm text-sumak-brown">
+      {{ content.finalCta.microcopy }}
+    </p>
+  </div>
+</section>

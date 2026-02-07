@@ -1,7 +1,8 @@
-import { Component, inject, OnInit, ChangeDetectionStrategy, signal } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy, ChangeDetectionStrategy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CatalogService } from './services/catalog.service';
 import { CartService } from './services/cart.service';
+import { SeoService } from '../../core/services/seo.service';
 import { Product, ProductCategory } from './models/catalog.models';
 import { ProductCardComponent } from './components/product-card/product-card.component';
 import { ProductModalComponent } from './components/product-modal/product-modal.component';
@@ -15,8 +16,9 @@ import { ToastComponent } from '../../shared/components/toast/toast.component';
   templateUrl: './catalog.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CatalogComponent implements OnInit {
+export class CatalogComponent implements OnInit, OnDestroy {
   private readonly catalogService = inject(CatalogService);
+  private readonly seoService = inject(SeoService);
   readonly cartService = inject(CartService);
 
   products: Product[] = [];
@@ -25,7 +27,7 @@ export class CatalogComponent implements OnInit {
   showProductModal = false;
   showCart = false;
   selectedCategory: ProductCategory | 'all' = 'all';
-  
+
   // Toast notification
   showToast = signal(false);
   toastTitle = signal('');
@@ -33,15 +35,38 @@ export class CatalogComponent implements OnInit {
   cartShake = signal(false);
 
   readonly categories = [
-    { value: 'all', label: 'Todos los Productos', count: 0 },
+    { value: 'all', label: 'Todos los rituales', count: 0 },
     { value: ProductCategory.CLASSIC, label: 'Clásicos', count: 0 },
     { value: ProductCategory.PREMIUM, label: 'Premium', count: 0 },
     { value: ProductCategory.EXCLUSIVE, label: 'Exclusivos', count: 0 }
   ];
 
   ngOnInit(): void {
+    this.setSeoMetadata();
     this.loadProducts();
     this.updateCategoryCounts();
+  }
+
+  ngOnDestroy(): void {
+    this.seoService.removeSchema('breadcrumb-schema');
+  }
+
+  private setSeoMetadata(): void {
+    this.seoService.updateMetaTags({
+      title: 'Catálogo de Rituales Gastronómicos Premium | Sumak Gourmet',
+      description: 'Explora nuestros rituales gastronómicos premium: clásicos, premium y exclusivos. Chocolate 70% cacao, frutos secos seleccionados, mieles infusionadas. Envíos a toda Colombia.',
+      keywords: 'catálogo sumak, rituales gastronómicos, chocolate premium colombia, regalos gourmet, experiencias gastronómicas, comprar rituales sumak',
+      ogTitle: 'Catálogo de Rituales Gastronómicos | Sumak Gourmet',
+      ogDescription: 'Descubre rituales gastronómicos curados con ingredientes premium. Clásicos, Premium y Exclusivos.',
+      ogImage: 'https://sumakgourmet.co/assets/images/og-cover.jpg',
+      ogUrl: 'https://sumakgourmet.co/catalog',
+      canonicalUrl: '/catalog'
+    });
+
+    this.seoService.addBreadcrumbSchema([
+      { name: 'Inicio', url: '/' },
+      { name: 'Catálogo', url: '/catalog' }
+    ]);
   }
 
   private loadProducts(): void {
@@ -65,7 +90,7 @@ export class CatalogComponent implements OnInit {
     if (this.selectedCategory === 'all') {
       this.filteredProducts = [...this.products];
     } else {
-      this.filteredProducts = this.products.filter(product => 
+      this.filteredProducts = this.products.filter(product =>
         product.category === this.selectedCategory
       );
     }

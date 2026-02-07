@@ -7,29 +7,29 @@
       </div>
 
       <!-- Navigation -->
-      <nav class="hidden lg:flex space-x-4">
-        <a
-          routerLink="/home"
-          routerLinkActive="text-sumak-green border-sumak-gold"
-          class="text-text-secondary hover:text-sumak-green px-4 py-2 text-sm font-garet font-medium border-b-2 border-transparent hover:border-sumak-gold/50 transition-all duration-200 relative group"
-        >
-          Inicio
-          <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-sumak-gold group-hover:w-full transition-all duration-300 ease-out"></span>
-        </a>
+      <nav class="hidden md:flex flex-1 justify-center space-x-6">
         <a
           routerLink="/catalog"
           routerLinkActive="text-sumak-green border-sumak-gold"
           class="text-text-secondary hover:text-sumak-green px-4 py-2 text-sm font-garet font-medium border-b-2 border-transparent hover:border-sumak-gold/50 transition-all duration-200 relative group"
         >
-          Nuestros Rituales
+          Rituales
           <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-sumak-gold group-hover:w-full transition-all duration-300 ease-out"></span>
         </a>
         <a
-          routerLink="/faq"
+          routerLink="/regalos-corporativos"
           routerLinkActive="text-sumak-green border-sumak-gold"
           class="text-text-secondary hover:text-sumak-green px-4 py-2 text-sm font-garet font-medium border-b-2 border-transparent hover:border-sumak-gold/50 transition-all duration-200 relative group"
         >
-          Preguntas Frecuentes
+          Regalos Corporativos
+          <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-sumak-gold group-hover:w-full transition-all duration-300 ease-out"></span>
+        </a>
+                <a
+          routerLink="/experiencias"
+          routerLinkActive="text-sumak-green border-sumak-gold"
+          class="text-text-secondary hover:text-sumak-green px-4 py-2 text-sm font-garet font-medium border-b-2 border-transparent hover:border-sumak-gold/50 transition-all duration-200 relative group"
+        >
+          Experiencias
           <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-sumak-gold group-hover:w-full transition-all duration-300 ease-out"></span>
         </a>
         <a
@@ -37,7 +37,7 @@
           routerLinkActive="text-sumak-green border-sumak-gold"
           class="text-text-secondary hover:text-sumak-green px-4 py-2 text-sm font-garet font-medium border-b-2 border-transparent hover:border-sumak-gold/50 transition-all duration-200 relative group"
         >
-          Conócenos
+          Sobre Sumak
           <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-sumak-gold group-hover:w-full transition-all duration-300 ease-out"></span>
         </a>
         <a
@@ -48,6 +48,7 @@
           Contacto
           <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-sumak-gold group-hover:w-full transition-all duration-300 ease-out"></span>
         </a>
+
         <!-- Admin only navigation -->
         <ng-container *ngIf="authService.isAuthenticated()">
           <a
@@ -70,7 +71,7 @@
       </nav>
 
       <!-- User Menu -->
-      <div class="flex items-center space-x-4">
+      <div class="flex items-center space-x-6 ml-auto">
         <div *ngIf="authService.currentUser() as user" class="flex items-center space-x-4">
           <div class="hidden md:block text-right">
             <p class="font-garet text-sm font-medium text-sumak-green">
@@ -124,16 +125,38 @@
           </div>
         </div>
 
-        <!-- Login Button for guests -->
-        <div *ngIf="!authService.isAuthenticated()">
+        <div>
           <app-button
             variant="primary"
             size="md"
-            routerLink="/auth/login"
+            routerLink="/cotizacion-corporativa"
           >
-            Mi Cuenta
+            Solicitar propuesta
           </app-button>
         </div>
+
+        <!-- User Icon for guests -->
+        <a
+          *ngIf="!authService.isAuthenticated()"
+          routerLink="/auth/login"
+          class="group relative p-2 rounded-full hover:bg-sumak-gold/5 transition-all duration-300 ease-out"
+          aria-label="Iniciar sesión"
+        >
+          <svg
+            class="w-5 h-5 text-text-secondary/60 group-hover:text-sumak-green transition-colors duration-300"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.5"
+              d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+        </a>
       </div>
 
       <!-- Mobile menu button -->
@@ -171,7 +194,23 @@
           class="block px-4 py-3 font-garet text-base font-medium text-text-secondary hover:bg-gray-50 hover:text-sumak-green rounded-lg transition-colors duration-200"
           (click)="closeMobileMenu()"
         >
-          Catálogo
+          Rituales
+        </a>
+        <a
+          routerLink="/regalos-corporativos"
+          routerLinkActive="bg-sumak-green/5 text-sumak-green"
+          class="block px-4 py-3 font-garet text-base font-medium text-text-secondary hover:bg-gray-50 hover:text-sumak-green rounded-lg transition-colors duration-200"
+          (click)="closeMobileMenu()"
+        >
+          Regalos Corporativos
+        </a>
+        <a
+          routerLink="/experiencias"
+          routerLinkActive="bg-sumak-green/5 text-sumak-green"
+          class="block px-4 py-3 font-garet text-base font-medium text-text-secondary hover:bg-gray-50 hover:text-sumak-green rounded-lg transition-colors duration-200"
+          (click)="closeMobileMenu()"
+        >
+          Experiencias
         </a>
         <a
           routerLink="/faq"

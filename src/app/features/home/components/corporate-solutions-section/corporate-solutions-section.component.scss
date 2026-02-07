@@ -1,0 +1,115 @@
+:host {
+  display: block;
+}
+
+.corporate-card {
+  background: white;
+  border-radius: 0.75rem;
+  padding: 2rem;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(6, 58, 61, 0.08);
+    border-color: rgba(197, 165, 114, 0.2);
+  }
+
+  &__icon-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    background: rgba(197, 165, 114, 0.1);
+    border-radius: 0.75rem;
+    margin-bottom: 1.5rem;
+    transition: background-color 0.3s ease;
+
+    .corporate-card:hover & {
+      background: rgba(197, 165, 114, 0.15);
+    }
+  }
+
+  &__icon {
+    width: 1.75rem;
+    height: 1.75rem;
+    color: #C5A572;
+  }
+
+  &__title {
+    font-family: 'Against', serif;
+    font-size: 1.25rem;
+    font-weight: 400;
+    color: #063A3D;
+    margin-bottom: 0.75rem;
+    line-height: 1.4;
+  }
+
+  &__description {
+    font-family: 'Garet', sans-serif;
+    font-size: 0.9375rem;
+    color: #6B6B6B;
+    line-height: 1.6;
+    margin: 0;
+  }
+}
+
+.corporate-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 2.5rem;
+  background: #063A3D;
+  color: white;
+  font-family: 'Garet', sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  border: 2px solid transparent;
+
+  &:hover {
+    background: #052e31;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(6, 58, 61, 0.2);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: #C5A572;
+    box-shadow: 0 0 0 3px rgba(197, 165, 114, 0.2);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.corporate-support-text {
+  margin-top: 1rem;
+  font-family: 'Garet', sans-serif;
+  font-size: 0.875rem;
+  color: #6B6B6B;
+}
+
+// Responsive adjustments
+@media (max-width: 767px) {
+  .corporate-card {
+    padding: 1.5rem;
+
+    &__title {
+      font-size: 1.125rem;
+    }
+
+    &__description {
+      font-size: 0.875rem;
+    }
+  }
+
+  .corporate-cta {
+    width: 100%;
+    padding: 0.875rem 2rem;
+  }
+}

@@ -1,0 +1,59 @@
+<section
+  class="section-padding bg-gradient-to-b from-gray-50 to-white"
+  aria-labelledby="corporate-solutions-heading">
+  <div class="container-sumak">
+    <!-- Header -->
+    <div class="text-center mb-12 max-w-3xl mx-auto">
+      <h2
+        id="corporate-solutions-heading"
+        class="text-3xl lg:text-4xl font-against text-sumak-green mb-4 leading-tight">
+        Soluciones corporativas para reconocimientos con propósito
+      </h2>
+      <p class="text-lg text-text-secondary leading-relaxed">
+        Propuestas premium para empresas y organizaciones que reconocen el valor de sus profesionales.
+      </p>
+    </div>
+
+    <!-- Cards Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+      <article
+        *ngFor="let solution of solutions; trackBy: trackBySolution"
+        class="corporate-card">
+        <div class="corporate-card__icon-wrapper">
+          <svg
+            class="corporate-card__icon"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            aria-hidden="true">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.5"
+              [attr.d]="solution.icon">
+            </path>
+          </svg>
+        </div>
+        <h3 class="corporate-card__title">
+          {{ solution.title }}
+        </h3>
+        <p class="corporate-card__description">
+          {{ solution.description }}
+        </p>
+      </article>
+    </div>
+
+    <!-- CTA -->
+    <div class="text-center">
+      <a
+        routerLink="/cotizacion-corporativa"
+        class="corporate-cta"
+        aria-label="Solicitar cotización para regalo corporativo">
+        Solicitar propuesta corporativa
+      </a>
+      <p class="corporate-support-text">
+        Atención personalizada para empresas
+      </p>
+    </div>
+  </div>
+</section>

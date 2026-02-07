@@ -22,6 +22,7 @@ export interface Stat {
   readonly value: string;
   readonly label: string;
   readonly description?: string;
+  readonly type?: 'numeric' | 'qualitative';
 }
 
 export interface HeroContent {

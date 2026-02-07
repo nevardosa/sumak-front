@@ -3,20 +3,24 @@
   <div class="bg-white border-b border-gray-100">
     <div class="container-sumak py-12">
       <div class="text-center mb-12">
-        <h1 class="title-primary mb-4">Catálogo SUMAK Gourmet</h1>
+        <h1 class="title-primary mb-4">Catálogo de Rituales Gastronómicos</h1>
         <p class="subtitle text-text-secondary max-w-3xl mx-auto">
-          Descubre nuestras experiencias gastronómicas premium, 
-          cuidadosamente seleccionadas para paladares exigentes
+          Descubre nuestras experiencias gastronómicas premium, cuidadosamente curadas para paladares que valoran el detalle y el significado.
         </p>
       </div>
-
+      <div class="text-center mb-4">
+        <p class="subtitle text-text-secondary max-w-3xl mx-auto">
+          Explora por perfil de sabor, ocasión o tipo de ritual.
+        </p>
+      </div>
       <!-- Filtros por Categoría -->
       <div class="flex flex-wrap justify-center gap-4 mb-8">
+
         <button
           *ngFor="let category of categories"
           (click)="filterByCategory(category.value)"
-          [class]="selectedCategory === category.value 
-            ? 'bg-sumak-green text-white' 
+          [class]="selectedCategory === category.value
+            ? 'bg-sumak-green text-white'
             : 'bg-white text-sumak-green border-2 border-sumak-green hover:bg-sumak-green hover:text-white'"
           class="px-6 py-3 rounded-lg font-garet font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-sumak-gold focus:ring-offset-2"
         >

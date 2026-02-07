@@ -1,9 +1,9 @@
-import { Component, OnInit, signal, computed, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal, computed, inject, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { FaqService } from '../../core/services/faq.service';
 import { FaqItem, FaqCategory, FaqCategoryId, FaqComponentState } from '../../core/models/faq.models';
-import { EnterpriseSEOService } from '../../core/services/enterprise-seo.service';
+import { SeoService } from '../../core/services/seo.service';
 import { SeoOptimizedDirective } from '../../shared/directives/seo-optimized.directive';
 
 @Component({
@@ -14,9 +14,9 @@ import { SeoOptimizedDirective } from '../../shared/directives/seo-optimized.dir
   styleUrls: ['./faq.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class FaqComponent implements OnInit {
+export class FaqComponent implements OnInit, OnDestroy {
   private readonly faqService = inject(FaqService);
-  private readonly seoService = inject(EnterpriseSEOService);
+  private readonly seoService = inject(SeoService);
 
   readonly state = signal<FaqComponentState>({
     selectedCategory: 'all',
@@ -44,7 +44,30 @@ export class FaqComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    this.seoService.updateFAQPage();
+    this.setSeoMetadata();
+  }
+
+  ngOnDestroy(): void {
+    this.seoService.removeSchema('breadcrumb-schema');
+    this.seoService.removeSchema('faq-schema');
+  }
+
+  private setSeoMetadata(): void {
+    this.seoService.updateMetaTags({
+      title: 'Preguntas Frecuentes | Sumak Gourmet - Rituales Gastronómicos',
+      description: 'Resuelve tus dudas sobre rituales gastronómicos, pedidos corporativos, envíos y más. Respuestas rápidas sobre experiencias gourmet premium en Colombia.',
+      keywords: 'preguntas frecuentes sumak, faq rituales gastronómicos, dudas pedidos corporativos, envíos colombia, consultas sumak gourmet',
+      ogTitle: 'Preguntas Frecuentes | Sumak Gourmet',
+      ogDescription: 'Encuentra respuestas sobre nuestros rituales gastronómicos, pedidos corporativos y experiencias premium.',
+      ogImage: 'https://sumakgourmet.co/assets/images/og-cover.jpg',
+      ogUrl: 'https://sumakgourmet.co/faq',
+      canonicalUrl: '/faq'
+    });
+
+    this.seoService.addBreadcrumbSchema([
+      { name: 'Inicio', url: '/' },
+      { name: 'Preguntas Frecuentes', url: '/faq' }
+    ]);
   }
 
   onCategoryChange(categoryId: FaqCategoryId | 'all'): void {
