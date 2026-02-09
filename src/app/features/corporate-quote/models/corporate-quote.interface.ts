@@ -7,6 +7,7 @@ export interface CorporateQuoteForm {
   readonly cantidad: number;
   readonly nota?: string;
   readonly honeypot?: string;
+  readonly recaptchaToken?: string; // reCAPTCHA v3 token
 }
 
 export interface CorporateQuotePayload {
@@ -17,6 +18,7 @@ export interface CorporateQuotePayload {
   readonly telefono: string;
   readonly cantidad: number;
   readonly nota: string;
+  readonly _recaptcha: string; // Formcarry reCAPTCHA field
 }
 
 export enum FormStatus {

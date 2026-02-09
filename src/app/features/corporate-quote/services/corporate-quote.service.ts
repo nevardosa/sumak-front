@@ -1,30 +1,33 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { Observable, throwError, lastValueFrom } from 'rxjs';
 import { catchError, timeout } from 'rxjs/operators';
 import { CorporateQuoteForm, CorporateQuotePayload } from '../models/corporate-quote.interface';
+import { RECAPTCHA_CONSTANTS } from '../../../core/constants/recaptcha.constants';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CorporateQuoteService {
-  private readonly FORMSPREE_ENDPOINT = 'https://formspree.io/f/xykdyzga';
+  // Use environment configuration for endpoint
+  private readonly FORM_ENDPOINT = environment.forms.corporateQuote.endpoint;
   private readonly TIMEOUT_MS = 15000;
   private readonly COOLDOWN_MS = 10000;
   private lastSubmitTime = 0;
 
   constructor(private readonly http: HttpClient) {}
 
-  submitQuote(formData: CorporateQuoteForm): Observable<any> {
+  submitQuote(formData: CorporateQuoteForm): Promise<any> {
     // Anti-spam: Honeypot check
     if (formData.honeypot) {
-      return throwError(() => new Error('Solicitud inválida'));
+      return Promise.reject(new Error('Solicitud inválida'));
     }
 
     // Anti-spam: Cooldown check
     const now = Date.now();
     if (now - this.lastSubmitTime < this.COOLDOWN_MS) {
-      return throwError(() => new Error('Por favor espera unos segundos antes de enviar otra solicitud'));
+      return Promise.reject(new Error('Por favor espera unos segundos antes de enviar otra solicitud'));
     }
 
     // Sanitize and validate
@@ -38,7 +41,7 @@ export class CorporateQuoteService {
       'Accept': 'application/json'
     });
 
-    return this.http.post(this.FORMSPREE_ENDPOINT, payload, { headers })
+    const request$ = this.http.post(this.FORM_ENDPOINT, payload, { headers })
       .pipe(
         timeout(this.TIMEOUT_MS),
         catchError(error => {
@@ -46,6 +49,8 @@ export class CorporateQuoteService {
           return throwError(() => new Error('Error al enviar la solicitud. Por favor intenta nuevamente.'));
         })
       );
+
+    return lastValueFrom(request$);
   }
 
   private sanitizeAndValidate(formData: CorporateQuoteForm): CorporateQuotePayload {
@@ -55,6 +60,11 @@ export class CorporateQuoteService {
       throw new Error('Todos los campos requeridos deben estar completos');
     }
 
+    // Validate reCAPTCHA token
+    if (!formData.recaptchaToken || formData.recaptchaToken.length < 20) {
+      throw new Error('Token de seguridad inválido. Recarga la página e intenta nuevamente.');
+    }
+
     return {
       nombreCompleto: this.sanitizeText(formData.nombreCompleto, 2, 80),
       empresa: this.sanitizeText(formData.empresa, 2, 120),
@@ -62,7 +72,8 @@ export class CorporateQuoteService {
       email: this.sanitizeEmail(formData.email),
       telefono: this.sanitizePhone(formData.telefono),
       cantidad: this.sanitizeQuantity(formData.cantidad),
-      nota: formData.nota ? this.sanitizeText(formData.nota, 0, 400) : ''
+      nota: formData.nota ? this.sanitizeText(formData.nota, 0, 400) : '',
+      _recaptcha: formData.recaptchaToken // Formcarry field name for reCAPTCHA validation
     };
   }
 

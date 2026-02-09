@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ButtonComponent } from '../../shared/components/button/button.component';
 import { SeoService } from '../../core/services/seo.service';
+import { WHATSAPP_CONFIG } from '../../core/config/whatsapp.config';
 
 @Component({
   selector: 'app-contact',
@@ -25,7 +26,7 @@ export class ContactComponent implements OnInit, OnDestroy {
   private setSeoMetadata(): void {
     this.seoService.updateMetaTags({
       title: 'Contacto | Sumak Gourmet - Pedidos Corporativos y Consultas',
-      description: 'Contáctanos para pedidos corporativos, eventos especiales y consultas personalizadas. WhatsApp: +57 320 866 3691 | Email: suumak25@gmail.com. Respuesta en 24 horas hábiles.',
+      description: `Contáctanos para pedidos corporativos, eventos especiales y consultas personalizadas. WhatsApp: +57 ${WHATSAPP_CONFIG.phoneNumber.slice(2)} | Email: suumak25@gmail.com. Respuesta en 24 horas hábiles.`,
       keywords: 'contacto sumak gourmet, pedidos corporativos, regalos empresariales, consultas personalizadas, whatsapp sumak',
       ogTitle: 'Contacto | Sumak Gourmet',
       ogDescription: 'Acompañamos pedidos corporativos, eventos especiales y consultas personalizadas sobre rituales gastronómicos premium.',
@@ -40,7 +41,8 @@ export class ContactComponent implements OnInit, OnDestroy {
     ]);
   }
   
-  readonly whatsappNumber = '573208663691';
+  readonly whatsappNumber = WHATSAPP_CONFIG.phoneNumber;
+  readonly whatsappUrl = `${WHATSAPP_CONFIG.baseUrl}${WHATSAPP_CONFIG.phoneNumber}?text=${encodeURIComponent('Hola, me interesa información sobre pedidos al por mayor')}`;
   readonly email = 'suumak25@gmail.com';
 
   readonly contactMethods = [
@@ -54,8 +56,8 @@ export class ContactComponent implements OnInit, OnDestroy {
     {
       icon: 'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z',
       title: 'WhatsApp',
-      value: '+57 320 866 3691',
-      link: `https://wa.me/573208663691?text=Hola, me interesa información sobre pedidos al por mayor`,
+      value: `+${WHATSAPP_CONFIG.phoneNumber.slice(0, 2)} ${WHATSAPP_CONFIG.phoneNumber.slice(2)}`,
+      link: this.whatsappUrl,
       description: 'Atención directa para pedidos especiales y consultas prioritarias.'
     }
   ];
