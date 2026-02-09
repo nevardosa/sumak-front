@@ -20,10 +20,19 @@ export const environment = {
     publicKey: 'DEVELOPMENT_MODE', // Placeholder for development
     adminEmail: 'suumak25@gmail.com'
   },
+  forms: {
+    corporateQuote: {
+      provider: 'formcarry',
+      endpoint: 'https://formcarry.com/s/8dlE37BRyEd'
+    }
+  },
   security: {
     encryptionEnabled: true,
     auditEnabled: true,
-    antiDebugEnabled: true,
+    antiDebugEnabled: true, // ✅ ENABLED for production
     keyDerivationIterations: 100000
+  },
+  recaptcha: {
+    siteKey: '6Lf1yGUsAAAAAPWDonLO7z9GlhDvJzF0zpuk9kSv' // Site Key de Google reCAPTCHA v3
   }
 };

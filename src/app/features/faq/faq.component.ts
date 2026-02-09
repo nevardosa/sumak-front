@@ -5,6 +5,7 @@ import { FaqService } from '../../core/services/faq.service';
 import { FaqItem, FaqCategory, FaqCategoryId, FaqComponentState } from '../../core/models/faq.models';
 import { SeoService } from '../../core/services/seo.service';
 import { SeoOptimizedDirective } from '../../shared/directives/seo-optimized.directive';
+import { WHATSAPP_CONFIG } from '../../core/config/whatsapp.config';
 
 @Component({
   selector: 'app-faq',
@@ -17,6 +18,8 @@ import { SeoOptimizedDirective } from '../../shared/directives/seo-optimized.dir
 export class FaqComponent implements OnInit, OnDestroy {
   private readonly faqService = inject(FaqService);
   private readonly seoService = inject(SeoService);
+
+  readonly whatsappUrl = `${WHATSAPP_CONFIG.baseUrl}${WHATSAPP_CONFIG.phoneNumber}`;
 
   readonly state = signal<FaqComponentState>({
     selectedCategory: 'all',

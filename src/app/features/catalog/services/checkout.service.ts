@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
+import { WhatsAppService } from '../../../core/services/whatsapp.service';
 import { CustomerData, CheckoutData, Municipality, Department, PaymentInstructions, AddressDetails, IdentificationType } from '../models/catalog.models';
 import { COLOMBIA_DEPARTMENTS, PAYMENT_INSTRUCTIONS, CHECKOUT_CONSTANTS } from '../constants/checkout.constants';
 import { getMunicipalitiesByDepartment } from '../constants/municipalities.constants';
@@ -8,6 +9,7 @@ import { SecureValidators } from '../../../shared/validators/secure-validators';
   providedIn: 'root'
 })
 export class CheckoutService {
+  private readonly whatsappService = inject(WhatsAppService);
   private readonly priceFormatter = new Intl.NumberFormat('es-CO', {
     style: 'currency',
     currency: 'COP',
@@ -209,34 +211,11 @@ export class CheckoutService {
     return this.priceFormatter.format(price);
   }
 
+  /**
+   * Open WhatsApp with order message
+   * Delegates to WhatsAppService for security and consistency
+   */
   openWhatsApp(message: string): void {
-    try {
-      if (!message || typeof message !== 'string') {
-        throw new Error('Mensaje inválido');
-      }
-
-      const encodedMessage = encodeURIComponent(message);
-      const whatsappUrl = `${CHECKOUT_CONSTANTS.WHATSAPP_BASE_URL}${PAYMENT_INSTRUCTIONS.whatsappNumber}?text=${encodedMessage}`;
-      
-      // Detectar móvil
-      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-      
-      if (isMobile) {
-        // En móvil: abrir directamente (más confiable)
-        window.location.href = whatsappUrl;
-      } else {
-        // En desktop: nueva pestaña
-        const newWindow = window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
-        
-        // Verificar si el popup fue bloqueado
-        if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
-          // Fallback: abrir en misma pestaña
-          window.location.href = whatsappUrl;
-        }
-      }
-    } catch (error) {
-      console.error('Error opening WhatsApp:', error);
-      alert('No se pudo abrir WhatsApp. Por favor, envía el pedido manualmente.');
-    }
+    this.whatsappService.openWhatsAppOrder(message, 'checkout');
   }
 }

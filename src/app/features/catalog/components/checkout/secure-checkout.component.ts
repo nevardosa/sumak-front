@@ -8,6 +8,7 @@ import { InputComponent } from '../../../../shared/components/input/input.compon
 import { SelectComponent } from '../../../../shared/components/select/select.component';
 import { CheckboxComponent } from '../../../../shared/components/checkbox/checkbox.component';
 import { DEPARTMENTS } from '../../constants/municipalities.constants';
+import { WhatsAppService } from '../../../../core/services/whatsapp.service';
 
 @Component({
   selector: 'app-secure-checkout',
@@ -209,6 +210,7 @@ export class SecureCheckoutComponent {
 
   private readonly fb = inject(FormBuilder);
   private readonly secureValidator = inject(SecureFormValidatorService);
+  private readonly whatsappService = inject(WhatsAppService);
   readonly cartService = inject(CartService);
 
   readonly integrityValid = signal(true);
@@ -302,9 +304,8 @@ export class SecureCheckoutComponent {
       // Generate military-grade secure WhatsApp message
       const whatsappMessage = await this.cartService.generateMilitarySecureOrder(formData);
       
-      // Send to WhatsApp
-      const whatsappUrl = `https://wa.me/573001234567?text=${encodeURIComponent(whatsappMessage)}`;
-      window.open(whatsappUrl, '_blank');
+      // Send to WhatsApp with security (new tab, noopener, noreferrer)
+      this.whatsappService.openWhatsAppOrder(whatsappMessage, 'secure_checkout');
       
       this.onClose();
     } catch (error) {

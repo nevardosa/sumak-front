@@ -4,7 +4,10 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angula
 import { Router, RouterModule } from '@angular/router';
 import { CorporateQuoteService } from '../../services/corporate-quote.service';
 import { CheckoutService } from '../../../catalog/services/checkout.service';
+import { RecaptchaService } from '../../../../core/services/recaptcha.service';
 import { FormStatus } from '../../models/corporate-quote.interface';
+import { environment } from '../../../../../environments/environment';
+import { RECAPTCHA_CONSTANTS } from '../../../../core/constants/recaptcha.constants';
 
 @Component({
   selector: 'app-corporate-quote-form',
@@ -18,6 +21,7 @@ export class CorporateQuoteFormComponent implements OnInit, OnDestroy {
   private readonly fb = inject(FormBuilder);
   private readonly quoteService = inject(CorporateQuoteService);
   private readonly checkoutService = inject(CheckoutService);
+  private readonly recaptchaService = inject(RecaptchaService);
   private readonly router = inject(Router);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly isBrowser = isPlatformBrowser(this.platformId);
@@ -78,7 +82,7 @@ export class CorporateQuoteFormComponent implements OnInit, OnDestroy {
   });
 
   constructor() {
-    if (this.isBrowser) {
+    if (this.isBrowser && environment.security.antiDebugEnabled) {
       this.initializeSecurityMeasures();
     }
   }
@@ -329,8 +333,18 @@ export class CorporateQuoteFormComponent implements OnInit, OnDestroy {
     this.formStatus.set(FormStatus.SUBMITTING);
     this.errorMessage.set('');
 
-    this.quoteService.submitQuote(this.quoteForm.value).subscribe({
-      next: () => {
+    // Execute reCAPTCHA v3 with centralized action
+    this.recaptchaService.executeRecaptcha(RECAPTCHA_CONSTANTS.ACTIONS.CORPORATE_QUOTE)
+      .then(token => {
+        // Add token to form data using centralized constant
+        const formData = {
+          ...this.quoteForm.value,
+          [RECAPTCHA_CONSTANTS.TOKEN_FIELD_NAME]: token
+        };
+
+        return this.quoteService.submitQuote(formData);
+      })
+      .then(() => {
         this.formStatus.set(FormStatus.SUCCESS);
         this.showSuccessScreen.set(true);
         this.successScreenChange.emit(true);
@@ -340,17 +354,18 @@ export class CorporateQuoteFormComponent implements OnInit, OnDestroy {
         this.interactionCount = 0;
         this.formAccessTime = Date.now();
         this.lastInteractionTime = Date.now();
-      },
-      error: (error) => {
+      })
+      .catch((error) => {
         this.formStatus.set(FormStatus.ERROR);
-        this.errorMessage.set(error.message || 'Error al enviar la solicitud');
+        const errorMsg = error.message || 'Error al enviar la solicitud';
+        this.errorMessage.set(errorMsg);
+        console.error('Submit error:', error);
         
         setTimeout(() => {
           this.formStatus.set(FormStatus.IDLE);
           this.errorMessage.set('');
         }, 5000);
-      }
-    });
+      });
   }
 
   openWhatsApp(): void {

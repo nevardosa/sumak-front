@@ -2,6 +2,7 @@ import { Component, inject, signal, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter, Subject, takeUntil } from 'rxjs';
+import { WHATSAPP_CONFIG } from '../../../core/config/whatsapp.config';
 
 @Component({
   selector: 'app-whatsapp-button',
@@ -10,7 +11,7 @@ import { filter, Subject, takeUntil } from 'rxjs';
   template: `
     @if (showButton()) {
       <a
-        href="https://wa.me/573208663691?text=Hola%2C%20me%20gustar%C3%ADa%20conocer%20m%C3%A1s%20sobre%20los%20rituales%20Sumak"
+        [href]="whatsappUrl"
         target="_blank"
         rel="noopener noreferrer"
         class="whatsapp-float"
@@ -60,6 +61,7 @@ export class WhatsappButtonComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   
   showButton = signal(true);
+  whatsappUrl = `${WHATSAPP_CONFIG.baseUrl}${WHATSAPP_CONFIG.phoneNumber}?text=${encodeURIComponent(WHATSAPP_CONFIG.defaultMessage || '')}`;
 
   ngOnInit() {
     this.updateVisibility(this.router.url);
