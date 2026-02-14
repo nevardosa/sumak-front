@@ -1,79 +1,97 @@
-/* Optimización de rendimiento - Evitar parpadeo */
-.product-card {
-  will-change: transform, box-shadow;
-  backface-visibility: hidden;
-  transform: translateZ(0);
-  transition: box-shadow 0.2s ease-out, border-color 0.2s ease-out;
-}
+/* === LUXURY RITUAL CARD === */
+/* Inspirado en: Apple, Louis Vuitton, Tesla */
 
-.product-card:hover {
-  box-shadow: 0 10px 25px -5px rgba(6, 58, 61, 0.1), 0 4px 6px -2px rgba(6, 58, 61, 0.05);
-  border-color: rgba(197, 165, 114, 0.3);
-}
-
-.product-image-container {
+.ritual-card {
   position: relative;
+  background: #FFFFFF;
+  cursor: pointer;
   overflow: hidden;
+  transition: transform 600ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 
-.product-image {
-  will-change: transform;
-  backface-visibility: hidden;
-  transform: translateZ(0);
-  transition: transform 0.3s ease-out;
+.ritual-card:hover {
+  transform: translateY(-8px);
 }
 
-.product-card:hover .product-image {
-  transform: scale(1.02);
+/* Imagen Protagonista */
+.ritual-image-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3/4;
+  overflow: hidden;
+  background: #F8F8F8;
 }
 
-.product-overlay {
-  background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.1) 100%);
-  opacity: 0;
-  transition: opacity 0.2s ease-out;
-  pointer-events: none;
+.ritual-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 800ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 
-.product-card:hover .product-overlay {
+.ritual-card:hover .ritual-image {
+  transform: scale(1.03);
+}
+
+/* Contenido Minimalista */
+.ritual-content {
+  padding: 32px 24px 40px;
+  text-align: center;
+}
+
+.ritual-name {
+  font-family: 'Against', serif;
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 1.3;
+  color: #063A3D;
+  margin: 0 0 24px;
+  letter-spacing: -0.01em;
+}
+
+/* Acción Aspiracional */
+.ritual-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0;
+  background: none;
+  border: none;
+  font-family: 'Garet', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #063A3D;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: all 400ms cubic-bezier(0.23, 1, 0.32, 1);
+  opacity: 0.7;
+}
+
+.ritual-action:hover {
   opacity: 1;
-  pointer-events: auto;
+  gap: 12px;
 }
 
-.product-overlay-btn {
-  transform: translateY(8px);
-  transition: transform 0.2s ease-out, background-color 0.2s ease-out;
-  font-family: 'Inter', sans-serif;
-  font-weight: 500;
-  font-size: 0.875rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+.ritual-action svg {
+  transition: transform 400ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 
-.product-card:hover .product-overlay-btn {
-  transform: translateY(0);
+.ritual-action:hover svg {
+  transform: translateX(4px);
 }
 
-.product-overlay-btn:hover {
-  background-color: white;
-}
-
-/* Optimización de line-clamp */
-.line-clamp-1 {
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.line-clamp-2 {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.line-clamp-3 {
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+/* Responsive */
+@media (max-width: 768px) {
+  .ritual-content {
+    padding: 24px 16px 32px;
+  }
+  
+  .ritual-name {
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .ritual-action {
+    font-size: 13px;
+  }
 }
