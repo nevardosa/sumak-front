@@ -11,11 +11,21 @@ import { CartComponent } from './components/cart/cart.component';
 import { ToastComponent } from '../../shared/components/toast/toast.component';
 import { MiniCartDrawerComponent } from './components/mini-cart-drawer/mini-cart-drawer.component';
 import { CheckoutModalComponent } from './components/checkout/checkout-modal.component';
+import { CustomConciergeSectionComponent } from '../../shared/components/custom-concierge-section/custom-concierge-section.component';
 
 @Component({
   selector: 'app-catalog',
   standalone: true,
-  imports: [CommonModule, ProductCardComponent, ProductModalComponent, CartComponent, ToastComponent, MiniCartDrawerComponent, CheckoutModalComponent],
+  imports: [
+    CommonModule, 
+    ProductCardComponent, 
+    ProductModalComponent, 
+    CartComponent, 
+    ToastComponent, 
+    MiniCartDrawerComponent, 
+    CheckoutModalComponent,
+    CustomConciergeSectionComponent
+  ],
   templateUrl: './catalog.component.html',
   styleUrl: './catalog.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -184,6 +194,17 @@ export class CatalogComponent implements OnInit, OnDestroy {
 
   onCloseCheckoutModal(): void {
     this.showCheckoutModal.set(false);
+  }
+
+  openCustomRitualContact(): void {
+    const message = encodeURIComponent(
+      'Hola, quiero diseñar un ritual personalizado con una bebida específica.'
+    );
+    window.open(
+      `https://wa.me/573208663691?text=${message}`,
+      '_blank',
+      'noopener,noreferrer'
+    );
   }
 
   private triggerCartShake(): void {

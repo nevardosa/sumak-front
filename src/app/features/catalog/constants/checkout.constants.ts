@@ -43,18 +43,18 @@ export const PAYMENT_INSTRUCTIONS: PaymentInstructions = {
   steps: [
     {
       stepNumber: 1,
-      title: 'Paga por Bre-B',
-      description: `Usa la llave: ${environment.payment.breAccount}`
+      title: 'Realiza el pago Bre-B',
+      description: `Transferencia inmediata desde tu banco usando la llave: ${environment.payment.breAccount}`
     },
     {
       stepNumber: 2,
       title: 'Guarda el comprobante',
-      description: 'Captura o descarga el comprobante del pago aprobado.'
+      description: 'Captura o descarga el comprobante del pago aprobado'
     },
     {
       stepNumber: 3,
       title: 'Confirma por WhatsApp',
-      description: 'Abre el chat con Sumak, tu pedido se enviará automáticamente y solo debes adjuntar el comprobante de pago.'
+      description: 'Tu pedido se enviará automáticamente y solo debes adjuntar el comprobante'
     }
   ]
 };
