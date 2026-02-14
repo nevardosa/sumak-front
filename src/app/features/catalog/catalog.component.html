@@ -50,15 +50,33 @@
 <app-product-modal
   *ngIf="showProductModal && selectedProduct"
   [product]="selectedProduct"
+  [ctaButtonAdded]="ctaButtonAdded()"
   (close)="onCloseModal()"
   (addToCart)="onAddToCart($event)"
 ></app-product-modal>
+
+<!-- Mini Cart Drawer -->
+<app-mini-cart-drawer
+  *ngIf="showMiniCart() && miniCartProduct()"
+  [product]="miniCartProduct()!"
+  [subtotal]="miniCartSubtotal()"
+  (close)="onCloseMiniCart()"
+  (viewCart)="onMiniCartViewCart()"
+  (checkout)="onMiniCartCheckout()"
+></app-mini-cart-drawer>
 
 <!-- Carrito de Compras -->
 <app-cart
   *ngIf="showCart"
   (close)="toggleCart()"
+  (checkout)="openCheckoutModal()"
 ></app-cart>
+
+<!-- Checkout Modal -->
+<app-checkout-modal
+  *ngIf="showCheckoutModal()"
+  (close)="onCloseCheckoutModal()"
+></app-checkout-modal>
 
 <!-- Toast Notification -->
 <app-toast

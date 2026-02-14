@@ -1,5 +1,6 @@
 import { Component, inject, OnInit, OnDestroy, ChangeDetectionStrategy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { CatalogService } from './services/catalog.service';
 import { CartService } from './services/cart.service';
 import { SeoService } from '../../core/services/seo.service';
@@ -8,11 +9,13 @@ import { ProductCardComponent } from './components/product-card/product-card.com
 import { ProductModalComponent } from './components/product-modal/product-modal.component';
 import { CartComponent } from './components/cart/cart.component';
 import { ToastComponent } from '../../shared/components/toast/toast.component';
+import { MiniCartDrawerComponent } from './components/mini-cart-drawer/mini-cart-drawer.component';
+import { CheckoutModalComponent } from './components/checkout/checkout-modal.component';
 
 @Component({
   selector: 'app-catalog',
   standalone: true,
-  imports: [CommonModule, ProductCardComponent, ProductModalComponent, CartComponent, ToastComponent],
+  imports: [CommonModule, ProductCardComponent, ProductModalComponent, CartComponent, ToastComponent, MiniCartDrawerComponent, CheckoutModalComponent],
   templateUrl: './catalog.component.html',
   styleUrl: './catalog.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -20,6 +23,7 @@ import { ToastComponent } from '../../shared/components/toast/toast.component';
 export class CatalogComponent implements OnInit, OnDestroy {
   private readonly catalogService = inject(CatalogService);
   private readonly seoService = inject(SeoService);
+  private readonly router = inject(Router);
   readonly cartService = inject(CartService);
 
   products: Product[] = [];
@@ -34,6 +38,17 @@ export class CatalogComponent implements OnInit, OnDestroy {
   toastTitle = signal('');
   toastMessage = signal('');
   cartShake = signal(false);
+  
+  // Mini cart drawer
+  showMiniCart = signal(false);
+  miniCartProduct = signal<Product | null>(null);
+  miniCartSubtotal = signal(0);
+  
+  // Checkout modal
+  showCheckoutModal = signal(false);
+  
+  // CTA button state
+  ctaButtonAdded = signal(false);
 
   readonly categories = [
     { value: 'all', label: 'Todos los rituales', count: 0 },
@@ -105,12 +120,70 @@ export class CatalogComponent implements OnInit, OnDestroy {
   onCloseModal(): void {
     this.showProductModal = false;
     this.selectedProduct = null;
+    this.ctaButtonAdded.set(false);
   }
 
   onAddToCart(product: Product): void {
+    // 1. Feedback inmediato en botón
+    this.ctaButtonAdded.set(true);
+    
+    // 2. Agregar al carrito
     this.cartService.addToCart(product);
+    
+    // 3. Mostrar toast premium
     this.showAddToCartNotification(product);
+    
+    // 4. Animar FAB
     this.triggerCartShake();
+    
+    // 5. Cerrar modal después de 700ms
+    setTimeout(() => {
+      this.onCloseModal();
+    }, 700);
+    
+    // 6. Mostrar mini cart drawer después de 800ms
+    setTimeout(() => {
+      this.showMiniCartDrawer(product);
+    }, 800);
+  }
+
+  private showMiniCartDrawer(product: Product): void {
+    this.miniCartProduct.set(product);
+    this.miniCartSubtotal.set(this.cartService.cart().total);
+    this.showMiniCart.set(true);
+  }
+
+  onCloseMiniCart(): void {
+    this.showMiniCart.set(false);
+    this.miniCartProduct.set(null);
+  }
+
+  onMiniCartViewCart(): void {
+    this.showCart = true;
+  }
+
+  onMiniCartCheckout(): void {
+    // Cerrar mini cart y abrir checkout modal
+    this.onCloseMiniCart();
+    setTimeout(() => {
+      this.openCheckoutModal();
+    }, 300);
+  }
+
+  openCheckoutModal(): void {
+    // Cerrar cualquier modal o drawer activo
+    this.showProductModal = false;
+    this.showCart = false;
+    this.showMiniCart.set(false);
+    
+    // Abrir checkout modal
+    setTimeout(() => {
+      this.showCheckoutModal.set(true);
+    }, 100);
+  }
+
+  onCloseCheckoutModal(): void {
+    this.showCheckoutModal.set(false);
   }
 
   private triggerCartShake(): void {

@@ -13,6 +13,7 @@ import { SafeHtmlPipe, SecureTextPipe, SecurePricePipe } from '../../../../share
 })
 export class ProductModalComponent implements OnInit, OnDestroy {
   @Input({ required: true }) product!: Product;
+  @Input() ctaButtonAdded: boolean = false;
   @Output() close = new EventEmitter<void>();
   @Output() addToCart = new EventEmitter<Product>();
 
@@ -31,7 +32,9 @@ export class ProductModalComponent implements OnInit, OnDestroy {
   }
 
   onAddToCart(): void {
-    this.addToCart.emit(this.product);
+    if (!this.ctaButtonAdded) {
+      this.addToCart.emit(this.product);
+    }
   }
 
   onBackdropClick(event: Event): void {
