@@ -1,18 +1,21 @@
 <article class="ritual-card" (click)="onDiscoverRitual()">
-  <div class="ritual-image-wrapper">
+  <div class="ritual-card__media">
     <img
       [src]="product.imageUrl"
       [alt]="product.name"
-      class="ritual-image"
+      class="ritual-card__image"
       loading="lazy"
     />
   </div>
   
-  <div class="ritual-content">
-    <h3 class="ritual-name">{{ product.name }}</h3>
-    <button type="button" class="ritual-action" (click)="onDiscoverRitual()">
+  <div class="ritual-card__body">
+    <h3 class="ritual-card__title">{{ product.name }}</h3>
+  </div>
+  
+  <div class="ritual-card__footer">
+    <button type="button" class="ritual-card__cta" (click)="onDiscoverRitual(); $event.stopPropagation()" tabindex="0">
       <span>Descubrir Ritual</span>
-      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+      <svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true">
         <path d="M4 10h12m0 0l-4-4m4 4l-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
     </button>

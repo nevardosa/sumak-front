@@ -1,21 +1,19 @@
-<div class="min-h-screen bg-gray-50">
-  <!-- Header del Catálogo -->
-  <div class="bg-white">
-    <div class="container-sumak py-20">
-      <div class="text-center max-w-4xl mx-auto">
-        <h1 class="text-5xl lg:text-6xl font-against text-sumak-green mb-6 leading-tight tracking-tight">
-          Colección de Rituales
-        </h1>
-        <p class="text-xl font-garet font-light text-text-secondary leading-relaxed">
-          Experiencias gastronómicas cuidadosamente curadas para momentos que merecen ser recordados.
-        </p>
-      </div>
+<div class="catalog-section">
+  <!-- Header -->
+  <div class="catalog-section__header">
+    <div class="catalog-section__header-inner">
+      <h1 class="catalog-section__title">
+        Colección de Rituales
+      </h1>
+      <p class="catalog-section__description">
+        Experiencias gastronómicas cuidadosamente curadas para momentos que merecen ser recordados.
+      </p>
     </div>
   </div>
 
-  <!-- Grid de Rituales -->
-  <div class="container-sumak py-20">
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12 lg:gap-16">
+  <!-- Grid -->
+  <div class="catalog-section__content">
+    <div class="ritual-grid">
       <app-product-card
         *ngFor="let product of filteredProducts; trackBy: trackByProductId"
         [product]="product"
@@ -23,14 +21,14 @@
       ></app-product-card>
     </div>
 
-    <!-- Estado vacío -->
-    <div *ngIf="filteredProducts.length === 0" class="text-center py-24">
-      <h3 class="text-2xl font-against text-sumak-green mb-4">No hay rituales disponibles</h3>
-      <p class="text-lg font-garet font-light text-text-body">Explora nuestra colección completa</p>
+    <!-- Empty State -->
+    <div *ngIf="filteredProducts.length === 0" class="catalog-section__empty">
+      <h3 class="catalog-section__empty-title">No hay rituales disponibles</h3>
+      <p class="catalog-section__empty-text">Explora nuestra colección completa</p>
     </div>
   </div>
 
-  <!-- Botón flotante del carrito LUXURY -->
+  <!-- Cart FAB -->
   <button
     *ngIf="cartService.cart().itemCount > 0"
     (click)="toggleCart()"

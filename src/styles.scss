@@ -35,6 +35,14 @@
 }
 
 @layer base {
+  /* Box-sizing global para prevenir overflow */
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    backface-visibility: hidden;
+  }
+
   html {
     font-family: 'Inter', system-ui, sans-serif;
   }
@@ -47,13 +55,6 @@
   * {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-  }
-
-  /* Prevenir parpadeo en transiciones */
-  *,
-  *::before,
-  *::after {
-    backface-visibility: hidden;
   }
 
   /* Global Typography Styles */
