@@ -14,6 +14,7 @@ import { ToastComponent } from '../../shared/components/toast/toast.component';
   standalone: true,
   imports: [CommonModule, ProductCardComponent, ProductModalComponent, CartComponent, ToastComponent],
   templateUrl: './catalog.component.html',
+  styleUrl: './catalog.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CatalogComponent implements OnInit, OnDestroy {

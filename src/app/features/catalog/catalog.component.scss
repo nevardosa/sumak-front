@@ -1,0 +1,189 @@
+/* === LUXURY CART FAB === */
+/* Inspirado en: Apple, Aesop, Louis Vuitton */
+/* ================================
+   SUMAK — LUXURY CART FAB (B2B/B2C)
+   Apple + Aesop + Louis Vuitton
+   Objetivo: más editorial, menos “FAB genérico”
+   - Forma: soft-square (no círculo)
+   - Más sutil, más premium
+   - Evita conflicto con reCAPTCHA
+================================ */
+
+/* Botón flotante */
+.luxury-cart-fab {
+  position: fixed;
+  right: max(18px, env(safe-area-inset-right));
+  bottom: max(128px, env(safe-area-inset-bottom)); /* deja aire para reCAPTCHA */
+  z-index: 45;
+
+  width: 54px;
+  height: 54px;
+  padding: 0;
+  margin: 0;
+
+  /* Look premium */
+  background: rgba(6, 58, 61, 0.92);              /* #063A3D sutil, no “bloque” */
+  border: 1px solid rgba(245, 239, 230, 0.16);    /* marfil muy leve */
+  border-radius: 16px;                             /* soft-square editorial */
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  color: rgba(245, 239, 230, 0.92);
+  cursor: pointer;
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  /* Sombra de lujo: suave y profunda, sin exagerar */
+  box-shadow:
+  0 12px 32px rgba(0, 0, 0, 0.18),
+  0 2px 6px rgba(0, 0, 0, 0.08);
+
+
+  transition:
+    transform 420ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 420ms cubic-bezier(0.16, 1, 0.3, 1),
+    background 420ms cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 420ms cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 420ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Icono dentro (si usas <svg>) */
+.luxury-cart-fab svg {
+  width: 20px;
+  height: 20px;
+  opacity: 0.95;
+}
+
+/* Hover: más “tacto premium”, menos agresivo */
+.luxury-cart-fab:hover {
+  transform: translateY(-2px);
+  background: rgba(5, 47, 50, 0.95);              /* #052F32 */
+  border-color: rgba(198, 164, 108, 0.22);        /* dorado sutil */
+  box-shadow:
+    0 22px 55px rgba(0, 0, 0, 0.28),
+    0 4px 14px rgba(0, 0, 0, 0.12);
+}
+
+.luxury-cart-fab:active {
+  transform: translateY(0px) scale(0.99);
+}
+
+/* Accesibilidad: focus elegante, estilo “joya” */
+.luxury-cart-fab:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px rgba(198, 164, 108, 0.35),
+    0 16px 40px rgba(0, 0, 0, 0.22),
+    0 2px 10px rgba(0, 0, 0, 0.10);
+}
+
+/* Badge Premium — micro, integrado, no “alerta” */
+.luxury-cart-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+
+  min-width: 18px;
+  height: 18px;
+  padding: 0 6px;
+
+  /* Dorado apagado (lujo), sin gritar */
+  background: rgba(198, 164, 108, 0.92);
+  color: rgba(6, 58, 61, 0.92);
+
+  font-family: 'Garet', sans-serif;
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 1;
+
+  border-radius: 999px;
+  border: 1px solid rgba(245, 239, 230, 0.92);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  /* “Micro joya” */
+  box-shadow:
+    0 10px 24px rgba(0, 0, 0, 0.18),
+    0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* Si el badge es 0, ocúltalo (opcional si usas ngIf ya) */
+.luxury-cart-badge:empty {
+  display: none;
+}
+
+/* Responsive: en móvil baja un poco el tamaño y ajusta posición */
+@media (max-width: 768px) {
+  .luxury-cart-fab {
+    width: 50px;
+    height: 50px;
+    border-radius: 14px;
+    right: max(14px, env(safe-area-inset-right));
+    bottom: max(104px, env(safe-area-inset-bottom));
+  }
+
+  .luxury-cart-fab svg {
+    width: 19px;
+    height: 19px;
+  }
+
+  .luxury-cart-badge {
+    top: -6px;
+    right: -6px;
+    min-width: 17px;
+    height: 17px;
+    font-size: 10px;
+  }
+}
+
+/* Reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  .luxury-cart-fab {
+    transition: none;
+  }
+}
+
+
+/* Shake Animation */
+.cart-shake {
+  animation: cartShake 600ms cubic-bezier(0.36, 0.07, 0.19, 0.97);
+}
+
+@keyframes cartShake {
+  0%, 100% { transform: translateY(-2px) translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateY(-2px) translateX(-2px); }
+  20%, 40%, 60%, 80% { transform: translateY(-2px) translateX(2px); }
+}
+
+/* Anti-overlap reCAPTCHA */
+.grecaptcha-badge {
+  bottom: 32px !important;
+  left: 32px !important;
+  right: auto !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .luxury-cart-fab {
+    width: 48px;
+    height: 48px;
+    bottom: 24px;
+    right: 24px;
+  }
+
+  .luxury-cart-badge {
+    min-width: 18px;
+    height: 18px;
+    font-size: 10px;
+  }
+
+  .grecaptcha-badge {
+    bottom: 24px !important;
+    left: 24px !important;
+  }
+}

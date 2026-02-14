@@ -30,17 +30,19 @@
     </div>
   </div>
 
-  <!-- Botón flotante del carrito -->
+  <!-- Botón flotante del carrito LUXURY -->
   <button
     *ngIf="cartService.cart().itemCount > 0"
     (click)="toggleCart()"
-    [class.animate-shake]="cartShake()"
-    class="fixed bottom-6 right-6 bg-sumak-gold hover:bg-sumak-gold/90 text-sumak-green p-4 rounded-full shadow-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-sumak-green focus:ring-offset-2 z-40 hover:scale-110"
+    [class.cart-shake]="cartShake()"
+    class="luxury-cart-fab"
+    aria-label="Ver carrito"
+    type="button"
   >
-    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m0 0h8m-8 0a2 2 0 100 4 2 2 0 000-4zm8 0a2 2 0 100 4 2 2 0 000-4z"></path>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m0 0h8m-8 0a2 2 0 100 4 2 2 0 000-4zm8 0a2 2 0 100 4 2 2 0 000-4z"></path>
     </svg>
-    <span class="absolute -top-2 -right-2 bg-sumak-wine text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center">
+    <span class="luxury-cart-badge">
       {{ cartService.cart().itemCount }}
     </span>
   </button>
