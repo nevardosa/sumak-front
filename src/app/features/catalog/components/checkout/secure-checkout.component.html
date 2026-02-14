@@ -1,0 +1,269 @@
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+  <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+    <!-- Header -->
+    <div class="flex items-center justify-between p-6 border-b border-sumak-green/10">
+      <div>
+        <h2 class="font-angainc text-2xl font-medium text-sumak-green">Finalizar pedido con asistencia personalizada</h2>
+        <p class="text-sm text-gray-600 mt-1">Un asesor Sumak confirmará tu pago y preparará tu ritual</p>
+      </div>
+      <button (click)="onClose()" class="close-btn">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Security Alert -->
+    <div *ngIf="!integrityValid()" class="mx-6 mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+      <div class="flex items-center gap-2 text-red-700">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+        </svg>
+        <span class="font-medium">Error de Seguridad</span>
+      </div>
+      <p class="text-sm text-red-600 mt-1">
+        Se detectó una manipulación en el carrito. Por favor, actualice la página y vuelva a agregar los productos.
+      </p>
+    </div>
+
+    <form [formGroup]="checkoutForm" (ngSubmit)="onSubmit()" class="p-6">
+      <!-- Customer Information -->
+      <div class="space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <app-input
+            label="Nombres"
+            formControlName="firstName"
+            [required]="true"
+            [error]="getFieldError('firstName')"
+          ></app-input>
+          
+          <app-input
+            label="Apellidos"
+            formControlName="lastName"
+            [required]="true"
+            [error]="getFieldError('lastName')"
+          ></app-input>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <app-select
+            label="Tipo de Identificación"
+            formControlName="identificationType"
+            [options]="identificationTypes"
+            [required]="true"
+            [error]="getFieldError('identificationType')"
+          ></app-select>
+          
+          <app-input
+            label="Número de Identificación"
+            formControlName="identificationNumber"
+            type="text"
+            [required]="true"
+            [error]="getFieldError('identificationNumber')"
+          ></app-input>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <app-input
+            label="Email"
+            formControlName="email"
+            type="email"
+            [required]="true"
+            [error]="getFieldError('email')"
+          ></app-input>
+          
+          <app-input
+            label="Teléfono"
+            formControlName="phone"
+            type="tel"
+            [required]="true"
+            [error]="getFieldError('phone')"
+          ></app-input>
+        </div>
+
+        <!-- Address Information -->
+        <div class="border-t border-sumak-green/10 pt-6">
+          <h3 class="font-angainc text-lg font-medium text-sumak-green mb-4">Dirección de Entrega</h3>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <app-select
+              label="Departamento"
+              formControlName="department"
+              [options]="departments"
+              [required]="true"
+              [error]="getFieldError('department')"
+              (selectionChange)="onDepartmentChange($event)"
+            ></app-select>
+            
+            <app-select
+              label="Municipio"
+              formControlName="municipality"
+              [options]="municipalities()"
+              [required]="true"
+              [error]="getFieldError('municipality')"
+            ></app-select>
+          </div>
+
+          <app-input
+            label="Dirección Completa"
+            formControlName="address"
+            [required]="true"
+            [error]="getFieldError('address')"
+            placeholder="Ej: Calle 123 #45-67, Apartamento 8B"
+          ></app-input>
+        </div>
+
+        <!-- Data Processing Consent -->
+        <div class="border-t border-sumak-green/10 pt-6">
+          <app-checkbox
+            formControlName="acceptsDataProcessing"
+            [required]="true"
+            [error]="getFieldError('acceptsDataProcessing')"
+          >
+            Acepto el tratamiento de mis datos personales según la política de privacidad
+          </app-checkbox>
+        </div>
+      </div>
+
+      <!-- Concierge Experience -->
+      <div class="border-t border-sumak-green/10 pt-6 mt-6">
+        <div class="bg-sumak-brown/5 rounded-xl p-5 border border-sumak-brown/10">
+          <div class="flex items-start gap-3">
+            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-sumak-gold/20 flex items-center justify-center">
+              <svg class="w-5 h-5 text-sumak-brown" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
+              </svg>
+            </div>
+            <div>
+              <h4 class="font-angainc text-base font-medium text-sumak-brown mb-1">Atención personalizada Sumak</h4>
+              <p class="text-sm text-gray-600">
+                Cada pedido es verificado manualmente para garantizar que recibas una experiencia impecable.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Order Summary -->
+      <div class="border-t border-sumak-green/10 pt-6 mt-6">
+        <h3 class="font-angainc text-lg font-medium text-sumak-green mb-4">Resumen del Pedido</h3>
+        
+        <div class="space-y-3 mb-4">
+          <div *ngFor="let item of cartService.cart().items" class="flex justify-between items-center">
+            <span class="text-sm">{{ item.product.name }} (x{{ item.quantity }})</span>
+            <span class="font-medium">{{ cartService.formatPrice(item.product.price * item.quantity) }}</span>
+          </div>
+        </div>
+        
+        <div class="border-t border-sumak-green/10 pt-3 flex justify-between items-center">
+          <span class="font-angainc text-lg font-medium text-sumak-green">Total:</span>
+          <span class="font-angainc text-xl font-semibold text-sumak-brown">
+            {{ cartService.formatPrice(cartService.cart().total) }}
+          </span>
+        </div>
+      </div>
+
+      <!-- What Happens Next - Concierge Guide -->
+      <div class="border-t border-sumak-green/10 pt-6 mt-6">
+        <h3 class="font-angainc text-lg font-medium text-sumak-green mb-2">Pasos para completar tu compra</h3>
+        <p class="text-sm text-gray-600 mb-5 leading-relaxed">
+          Te acompañaremos paso a paso para completar tu compra de forma segura.
+        </p>
+
+        <div class="space-y-4">
+          <!-- Step 1 -->
+          <div class="flex gap-3">
+            <div class="flex-shrink-0 w-8 h-8 rounded-full bg-sumak-green/10 text-sumak-green flex items-center justify-center text-sm font-semibold">1</div>
+            <div class="flex-1">
+              <p class="font-medium text-sumak-green text-sm mb-1">Realiza el pago mediante Bre-B desde tu banco usando la llave:</p>
+              <div class="bg-sumak-green/5 rounded-lg p-3 border border-sumak-green/10 flex items-center justify-between gap-2">
+                <code class="text-sm font-mono text-sumak-brown">{{ breAccount }}</code>
+                <button
+                  type="button"
+                  (click)="copyBreAccount()"
+                  class="px-3 py-1.5 text-xs font-medium text-sumak-green hover:bg-sumak-green hover:text-white rounded-md transition-colors border border-sumak-green/20"
+                >
+                  Copiar
+                </button>
+              </div>
+              <p class="text-xs text-gray-500 mt-2 italic">Bre-B es una transferencia inmediata desde tu app bancaria.</p>
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="flex gap-3">
+            <div class="flex-shrink-0 w-8 h-8 rounded-full bg-sumak-green/10 text-sumak-green flex items-center justify-center text-sm font-semibold">2</div>
+            <div class="flex-1">
+              <p class="font-medium text-sumak-green text-sm">Guarda o captura el comprobante del pago aprobado.</p>
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="flex gap-3">
+            <div class="flex-shrink-0 w-8 h-8 rounded-full bg-sumak-green/10 text-sumak-green flex items-center justify-center text-sm font-semibold">3</div>
+            <div class="flex-1">
+              <p class="font-medium text-sumak-green text-sm">Te abriremos WhatsApp automáticamente para confirmar tu pedido y adjuntar el comprobante.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Concierge Message -->
+        <div class="mt-5 bg-gradient-to-r from-sumak-gold/10 to-sumak-brown/10 rounded-lg p-4 border border-sumak-gold/20">
+          <p class="text-sm text-sumak-brown font-medium text-center">
+            Nuestro equipo verificará tu pago y preparará tu ritual con prioridad.
+          </p>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex flex-col gap-3 mt-8">
+        <div class="flex-1">
+          <app-button
+            type="submit"
+            variant="primary"
+            size="lg"
+            class="w-full"
+            [disabled]="!checkoutForm.valid || !integrityValid() || isProcessing()"
+          >
+            <span *ngIf="!isProcessing()">Confirmar pedido y recibir instrucciones de pago</span>
+            <span *ngIf="isProcessing()" class="flex items-center gap-2">
+              <svg class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Procesando...
+            </span>
+          </app-button>
+          
+          <!-- Security Message -->
+          <p class="text-xs text-center text-gray-500 mt-3 leading-relaxed">
+            No se realizará ningún cobro automático.<br>
+            El pago se completa manualmente por Bre-B.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          (click)="onClose()"
+          class="w-full px-6 py-3 border border-sumak-green/20 text-sumak-green font-medium rounded-lg hover:bg-sumak-green/5 transition-colors"
+        >
+          Cancelar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Status Modal Premium -->
+@if (showStatusModal()) {
+  <app-checkout-status-modal
+    [status]="checkoutStatus()"
+    [pdfUrl]="pdfUrl()"
+    [whatsappMessage]="whatsappMessage()"
+    (close)="onCloseStatusModal()"
+    (retry)="onRetryCheckout()"
+    (openWhatsApp)="onOpenWhatsAppManual()"
+    (copyLink)="onCopyPdfLink()"
+    (copyMessage)="onCopyWhatsAppMessage()"
+  ></app-checkout-status-modal>
+}

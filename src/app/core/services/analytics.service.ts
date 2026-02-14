@@ -14,7 +14,16 @@ export type AnalyticsEventName =
   | 'view_regalos_corporativos'
   | 'view_contacto'
   | 'view_experiencias'
-  | 'view_catalog';
+  | 'view_catalog'
+  | 'checkout_opened'
+  | 'checkout_confirm_clicked'
+  | 'pdf_generated'
+  | 'pdf_downloaded'
+  | 'pdf_link_created'
+  | 'whatsapp_opened'
+  | 'whatsapp_message_copied'
+  | 'checkout_completed_intent'
+  | 'checkout_error';
 
 /**
  * Standard Placements for consistent tracking

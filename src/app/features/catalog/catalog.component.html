@@ -28,6 +28,11 @@
     </div>
   </div>
 
+  <!-- Custom Concierge Section - After Products -->
+  <app-custom-concierge-section
+    (requestCustomRitual)="openCustomRitualContact()"
+  ></app-custom-concierge-section>
+
   <!-- Cart FAB -->
   <button
     *ngIf="cartService.cart().itemCount > 0"

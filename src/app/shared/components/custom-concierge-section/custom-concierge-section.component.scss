@@ -1,0 +1,189 @@
+/* === CUSTOM CONCIERGE SECTION === */
+/* Premium Personalization Component - End of Catalog */
+/* Apple / Louis Vuitton / Four Seasons Standard */
+
+.concierge-section {
+  max-width: 1280px;
+  margin: 0 auto;
+  margin-top: clamp(48px, 8vw, 96px);
+  padding-inline: clamp(16px, 4vw, 40px);
+  padding-bottom: clamp(48px, 8vw, 80px);
+}
+
+.concierge-container {
+  background: linear-gradient(135deg, 
+    rgba(250, 248, 246, 0.8) 0%, 
+    rgba(245, 239, 230, 0.6) 100%
+  );
+  border: 1px solid rgba(198, 164, 108, 0.15);
+  border-radius: clamp(20px, 3vw, 28px);
+  padding: clamp(40px, 7vw, 64px) clamp(32px, 6vw, 56px);
+  text-align: center;
+  box-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.03),
+    0 8px 24px rgba(0, 0, 0, 0.04),
+    0 16px 48px rgba(0, 0, 0, 0.05);
+  transition: all 600ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.concierge-container:hover {
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.04),
+    0 12px 32px rgba(0, 0, 0, 0.05),
+    0 20px 56px rgba(0, 0, 0, 0.06);
+  transform: translateY(-4px);
+  border-color: rgba(198, 164, 108, 0.22);
+}
+
+/* === LABEL === */
+
+.concierge-label {
+  display: inline-block;
+  font-family: 'Garet', sans-serif;
+  font-size: clamp(10px, 1.5vw, 11px);
+  font-weight: 500;
+  line-height: 1;
+  color: #9CA3AF;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: clamp(20px, 3.5vw, 28px);
+}
+
+/* === TITLE === */
+
+.concierge-title {
+  font-family: 'Against', serif;
+  font-size: clamp(28px, 5.5vw, 42px);
+  font-weight: 400;
+  line-height: 1.15;
+  color: #063A3D;
+  letter-spacing: -0.025em;
+  margin: 0 0 clamp(20px, 3.5vw, 28px);
+  max-width: 720px;
+  margin-inline: auto;
+}
+
+/* === SUBTITLE === */
+
+.concierge-subtitle {
+  font-family: 'Garet', sans-serif;
+  font-size: clamp(16px, 2.6vw, 18px);
+  font-weight: 400;
+  line-height: 1.7;
+  color: #6B7280;
+  margin: 0 0 clamp(32px, 5.5vw, 44px);
+  max-width: 580px;
+  margin-inline: auto;
+}
+
+/* === CTA BUTTON === */
+
+.concierge-cta {
+  font-family: 'Garet', sans-serif;
+  font-size: clamp(15px, 2.3vw, 17px);
+  font-weight: 500;
+  color: #F5EFE6;
+  background: linear-gradient(135deg, #063A3D 0%, #052F32 100%);
+  border: 1px solid rgba(198, 164, 108, 0.3);
+  border-radius: 14px;
+  padding: clamp(16px, 3vw, 18px) clamp(36px, 7vw, 56px);
+  cursor: pointer;
+  transition: all 400ms cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 
+    0 2px 8px rgba(6, 58, 61, 0.15),
+    0 6px 20px rgba(6, 58, 61, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: clamp(240px, 45vw, 320px);
+  position: relative;
+  overflow: hidden;
+}
+
+.concierge-cta::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(255, 255, 255, 0.1), 
+    transparent
+  );
+  transition: left 600ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.concierge-cta:hover {
+  background: linear-gradient(135deg, #052F32 0%, #041F21 100%);
+  border-color: rgba(198, 164, 108, 0.45);
+  box-shadow: 
+    0 4px 16px rgba(6, 58, 61, 0.20),
+    0 10px 32px rgba(6, 58, 61, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  transform: translateY(-3px);
+}
+
+.concierge-cta:hover::before {
+  left: 100%;
+}
+
+.concierge-cta:active {
+  transform: translateY(-1px) scale(0.98);
+  box-shadow: 
+    0 2px 10px rgba(6, 58, 61, 0.18),
+    0 6px 20px rgba(6, 58, 61, 0.12);
+}
+
+.concierge-cta:focus-visible {
+  outline: none;
+  box-shadow: 
+    0 0 0 4px rgba(198, 164, 108, 0.35),
+    0 4px 16px rgba(6, 58, 61, 0.20),
+    0 10px 32px rgba(6, 58, 61, 0.15);
+}
+
+/* === TRUST TEXT === */
+
+.concierge-trust {
+  font-family: 'Garet', sans-serif;
+  font-size: clamp(12px, 1.9vw, 13px);
+  font-weight: 400;
+  line-height: 1.5;
+  color: #9CA3AF;
+  margin: clamp(20px, 3.5vw, 28px) 0 0;
+  letter-spacing: 0.01em;
+}
+
+/* === RESPONSIVE === */
+
+@media (max-width: 768px) {
+  .concierge-section {
+    margin-top: clamp(48px, 10vw, 64px);
+  }
+  
+  .concierge-container {
+    border-radius: 20px;
+  }
+  
+  .concierge-cta {
+    width: 100%;
+    max-width: 360px;
+    border-radius: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .concierge-container,
+  .concierge-cta,
+  .concierge-cta::before {
+    transition: none;
+  }
+  
+  .concierge-container:hover,
+  .concierge-cta:hover {
+    transform: none;
+  }
+}
