@@ -1,56 +1,32 @@
 <div class="min-h-screen bg-gray-50">
   <!-- Header del Catálogo -->
-  <div class="bg-white border-b border-gray-100">
-    <div class="container-sumak py-12">
-      <div class="text-center mb-12">
-        <h1 class="title-primary mb-4">Catálogo de Rituales Gastronómicos</h1>
-        <p class="subtitle text-text-secondary max-w-3xl mx-auto">
-          Descubre nuestras experiencias gastronómicas premium, cuidadosamente curadas para paladares que valoran el detalle y el significado.
+  <div class="bg-white">
+    <div class="container-sumak py-20">
+      <div class="text-center max-w-4xl mx-auto">
+        <h1 class="text-5xl lg:text-6xl font-against text-sumak-green mb-6 leading-tight tracking-tight">
+          Colección de Rituales
+        </h1>
+        <p class="text-xl font-garet font-light text-text-secondary leading-relaxed">
+          Experiencias gastronómicas cuidadosamente curadas para momentos que merecen ser recordados.
         </p>
-      </div>
-      <div class="text-center mb-4">
-        <p class="subtitle text-text-secondary max-w-3xl mx-auto">
-          Explora por perfil de sabor, ocasión o tipo de ritual.
-        </p>
-      </div>
-      <!-- Filtros por Categoría -->
-      <div class="flex flex-wrap justify-center gap-4 mb-8">
-
-        <button
-          *ngFor="let category of categories"
-          (click)="filterByCategory(category.value)"
-          [class]="selectedCategory === category.value
-            ? 'bg-sumak-green text-white'
-            : 'bg-white text-sumak-green border-2 border-sumak-green hover:bg-sumak-green hover:text-white'"
-          class="px-6 py-3 rounded-lg font-garet font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-sumak-gold focus:ring-offset-2"
-        >
-          {{ category.label }}
-          <span class="ml-2 text-sm opacity-75">({{ category.count }})</span>
-        </button>
       </div>
     </div>
   </div>
 
-  <!-- Grid de Productos -->
-  <div class="container-sumak section-padding">
-    <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
+  <!-- Grid de Rituales -->
+  <div class="container-sumak py-20">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12 lg:gap-16">
       <app-product-card
         *ngFor="let product of filteredProducts; trackBy: trackByProductId"
         [product]="product"
         (productClick)="onProductClick($event)"
-        (addToCart)="onAddToCart($event)"
       ></app-product-card>
     </div>
 
     <!-- Estado vacío -->
-    <div *ngIf="filteredProducts.length === 0" class="text-center py-16">
-      <div class="w-24 h-24 bg-sumak-green/10 rounded-full flex items-center justify-center mx-auto mb-6">
-        <svg class="w-12 h-12 text-sumak-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
-        </svg>
-      </div>
-      <h3 class="title-secondary mb-2">No hay productos en esta categoría</h3>
-      <p class="body-large text-text-body">Explora otras categorías para descubrir nuestras experiencias gourmet</p>
+    <div *ngIf="filteredProducts.length === 0" class="text-center py-24">
+      <h3 class="text-2xl font-against text-sumak-green mb-4">No hay rituales disponibles</h3>
+      <p class="text-lg font-garet font-light text-text-body">Explora nuestra colección completa</p>
     </div>
   </div>
 
