@@ -2,20 +2,20 @@ import { Component, Output, EventEmitter, inject, OnInit, OnDestroy, ChangeDetec
 import { CommonModule } from '@angular/common';
 import { CartService } from '../../services/cart.service';
 import { ButtonComponent } from '../../../../shared/components/button/button.component';
-import { CheckoutModalComponent } from '../checkout/checkout-modal.component';
 import { CartItemComponent } from '../../../../shared/components/cart-item/cart-item.component';
 import { CartItem } from '../../models/catalog.models';
 
 @Component({
   selector: 'app-cart',
   standalone: true,
-  imports: [CommonModule, ButtonComponent, CheckoutModalComponent, CartItemComponent],
+  imports: [CommonModule, ButtonComponent, CartItemComponent],
   templateUrl: './cart.component.html',
   styleUrl: './cart.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CartComponent implements OnInit, OnDestroy {
   @Output() close = new EventEmitter<void>();
+  @Output() checkout = new EventEmitter<void>();
   
   private readonly priceFormatter = new Intl.NumberFormat('es-CO', {
     style: 'currency',
@@ -24,7 +24,6 @@ export class CartComponent implements OnInit, OnDestroy {
   });
 
   readonly cartService = inject(CartService);
-  readonly showCheckoutModal = signal(false);
   readonly isProcessing = signal(false);
 
   ngOnInit(): void {
@@ -69,18 +68,8 @@ export class CartComponent implements OnInit, OnDestroy {
 
   onCheckout(): void {
     if (this.cartService.cart().items.length > 0 && !this.isProcessing()) {
-      this.isProcessing.set(true);
-      
-      // Simulate processing delay for better UX
-      setTimeout(() => {
-        this.showCheckoutModal.set(true);
-        this.isProcessing.set(false);
-      }, 800);
+      this.checkout.emit();
     }
-  }
-
-  onCloseCheckoutModal(): void {
-    this.showCheckoutModal.set(false);
   }
 
   trackByProductId(index: number, item: CartItem): string {

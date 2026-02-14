@@ -1,0 +1,67 @@
+<div class="mini-cart-backdrop" (click)="onBackdropClick($event)" role="presentation">
+  <div 
+    class="mini-cart-drawer" 
+    role="dialog" 
+    aria-modal="true" 
+    aria-labelledby="mini-cart-title"
+    tabindex="-1"
+  >
+    <!-- Header -->
+    <div class="mini-cart-header">
+      <h3 id="mini-cart-title" class="mini-cart-title">Agregado al carrito</h3>
+      <button 
+        type="button" 
+        class="mini-cart-close" 
+        (click)="onClose()"
+        aria-label="Cerrar carrito"
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Product Added -->
+    <div class="mini-cart-product">
+      <div class="mini-cart-product__image">
+        <img [src]="product.imageUrl" [alt]="product.name" />
+      </div>
+      <div class="mini-cart-product__info">
+        <h4 class="mini-cart-product__name">{{ product.name }}</h4>
+        <p class="mini-cart-product__price">{{ formatPrice(product.price) }}</p>
+        <p class="mini-cart-product__quantity">Cantidad: 1</p>
+      </div>
+    </div>
+
+    <!-- Subtotal -->
+    <div class="mini-cart-subtotal">
+      <span>Subtotal</span>
+      <span class="mini-cart-subtotal__amount">{{ formatPrice(subtotal) }}</span>
+    </div>
+
+    <!-- Actions -->
+    <div class="mini-cart-actions">
+      <button 
+        type="button" 
+        class="mini-cart-btn mini-cart-btn--primary"
+        (click)="onCheckout()"
+      >
+        Finalizar compra
+      </button>
+      <button 
+        type="button" 
+        class="mini-cart-btn mini-cart-btn--secondary"
+        (click)="onViewCart()"
+      >
+        Ver carrito
+      </button>
+      <button 
+        type="button" 
+        class="mini-cart-link"
+        (click)="onContinueShopping()"
+      >
+        Seguir explorando
+      </button>
+    </div>
+  </div>
+</div>
