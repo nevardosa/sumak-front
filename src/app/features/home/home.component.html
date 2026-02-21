@@ -15,20 +15,43 @@
     <div class="grid lg:grid-cols-[4fr_1fr] gap-12 items-center">
       <div class="text-center lg:text-left">
         <h1 class="text-4xl md:text-5xl lg:text-5xl xl:text-6xl text-white mb-6 leading-tight">
-          Sabores
-          <span class="text-sumak-gold font-against">Auténticos</span>
-          de Colombia
+          La forma más segura
+          <span class="text-sumak-gold font-against"> de regalar premium</span>
+            en Colombia.
         </h1>
-        <p class="text-lg md:text-xl lg:text-lg xl:text-xl text-gray-200 mb-8 leading-relaxed max-w-2xl mx-auto lg:mx-0">
-          Rituales gastronómicos inspirados en la diversidad cultural del país, concebidos a partir de una curaduría cuidadosa de ingredientes nacionales e internacionales, seleccionados por su calidad, origen y afinidad sensorial.
+        <p class="text-lg md:text-xl lg:text-lg xl:text-xl text-gray-200 mb-2 leading-relaxed max-w-2xl mx-auto lg:mx-0">
+          Diseñamos rituales gastronómicos, no regalos genéricos.
         </p>
-        <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+        <p class="text-lg md:text-xl lg:text-lg xl:text-xl text-gray-200 mb-2 leading-relaxed max-w-2xl mx-auto lg:mx-0">
+          El regalo perfecto elegido por personas y empresas que no pueden darse el lujo de equivocarse.
+        </p>
+        <p class="text-lg md:text-xl lg:text-lg xl:text-xl text-gray-200 mb-8 leading-relaxed max-w-2xl mx-auto lg:mx-0">
+          Producción limitada para preservar la experiencia y el detalle.
+        </p>
+        <p class="text-lg md:text-xl lg:text-lg xl:text-xl text-gray-200 mb-8 leading-relaxed max-w-2xl mx-auto lg:mx-0">
+
+        </p>
+        <div class="flex flex-col sm:flex-row gap-8 justify-center lg:justify-start mb-8">
           <app-button
             variant="secondary"
             size="lg"
             [routerLink]="'/catalog'">
-            Explorar rituales
+            Elegir regalo ahora
           </app-button>
+          <app-button
+            variant="outline-light"
+            size="lg"
+            [routerLink]="'/cotizacion-corporativa'">
+            Solicitar propuesta corporativa
+          </app-button>
+        </div>
+        <div class="justify-center lg:justify-start mt-2">
+            <p class="text-lg md:text-xl lg:text-lg xl:text-xl text-gray-200 mb-1 leading-relaxed max-w-2xl mx-auto lg:mx-0">
+           Entrega rápida en Bogotá y envíos nacionales
+            </p>
+            <p class="text-lg md:text-xl lg:text-lg xl:text-xl text-gray-200 mb-1 leading-relaxed max-w-2xl mx-auto lg:mx-0">
+           Presentación premium incluida
+            </p>
         </div>
       </div>
     </div>
@@ -36,37 +59,11 @@
 </section>
 
 <!-- Beneficios Section -->
-<section class="bg-white py-12 fade-in-section">
+<section class="benefits-section bg-white py-12">
   <div class="container-sumak">
     <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6">
       <!-- Beneficio 1 -->
-      <div class="benefit-item flex items-start gap-4 p-6 rounded-xl hover:bg-gray-50 transition-colors" style="transition-delay: 0ms;">
-        <div class="flex-shrink-0">
-          <svg class="w-8 h-8 text-sumak-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-          </svg>
-        </div>
-        <div>
-          <h3 class="font-semibold text-sumak-green mb-1">Entrega rápida</h3>
-          <p class="text-sm text-text-secondary">Bogotá en menos de 24h listo para regalar</p>
-        </div>
-      </div>
-
-      <!-- Beneficio 2 -->
-      <div class="benefit-item flex items-start gap-4 p-6 rounded-xl hover:bg-gray-50 transition-colors" style="transition-delay: 250ms;">
-        <div class="flex-shrink-0">
-          <svg class="w-8 h-8 text-sumak-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/>
-          </svg>
-        </div>
-        <div>
-          <h3 class="font-semibold text-sumak-green mb-1">Listo para regalar</h3>
-          <p class="text-sm text-text-secondary">Presentación premium incluida</p>
-        </div>
-      </div>
-
-      <!-- Beneficio 3 -->
-      <div class="benefit-item flex items-start gap-4 p-6 rounded-xl hover:bg-gray-50 transition-colors" style="transition-delay: 500ms;">
+      <div class="benefit-item flex items-start gap-4 p-6 rounded-xl hover:bg-gray-50 transition-colors">
         <div class="flex-shrink-0">
           <svg class="w-8 h-8 text-sumak-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
@@ -74,12 +71,41 @@
         </div>
         <div>
           <h3 class="font-semibold text-sumak-green mb-1">Experiencia curada</h3>
-          <p class="text-sm text-text-secondary">Maridaje pensado, no productos sueltos</p>
+          <p class="text-sm text-text-secondary">Regalo que sí sorprende, no productos sueltos</p>
+        </div>
+      </div>
+
+
+      <!-- Beneficio 2 -->
+
+      <div class="benefit-item flex items-start gap-4 p-6 rounded-xl hover:bg-gray-50 transition-colors">
+        <div class="flex-shrink-0">
+          <svg class="w-8 h-8 text-sumak-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/>
+          </svg>
+        </div>
+        <div>
+          <h3 class="font-semibold text-sumak-green mb-1">Listo para regalar</h3>
+          <p class="text-sm text-text-secondary">Entrega directa, sin preocuparte por envolver</p>
+        </div>
+      </div>
+
+
+      <!-- Beneficio 3 -->
+      <div class="benefit-item flex items-start gap-4 p-6 rounded-xl hover:bg-gray-50 transition-colors">
+        <div class="flex-shrink-0">
+          <svg class="w-8 h-8 text-sumak-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+          </svg>
+        </div>
+        <div>
+          <h3 class="font-semibold text-sumak-green mb-1">Entrega rápida</h3>
+          <p class="text-sm text-text-secondary">Solución de último minuto sin perder elegancia</p>
         </div>
       </div>
 
       <!-- Beneficio 4 -->
-      <div class="benefit-item flex items-start gap-4 p-6 rounded-xl hover:bg-gray-50 transition-colors" style="transition-delay: 750ms;">
+      <div class="benefit-item flex items-start gap-4 p-6 rounded-xl hover:bg-gray-50 transition-colors">
         <div class="flex-shrink-0">
           <svg class="w-8 h-8 text-sumak-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
@@ -87,7 +113,7 @@
         </div>
         <div>
           <h3 class="font-semibold text-sumak-green mb-1">Envío nacional</h3>
-          <p class="text-sm text-text-secondary">Descuento de $25.000 sobre el ritual</p>
+          <p class="text-sm text-text-secondary">Cobertura nacional segura y cuidada</p>
         </div>
       </div>
     </div>
