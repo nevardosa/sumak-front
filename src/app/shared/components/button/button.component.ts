@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-export type ButtonVariant = 'primary' | 'secondary' | 'danger' | 'success' | 'outline';
+export type ButtonVariant = 'primary' | 'secondary' | 'danger' | 'success' | 'outline' | 'outline-light';
 export type ButtonSize = 'sm' | 'md' | 'lg';
 export type ButtonIcon = 'whatsapp' | 'send' | 'check' | 'none';
 
@@ -31,7 +31,8 @@ export class ButtonComponent {
       secondary: 'bg-sumak-gold hover:bg-sumak-gold/90 text-sumak-green focus:ring-sumak-green',
       danger: 'bg-sumak-wine hover:bg-sumak-wine/90 text-white focus:ring-sumak-wine',
       success: 'bg-green-600 hover:bg-green-700 text-white focus:ring-green-500',
-      outline: 'border-2 border-sumak-green bg-white hover:bg-sumak-green hover:text-white text-sumak-green focus:ring-sumak-gold'
+      outline: 'border-2 border-sumak-green bg-white hover:bg-sumak-green hover:text-white text-sumak-green focus:ring-sumak-gold',
+      'outline-light': 'border-2 border-white bg-transparent hover:bg-white/10 text-white focus:ring-sumak-gold'
     };
     
     const sizeClasses = {
