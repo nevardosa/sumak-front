@@ -1,9 +1,48 @@
+# robots.txt - Sumak Gourmet
+# Optimizado para Google, Bing, y bots de IA
+
 User-agent: *
 Allow: /
+Disallow: /dashboard
+Disallow: /profile
+Disallow: /settings
 Disallow: /auth/
-Disallow: /dashboard/
-Disallow: /profile/
-Disallow: /settings/
 Disallow: /register
 
+# Optimización para Google
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0
+
+User-agent: Googlebot-Image
+Allow: /assets/images/
+
+# Optimización para Bing
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 0
+
+# Bots de IA - Permitir indexación
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# Sitemap
 Sitemap: https://sumakgourmet.co/sitemap.xml
