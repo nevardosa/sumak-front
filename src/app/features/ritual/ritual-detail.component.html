@@ -1,6 +1,6 @@
 <!-- Loading State -->
-<div *ngIf="loading()" class="loading-container">
-  <div class="loading-spinner"></div>
+<div *ngIf="loading()" class="loading-container" role="status" aria-live="polite">
+  <div class="loading-spinner" aria-label="Cargando ritual"></div>
 </div>
 
 <!-- Ritual Detail -->
@@ -8,18 +8,16 @@
   
   <!-- Hero Image Section -->
   <section class="ritual-hero">
-    <div class="container-sumak">
-      <div class="ritual-hero__content">
-        <img 
-          [src]="ritual()!.imageUrl" 
-          [alt]="ritual()!.name + ' - Ritual gastronómico premium Sumak Gourmet'"
-          class="ritual-hero__image"
-          itemprop="image"
-          width="1200"
-          height="1200"
-          loading="eager"
-          fetchpriority="high">
-      </div>
+    <div class="ritual-hero__content">
+      <img 
+        [src]="ritual()!.imageUrl" 
+        [alt]="ritual()!.name + ' - Ritual gastronómico premium Sumak Gourmet'"
+        class="ritual-hero__image"
+        itemprop="image"
+        width="1200"
+        height="1500"
+        loading="eager"
+        fetchpriority="high">
     </div>
   </section>
 
@@ -31,10 +29,10 @@
       <header class="ritual-header">
         <nav class="breadcrumb" aria-label="Breadcrumb">
           <a [routerLink]="['/']">Inicio</a>
-          <span class="separator">/</span>
+          <span class="separator" aria-hidden="true">/</span>
           <a [routerLink]="['/catalog']">Catálogo</a>
-          <span class="separator">/</span>
-          <span class="current">{{ ritual()!.name }}</span>
+          <span class="separator" aria-hidden="true">/</span>
+          <span class="current" aria-current="page">{{ ritual()!.name }}</span>
         </nav>
 
         <h1 class="ritual-title" itemprop="name">{{ ritual()!.name }}</h1>
@@ -45,6 +43,7 @@
           <meta itemprop="priceCurrency" content="COP">
           <meta itemprop="price" [content]="ritual()!.price">
           <meta itemprop="availability" content="https://schema.org/InStock">
+          <meta itemprop="url" [content]="'https://sumakgourmet.co/ritual/' + ritual()!.slug">
           <span class="price-value">{{ formatPrice(ritual()!.price) }}</span>
         </div>
         
@@ -58,14 +57,14 @@
       </app-ritual-badges>
 
       <!-- Quick Summary -->
-      <div class="quick-summary" *ngIf="ritual()!.sensorialExperience || ritual()!.decisionSummary?.highlightedIngredients">
+      <aside class="quick-summary" *ngIf="ritual()!.sensorialExperience || ritual()!.decisionSummary?.highlightedIngredients">
         <div class="summary-item" *ngIf="ritual()!.sensorialExperience">
           <strong>Sensación:</strong> {{ ritual()!.sensorialExperience }}
         </div>
         <div class="summary-item" *ngIf="ritual()!.decisionSummary?.highlightedIngredients">
           <strong>Incluye:</strong> {{ getHighlightedIngredients() }}
         </div>
-      </div>
+      </aside>
 
       <!-- Description -->
       <div class="ritual-description">
@@ -78,14 +77,16 @@
           variant="secondary"
           size="lg"
           [loading]="addingToCart()"
-          (clicked)="onAddToCart()">
+          (clicked)="onAddToCart()"
+          [attr.aria-label]="'Agregar ' + ritual()!.name + ' al carrito'">
           {{ addingToCart() ? 'Agregando...' : 'Regalar este ritual' }}
         </app-button>
         
         <app-button
           variant="outline-light"
           size="lg"
-          (clicked)="onCorporateInquiry()">
+          (clicked)="onCorporateInquiry()"
+          [attr.aria-label]="'Solicitar propuesta corporativa para ' + ritual()!.name">
           Propuesta corporativa
         </app-button>
       </div>
@@ -95,25 +96,25 @@
         <h2 class="section-title">Para quién es este ritual</h2>
         <ul class="for-whom-list">
           <li class="for-whom-item">
-            <svg class="for-whom-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="for-whom-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
             </svg>
             <span>Regalos empresariales</span>
           </li>
           <li class="for-whom-item">
-            <svg class="for-whom-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="for-whom-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
             </svg>
             <span>Ocasiones especiales</span>
           </li>
           <li class="for-whom-item">
-            <svg class="for-whom-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="for-whom-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
             </svg>
             <span>Agradecimientos importantes</span>
           </li>
           <li class="for-whom-item">
-            <svg class="for-whom-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="for-whom-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
             </svg>
             <span>Celebraciones íntimas</span>
@@ -132,7 +133,7 @@
         <h2 class="section-title">Qué Incluye</h2>
         <ul class="ingredients-list">
           <li *ngFor="let ingredient of ritual()!.ingredients" class="ingredient-item">
-            <svg class="ingredient-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="ingredient-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
             </svg>
             <span>{{ ingredient }}</span>
@@ -167,7 +168,7 @@
         <h2 class="section-title">Entrega</h2>
         <div class="delivery-grid">
           <div class="delivery-item">
-            <svg class="delivery-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="delivery-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
             </svg>
             <div>
@@ -176,7 +177,7 @@
             </div>
           </div>
           <div class="delivery-item">
-            <svg class="delivery-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="delivery-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
             </svg>
             <div>
@@ -189,12 +190,16 @@
 
       <!-- Corporate Block -->
       <app-ritual-corporate-block
+        *ngIf="ritual()!.corporateOptions?.available"
         [options]="ritual()!.corporateOptions"
         (corporateClick)="onCorporateInquiry()">
       </app-ritual-corporate-block>
 
       <!-- FAQ -->
-      <app-ritual-faq [faqs]="ritual()!.faqs"></app-ritual-faq>
+      <app-ritual-faq 
+        *ngIf="ritual()!.faqs?.length"
+        [faqs]="ritual()!.faqs">
+      </app-ritual-faq>
 
     </div>
   </section>
