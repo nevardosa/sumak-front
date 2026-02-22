@@ -1,7 +1,8 @@
-import { Component, Output, EventEmitter, Input, ChangeDetectionStrategy, OnInit, OnDestroy, HostListener } from '@angular/core';
+import { Component, Output, EventEmitter, Input, ChangeDetectionStrategy, OnInit, OnDestroy, HostListener, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { Product } from '../../models/catalog.models';
+import { CartService } from '../../services/cart.service';
 
 @Component({
   selector: 'app-mini-cart-drawer',
@@ -12,12 +13,12 @@ import { Product } from '../../models/catalog.models';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MiniCartDrawerComponent implements OnInit, OnDestroy {
-  @Input({ required: true }) product!: Product;
-  @Input() subtotal: number = 0;
+  @Input({ required: true }) product!: Product; // Último producto agregado (para highlight)
   @Output() close = new EventEmitter<void>();
   @Output() viewCart = new EventEmitter<void>();
   @Output() checkout = new EventEmitter<void>();
 
+  readonly cartService = inject(CartService);
   private previousFocusedElement: HTMLElement | null = null;
 
   constructor(private router: Router) {}
@@ -74,6 +75,10 @@ export class MiniCartDrawerComponent implements OnInit, OnDestroy {
 
   onContinueShopping(): void {
     this.onClose();
+  }
+
+  isLastAdded(productId: string): boolean {
+    return this.product.id === productId;
   }
 
   formatPrice(price: number): string {

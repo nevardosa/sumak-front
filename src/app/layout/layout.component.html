@@ -6,4 +6,33 @@
   </main>
   
   <app-footer></app-footer>
+
+  <!-- Global Cart FAB -->
+  <button
+    *ngIf="cartService.cart().itemCount > 0"
+    (click)="toggleCart()"
+    class="global-cart-fab"
+    aria-label="Ver carrito"
+    type="button"
+  >
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m0 0h8m-8 0a2 2 0 100 4 2 2 0 000-4zm8 0a2 2 0 100 4 2 2 0 000-4z"></path>
+    </svg>
+    <span class="global-cart-badge">
+      {{ cartService.cart().itemCount }}
+    </span>
+  </button>
+
+  <!-- Global Cart Drawer -->
+  <app-cart
+    *ngIf="showCart()"
+    (close)="onCloseCart()"
+    (checkout)="onCheckout()"
+  ></app-cart>
+
+  <!-- Global Checkout Modal -->
+  <app-checkout-modal
+    *ngIf="showCheckoutModal()"
+    (close)="onCloseCheckoutModal()"
+  ></app-checkout-modal>
 </div>

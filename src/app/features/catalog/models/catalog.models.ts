@@ -1,5 +1,6 @@
 export interface Product {
   id: string;
+  slug: string;
   name: string;
   price: number;
   description: string;
@@ -7,12 +8,27 @@ export interface Product {
   ingredients: string[];
   sensorialExperience: string;
   imageUrl: string;
+  images?: string[];
   category: ProductCategory;
-  // New fields for enhanced product information
   curatedLine: string;
   occasions: string[];
   affinity: ProductAffinity;
   servingSuggestion: string;
+  // SEO fields
+  metaTitle?: string;
+  metaDescription?: string;
+  keywords?: string[];
+  ogTitle?: string;
+  ogDescription?: string;
+  ogImage?: string;
+  // Delivery info
+  deliveryInfo?: DeliveryInfo;
+  // Corporate options
+  corporateOptions?: CorporateOptions;
+  // Decision summary (for above fold)
+  decisionSummary?: DecisionSummary;
+  // FAQ specific to this ritual
+  faqs?: RitualFAQ[];
 }
 
 export interface ProductAffinity {
@@ -124,4 +140,33 @@ export interface PaymentStep {
   stepNumber: number;
   title: string;
   description: string;
+}
+
+export interface DeliveryInfo {
+  bogotaExpress: boolean;
+  nationalShipping: boolean;
+  estimatedDays: string;
+  shippingDiscount?: number;
+  details?: string;
+}
+
+export interface CorporateOptions {
+  available: boolean;
+  minQuantity?: number;
+  customization: boolean;
+  bulkDiscount?: number;
+  benefits?: string[]; // Specific B2B benefits
+  multiDestination?: boolean;
+  invoicing?: boolean;
+  sla?: string;
+}
+
+export interface DecisionSummary {
+  badges: string[]; // e.g., ['Producción limitada', 'Entrega express']
+  highlightedIngredients: string[]; // 2-3 key items
+}
+
+export interface RitualFAQ {
+  question: string;
+  answer: string;
 }

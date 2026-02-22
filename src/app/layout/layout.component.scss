@@ -1,0 +1,111 @@
+/* === GLOBAL CART FAB === */
+/* Visible en todas las páginas cuando hay productos en el carrito */
+
+.global-cart-fab {
+  position: fixed;
+  right: 18px;
+  bottom: 128px;
+  z-index: 45;
+  width: 54px;
+  height: 54px;
+  padding: 0;
+  margin: 0;
+  background: rgba(6, 58, 61, 0.92);
+  border: 1px solid rgba(245, 239, 230, 0.16);
+  border-radius: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(245, 239, 230, 0.92);
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18), 0 2px 6px rgba(0, 0, 0, 0.08);
+  transition: all 420ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.global-cart-fab svg {
+  width: 20px;
+  height: 20px;
+  opacity: 0.95;
+}
+
+.global-cart-fab:hover {
+  transform: translateY(-2px);
+  background: rgba(5, 47, 50, 0.95);
+  border-color: rgba(198, 164, 108, 0.22);
+  box-shadow: 0 22px 55px rgba(0, 0, 0, 0.28), 0 4px 14px rgba(0, 0, 0, 0.12);
+}
+
+.global-cart-fab:active {
+  transform: translateY(0) scale(0.99);
+}
+
+.global-cart-fab:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(198, 164, 108, 0.35), 0 16px 40px rgba(0, 0, 0, 0.22), 0 2px 10px rgba(0, 0, 0, 0.10);
+}
+
+.global-cart-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 6px;
+  background: rgba(198, 164, 108, 0.92);
+  color: rgba(6, 58, 61, 0.92);
+  font-family: 'Garet', sans-serif;
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 1;
+  border-radius: 999px;
+  border: 1px solid rgba(245, 239, 230, 0.92);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18), 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.cart-shake {
+  animation: cartShake 600ms cubic-bezier(0.36, 0.07, 0.19, 0.97);
+}
+
+@keyframes cartShake {
+  0%, 100% { transform: translateY(-2px) translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateY(-2px) translateX(-2px); }
+  20%, 40%, 60%, 80% { transform: translateY(-2px) translateX(2px); }
+}
+
+/* === RESPONSIVE === */
+
+@media (max-width: 768px) {
+  .global-cart-fab {
+    width: 50px;
+    height: 50px;
+    border-radius: 14px;
+    right: 14px;
+    bottom: 104px;
+  }
+
+  .global-cart-fab svg {
+    width: 19px;
+    height: 19px;
+  }
+
+  .global-cart-badge {
+    min-width: 17px;
+    height: 17px;
+    font-size: 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .global-cart-fab {
+    transition: none;
+  }
+  
+  .cart-shake {
+    animation: none;
+  }
+}

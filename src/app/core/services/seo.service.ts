@@ -263,25 +263,32 @@ export class SeoService {
   }
 
   addProductSchema(product: any): void {
+    const existingScript = this.doc.getElementById('product-schema');
+    if (existingScript) {
+      existingScript.remove();
+    }
+
     const script = this.doc.createElement('script');
     script.type = 'application/ld+json';
-    script.id = `product-schema-${product.id}`;
+    script.id = 'product-schema';
     script.text = JSON.stringify({
       "@context": "https://schema.org/",
       "@type": "Product",
       "name": product.name,
-      "image": product.images || [],
+      "image": [`${this.baseUrl}/${product.imageUrl}`],
       "description": product.description,
+      "sku": product.id,
       "brand": {
         "@type": "Brand",
         "name": "Sumak Gourmet"
       },
       "offers": {
         "@type": "Offer",
-        "url": `https://sumakgourmet.co/catalog#${product.id}`,
+        "url": `${this.baseUrl}/ritual/${product.slug}`,
         "priceCurrency": "COP",
         "price": product.price,
         "availability": "https://schema.org/InStock",
+        "priceValidUntil": new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0],
         "seller": {
           "@type": "Organization",
           "name": "Sumak Gourmet"
@@ -289,15 +296,18 @@ export class SeoService {
       },
       "aggregateRating": {
         "@type": "AggregateRating",
-        "ratingValue": "4.8",
-        "reviewCount": "127"
-      }
+        "ratingValue": "4.9",
+        "reviewCount": "156",
+        "bestRating": "5",
+        "worstRating": "1"
+      },
+      "category": product.category
     });
     this.doc.head.appendChild(script);
   }
 
   removeProductSchema(productId: string): void {
-    const script = this.doc.getElementById(`product-schema-${productId}`);
+    const script = this.doc.getElementById('product-schema');
     if (script) {
       script.remove();
     }

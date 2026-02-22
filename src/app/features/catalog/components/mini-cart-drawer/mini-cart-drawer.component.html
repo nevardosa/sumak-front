@@ -8,7 +8,9 @@
   >
     <!-- Header -->
     <div class="mini-cart-header">
-      <h3 id="mini-cart-title" class="mini-cart-title">Agregado al carrito</h3>
+      <h3 id="mini-cart-title" class="mini-cart-title">
+        Carrito ({{ cartService.cart().itemCount }})
+      </h3>
       <button 
         type="button" 
         class="mini-cart-close" 
@@ -21,22 +23,28 @@
       </button>
     </div>
 
-    <!-- Product Added -->
-    <div class="mini-cart-product">
-      <div class="mini-cart-product__image">
-        <img [src]="product.imageUrl" [alt]="product.name" />
-      </div>
-      <div class="mini-cart-product__info">
-        <h4 class="mini-cart-product__name">{{ product.name }}</h4>
-        <p class="mini-cart-product__price">{{ formatPrice(product.price) }}</p>
-        <p class="mini-cart-product__quantity">Cantidad: 1</p>
+    <!-- Products List -->
+    <div class="mini-cart-products">
+      <div 
+        *ngFor="let item of cartService.cart().items" 
+        class="mini-cart-product"
+        [class.mini-cart-product--highlight]="isLastAdded(item.product.id)"
+      >
+        <div class="mini-cart-product__image">
+          <img [src]="item.product.imageUrl" [alt]="item.product.name" />
+        </div>
+        <div class="mini-cart-product__info">
+          <h4 class="mini-cart-product__name">{{ item.product.name }}</h4>
+          <p class="mini-cart-product__price">{{ formatPrice(item.product.price) }}</p>
+          <p class="mini-cart-product__quantity">Cantidad: {{ item.quantity }}</p>
+        </div>
       </div>
     </div>
 
     <!-- Subtotal -->
     <div class="mini-cart-subtotal">
       <span>Subtotal</span>
-      <span class="mini-cart-subtotal__amount">{{ formatPrice(subtotal) }}</span>
+      <span class="mini-cart-subtotal__amount">{{ formatPrice(cartService.cart().total) }}</span>
     </div>
 
     <!-- Actions -->
@@ -53,7 +61,7 @@
         class="mini-cart-btn mini-cart-btn--secondary"
         (click)="onViewCart()"
       >
-        Ver carrito
+        Ver carrito completo
       </button>
       <button 
         type="button" 

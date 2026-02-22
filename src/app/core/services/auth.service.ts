@@ -74,14 +74,22 @@ export class AuthService {
   }
 
   private setupAntiDebug(): void {
+    // Only run in browser
+    if (typeof window === 'undefined') return;
+    
     // Disabled in development to prevent refresh issues
-    if (typeof window !== 'undefined' && window.location.hostname === 'localhost') {
+    if (window.location.hostname === 'localhost') {
       return;
     }
 
     // Production anti-debug protection (optimized)
     let debugCheckCount = 0;
     const debugInterval = setInterval(() => {
+      if (typeof window === 'undefined') {
+        clearInterval(debugInterval);
+        return;
+      }
+      
       debugCheckCount++;
       if (debugCheckCount > 10) {
         clearInterval(debugInterval);
@@ -105,6 +113,11 @@ export class AuthService {
     // Console detection (optimized)
     let consoleCheckCount = 0;
     const consoleInterval = setInterval(() => {
+      if (typeof window === 'undefined') {
+        clearInterval(consoleInterval);
+        return;
+      }
+      
       consoleCheckCount++;
       if (consoleCheckCount > 5) {
         clearInterval(consoleInterval);
