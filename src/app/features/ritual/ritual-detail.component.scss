@@ -23,18 +23,19 @@
 .ritual-detail {
   background: #fff;
   min-height: 100vh;
+  padding: 25px;
 }
 
 // Hero
 .ritual-hero {
   background: #f9fafb;
   padding: 0;
-  
+
   &__content {
     max-width: 100%;
     margin: 0 auto;
   }
-  
+
   &__image {
     width: 100%;
     height: auto;
@@ -62,21 +63,21 @@
   color: #6b7280;
   margin-bottom: 1rem;
   flex-wrap: wrap;
-  
+
   a {
     color: #6b7280;
     text-decoration: none;
     transition: color 0.2s;
-    
+
     &:hover {
       color: var(--sumak-green, #1a4d2e);
     }
   }
-  
+
   .separator {
     color: #d1d5db;
   }
-  
+
   .current {
     color: var(--sumak-green, #1a4d2e);
     font-weight: 500;
@@ -133,7 +134,7 @@
   font-size: 0.9375rem;
   line-height: 1.5;
   color: #374151;
-  
+
   strong {
     color: var(--sumak-green, #1a4d2e);
     font-weight: 600;
@@ -157,11 +158,11 @@
   flex-direction: column;
   gap: 1rem;
   margin-bottom: 2rem;
-  
+
   &--desktop {
     display: none;
   }
-  
+
   &--mobile {
     position: fixed;
     bottom: 0;
@@ -206,7 +207,7 @@
   margin-bottom: 2.5rem;
   padding-bottom: 2.5rem;
   border-bottom: 1px solid #e5e7eb;
-  
+
   &:last-child {
     border-bottom: none;
   }
@@ -223,7 +224,7 @@
   font-size: 1rem;
   line-height: 1.75;
   color: #4b5563;
-  
+
   &.sensorial {
     font-style: italic;
     color: var(--sumak-gold, #D4AF37);
@@ -346,7 +347,7 @@
   border-radius: 0.5rem;
   border: 1px solid #e5e7eb;
   transition: all 0.2s;
-  
+
   &:hover {
     border-color: var(--sumak-gold, #D4AF37);
     transform: translateX(4px);
@@ -366,23 +367,23 @@
     aspect-ratio: 16/9;
     max-height: 500px;
   }
-  
+
   .ritual-title {
     font-size: 2.5rem;
   }
-  
+
   .ritual-tagline {
     font-size: 1rem;
   }
-  
+
   .delivery-grid {
     grid-template-columns: repeat(2, 1fr);
   }
-  
+
   .for-whom-list {
     grid-template-columns: repeat(2, 1fr);
   }
-  
+
   .ritual-cta--mobile {
     padding: 1rem 1.5rem;
   }
@@ -393,37 +394,37 @@
   .ritual-content {
     padding: 3rem 0 3rem;
   }
-  
+
   .ritual-hero__image {
     max-width: 800px;
     margin: 0 auto;
     border-radius: 1rem;
   }
-  
+
   .ritual-title {
     font-size: 3rem;
   }
-  
+
   .ritual-tagline {
     font-size: 1.125rem;
   }
-  
+
   .ritual-cta {
     &--desktop {
       display: flex;
       flex-direction: row;
       max-width: 600px;
     }
-    
+
     &--mobile {
       display: none;
     }
   }
-  
+
   .section-title {
     font-size: 1.75rem;
   }
-  
+
   .for-whom-list {
     grid-template-columns: repeat(4, 1fr);
   }
