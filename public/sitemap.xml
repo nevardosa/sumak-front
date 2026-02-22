@@ -13,7 +13,7 @@
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
-  
+
   <!-- Product Detail Pages (PDP) - Rituales -->
   <url>
     <loc>https://sumakgourmet.co/ritual/kuntur-dorado</loc>
@@ -99,7 +99,7 @@
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
-  
+
   <!-- Corporate & Services -->
   <url>
     <loc>https://sumakgourmet.co/regalos-corporativos</loc>
@@ -119,7 +119,7 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
-  
+
   <!-- Info Pages -->
   <url>
     <loc>https://sumakgourmet.co/about</loc>
