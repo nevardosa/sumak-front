@@ -6,9 +6,9 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="ritual-badges">
+    <div class="ritual-badges" *ngIf="badges.length">
       <div *ngFor="let badge of badges" class="badge">
-        <svg class="badge-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg class="badge-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="getIconPath(badge)"/>
         </svg>
         <span>{{ badge }}</span>
@@ -19,24 +19,24 @@ import { CommonModule } from '@angular/common';
     .ritual-badges {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 0.75rem;
-      margin-bottom: 1.5rem;
+      gap: 0.625rem;
+      margin-bottom: 1.75rem;
     }
 
     .badge {
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      padding: 0.75rem;
-      background: #f9fafb;
-      border: 1px solid #e5e7eb;
-      border-radius: 0.5rem;
-      transition: all 0.2s;
+      padding: 0.75rem 0.625rem;
+      background: #fafafa;
+      border: 1px solid #f0f0f0;
+      border-radius: 0.375rem;
+      transition: all 0.15s ease;
     }
 
     .badge:hover {
-      background: #f3f4f6;
-      border-color: var(--sumak-gold, #D4AF37);
+      background: #f5f5f5;
+      border-color: rgba(212, 175, 55, 0.25);
     }
 
     .badge span {
@@ -44,11 +44,12 @@ import { CommonModule } from '@angular/common';
       color: #374151;
       font-weight: 500;
       line-height: 1.3;
+      letter-spacing: 0.005em;
     }
 
     .badge-icon {
-      width: 18px;
-      height: 18px;
+      width: 16px;
+      height: 16px;
       color: var(--sumak-gold, #D4AF37);
       flex-shrink: 0;
     }
@@ -56,6 +57,15 @@ import { CommonModule } from '@angular/common';
     @media (min-width: 768px) {
       .ritual-badges {
         grid-template-columns: repeat(4, 1fr);
+        gap: 0.75rem;
+      }
+
+      .badge {
+        padding: 0.875rem 0.75rem;
+      }
+
+      .badge span {
+        font-size: 0.875rem;
       }
     }
   `],
