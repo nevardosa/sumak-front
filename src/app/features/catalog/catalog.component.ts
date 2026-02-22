@@ -125,9 +125,13 @@ export class CatalogComponent implements OnInit, OnDestroy {
   onProductClick(product: Product): void {
     this.selectedProduct = product;
     this.showProductModal = true;
+    this.seoService.addProductSchema(product);
   }
 
   onCloseModal(): void {
+    if (this.selectedProduct) {
+      this.seoService.removeProductSchema(this.selectedProduct.id);
+    }
     this.showProductModal = false;
     this.selectedProduct = null;
     this.ctaButtonAdded.set(false);

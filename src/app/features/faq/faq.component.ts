@@ -71,6 +71,13 @@ export class FaqComponent implements OnInit, OnDestroy {
       { name: 'Inicio', url: '/' },
       { name: 'Preguntas Frecuentes', url: '/faq' }
     ]);
+
+    this.addFAQSchema();
+  }
+
+  private addFAQSchema(): void {
+    const faqs = this.faqService.allFaqItems;
+    this.seoService.addFAQSchema([...faqs]);
   }
 
   onCategoryChange(categoryId: FaqCategoryId | 'all'): void {

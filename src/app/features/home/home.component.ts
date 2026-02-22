@@ -80,7 +80,10 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     });
 
     this.seoService.addOrganizationSchema();
-    this.seoService.addWebSiteSchema(); // ← Agregar WebSite schema
+    this.seoService.addWebSiteSchema();
+    this.seoService.addLocalBusinessSchema();
+    this.seoService.addSpeakableSchema();
+    this.seoService.addHowToSchema();
     this.seoService.addBreadcrumbSchema([
       { name: 'Inicio', url: '/' }
     ]);

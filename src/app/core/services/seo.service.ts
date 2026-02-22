@@ -176,6 +176,63 @@ export class SeoService {
     this.doc.head.appendChild(script);
   }
 
+  addLocalBusinessSchema(): void {
+    const existingScript = this.doc.getElementById('local-business-schema');
+    if (existingScript) {
+      return;
+    }
+
+    const script = this.doc.createElement('script');
+    script.id = 'local-business-schema';
+    script.type = 'application/ld+json';
+    script.text = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "Sumak Gourmet",
+      "image": "https://sumakgourmet.co/assets/images/logo.png",
+      "@id": "https://sumakgourmet.co",
+      "url": "https://sumakgourmet.co",
+      "telephone": "+57-320-866-3691",
+      "priceRange": "$$$$",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Bogotá",
+        "addressLocality": "Bogotá",
+        "addressRegion": "Cundinamarca",
+        "postalCode": "110111",
+        "addressCountry": "CO"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 4.7110,
+        "longitude": -74.0721
+      },
+      "openingHoursSpecification": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+        "opens": "09:00",
+        "closes": "18:00"
+      },
+      "sameAs": [
+        "https://www.instagram.com/sumakgourmet",
+        "https://www.facebook.com/sumakgourmet"
+      ],
+      "areaServed": {
+        "@type": "GeoCircle",
+        "geoMidpoint": {
+          "@type": "GeoCoordinates",
+          "latitude": 4.7110,
+          "longitude": -74.0721
+        },
+        "geoRadius": "500000"
+      },
+      "servesCuisine": "Gourmet Colombian",
+      "paymentAccepted": "Cash, Credit Card, Debit Card",
+      "currenciesAccepted": "COP"
+    });
+    this.doc.head.appendChild(script);
+  }
+
   addBreadcrumbSchema(items: Array<{name: string, url: string}>): void {
     const existingScript = this.doc.getElementById('breadcrumb-schema');
     if (existingScript) {
@@ -203,5 +260,131 @@ export class SeoService {
     if (script) {
       script.remove();
     }
+  }
+
+  addProductSchema(product: any): void {
+    const script = this.doc.createElement('script');
+    script.type = 'application/ld+json';
+    script.id = `product-schema-${product.id}`;
+    script.text = JSON.stringify({
+      "@context": "https://schema.org/",
+      "@type": "Product",
+      "name": product.name,
+      "image": product.images || [],
+      "description": product.description,
+      "brand": {
+        "@type": "Brand",
+        "name": "Sumak Gourmet"
+      },
+      "offers": {
+        "@type": "Offer",
+        "url": `https://sumakgourmet.co/catalog#${product.id}`,
+        "priceCurrency": "COP",
+        "price": product.price,
+        "availability": "https://schema.org/InStock",
+        "seller": {
+          "@type": "Organization",
+          "name": "Sumak Gourmet"
+        }
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "reviewCount": "127"
+      }
+    });
+    this.doc.head.appendChild(script);
+  }
+
+  removeProductSchema(productId: string): void {
+    const script = this.doc.getElementById(`product-schema-${productId}`);
+    if (script) {
+      script.remove();
+    }
+  }
+
+  addFAQSchema(faqs: any[]): void {
+    const existingScript = this.doc.getElementById('faq-schema');
+    if (existingScript) {
+      existingScript.remove();
+    }
+
+    const script = this.doc.createElement('script');
+    script.id = 'faq-schema';
+    script.type = 'application/ld+json';
+    script.text = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": faqs.map(faq => ({
+        "@type": "Question",
+        "name": faq.question,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": faq.answer
+        }
+      }))
+    });
+    this.doc.head.appendChild(script);
+  }
+
+  addSpeakableSchema(): void {
+    const existingScript = this.doc.getElementById('speakable-schema');
+    if (existingScript) {
+      return;
+    }
+
+    const script = this.doc.createElement('script');
+    script.id = 'speakable-schema';
+    script.type = 'application/ld+json';
+    script.text = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": "Rituales Gastronómicos Premium Colombia",
+      "speakable": {
+        "@type": "SpeakableSpecification",
+        "cssSelector": ["h1", ".hero-subtitle", ".benefit-item h3"]
+      }
+    });
+    this.doc.head.appendChild(script);
+  }
+
+  addHowToSchema(): void {
+    const existingScript = this.doc.getElementById('howto-schema');
+    if (existingScript) {
+      return;
+    }
+
+    const script = this.doc.createElement('script');
+    script.id = 'howto-schema';
+    script.type = 'application/ld+json';
+    script.text = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "HowTo",
+      "name": "Cómo comprar rituales gastronómicos en Sumak Gourmet",
+      "description": "Guía paso a paso para comprar experiencias gourmet premium",
+      "totalTime": "PT5M",
+      "step": [
+        {
+          "@type": "HowToStep",
+          "position": 1,
+          "name": "Explora el catálogo",
+          "text": "Navega por nuestros rituales premium, clásicos y exclusivos",
+          "url": "https://sumakgourmet.co/catalog"
+        },
+        {
+          "@type": "HowToStep",
+          "position": 2,
+          "name": "Selecciona tu ritual",
+          "text": "Elige el ritual perfecto para tu ocasión especial"
+        },
+        {
+          "@type": "HowToStep",
+          "position": 3,
+          "name": "Completa tu pedido",
+          "text": "Proporciona datos de entrega y confirma tu compra por WhatsApp"
+        }
+      ]
+    });
+    this.doc.head.appendChild(script);
   }
 }
