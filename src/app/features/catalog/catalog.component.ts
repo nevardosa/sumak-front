@@ -1,12 +1,11 @@
-import { Component, inject, OnInit, OnDestroy, ChangeDetectionStrategy, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, inject, OnInit, OnDestroy, ChangeDetectionStrategy, signal, PLATFORM_ID } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { CatalogService } from './services/catalog.service';
 import { CartService } from './services/cart.service';
 import { SeoService } from '../../core/services/seo.service';
 import { Product, ProductCategory } from './models/catalog.models';
 import { ProductCardComponent } from './components/product-card/product-card.component';
-import { ProductModalComponent } from './components/product-modal/product-modal.component';
 import { CartComponent } from './components/cart/cart.component';
 import { ToastComponent } from '../../shared/components/toast/toast.component';
 import { MiniCartDrawerComponent } from './components/mini-cart-drawer/mini-cart-drawer.component';
@@ -19,11 +18,8 @@ import { CustomConciergeSectionComponent } from '../../shared/components/custom-
   imports: [
     CommonModule, 
     ProductCardComponent, 
-    ProductModalComponent, 
-    CartComponent, 
     ToastComponent, 
-    MiniCartDrawerComponent, 
-    CheckoutModalComponent,
+    MiniCartDrawerComponent,
     CustomConciergeSectionComponent
   ],
   templateUrl: './catalog.component.html',
@@ -34,12 +30,11 @@ export class CatalogComponent implements OnInit, OnDestroy {
   private readonly catalogService = inject(CatalogService);
   private readonly seoService = inject(SeoService);
   private readonly router = inject(Router);
+  private readonly platformId = inject(PLATFORM_ID);
   readonly cartService = inject(CartService);
 
   products: Product[] = [];
   filteredProducts: Product[] = [];
-  selectedProduct: Product | null = null;
-  showProductModal = false;
   showCart = false;
   selectedCategory: ProductCategory | 'all' = 'all';
 
@@ -47,18 +42,10 @@ export class CatalogComponent implements OnInit, OnDestroy {
   showToast = signal(false);
   toastTitle = signal('');
   toastMessage = signal('');
-  cartShake = signal(false);
   
   // Mini cart drawer
   showMiniCart = signal(false);
   miniCartProduct = signal<Product | null>(null);
-  miniCartSubtotal = signal(0);
-  
-  // Checkout modal
-  showCheckoutModal = signal(false);
-  
-  // CTA button state
-  ctaButtonAdded = signal(false);
 
   readonly categories = [
     { value: 'all', label: 'Todos los rituales', count: 0 },
@@ -71,6 +58,7 @@ export class CatalogComponent implements OnInit, OnDestroy {
     this.setSeoMetadata();
     this.loadProducts();
     this.updateCategoryCounts();
+    this.checkQueryParams();
   }
 
   ngOnDestroy(): void {
@@ -107,6 +95,15 @@ export class CatalogComponent implements OnInit, OnDestroy {
     this.categories[3].count = this.products.filter(p => p.category === ProductCategory.EXCLUSIVE).length;
   }
 
+  private checkQueryParams(): void {
+    this.router.routerState.root.queryParams.subscribe(params => {
+      if (params['checkout'] === 'true' && this.cartService.cart().items.length > 0) {
+        // Redirect to layout-level checkout
+        this.router.navigate(['/catalog']);
+      }
+    });
+  }
+
   filterByCategory(category: string): void {
     this.selectedCategory = category as ProductCategory | 'all';
     this.filterProducts();
@@ -123,47 +120,32 @@ export class CatalogComponent implements OnInit, OnDestroy {
   }
 
   onProductClick(product: Product): void {
-    this.selectedProduct = product;
-    this.showProductModal = true;
-    this.seoService.addProductSchema(product);
-  }
-
-  onCloseModal(): void {
-    if (this.selectedProduct) {
-      this.seoService.removeProductSchema(this.selectedProduct.id);
+    // Mobile-first: Navigate to PDP
+    if (isPlatformBrowser(this.platformId)) {
+      const isMobile = window.innerWidth < 768;
+      if (isMobile || true) { // Always navigate to PDP for better SEO
+        this.router.navigate(['/ritual', product.slug]);
+        return;
+      }
     }
-    this.showProductModal = false;
-    this.selectedProduct = null;
-    this.ctaButtonAdded.set(false);
+    
+    // Desktop fallback (optional quick view - currently disabled)
+    this.router.navigate(['/ritual', product.slug]);
   }
 
   onAddToCart(product: Product): void {
-    // 1. Feedback inmediato en botón
-    this.ctaButtonAdded.set(true);
-    
-    // 2. Agregar al carrito
+    // Add to cart from catalog (if needed)
     this.cartService.addToCart(product);
-    
-    // 3. Mostrar toast premium
     this.showAddToCartNotification(product);
     
-    // 4. Animar FAB
-    this.triggerCartShake();
-    
-    // 5. Cerrar modal después de 700ms
-    setTimeout(() => {
-      this.onCloseModal();
-    }, 700);
-    
-    // 6. Mostrar mini cart drawer después de 800ms
+    // Show mini cart drawer
     setTimeout(() => {
       this.showMiniCartDrawer(product);
-    }, 800);
+    }, 300);
   }
 
   private showMiniCartDrawer(product: Product): void {
     this.miniCartProduct.set(product);
-    this.miniCartSubtotal.set(this.cartService.cart().total);
     this.showMiniCart.set(true);
   }
 
@@ -180,24 +162,10 @@ export class CatalogComponent implements OnInit, OnDestroy {
     // Cerrar mini cart y abrir checkout modal
     this.onCloseMiniCart();
     setTimeout(() => {
-      this.openCheckoutModal();
+      this.router.navigate(['/catalog'], { 
+        queryParams: { checkout: 'true' } 
+      });
     }, 300);
-  }
-
-  openCheckoutModal(): void {
-    // Cerrar cualquier modal o drawer activo
-    this.showProductModal = false;
-    this.showCart = false;
-    this.showMiniCart.set(false);
-    
-    // Abrir checkout modal
-    setTimeout(() => {
-      this.showCheckoutModal.set(true);
-    }, 100);
-  }
-
-  onCloseCheckoutModal(): void {
-    this.showCheckoutModal.set(false);
   }
 
   openCustomRitualContact(): void {
@@ -211,11 +179,6 @@ export class CatalogComponent implements OnInit, OnDestroy {
     );
   }
 
-  private triggerCartShake(): void {
-    this.cartShake.set(true);
-    setTimeout(() => this.cartShake.set(false), 600);
-  }
-
   private showAddToCartNotification(product: Product): void {
     this.toastTitle.set('Producto agregado');
     this.toastMessage.set(`${product.name} se agregó al carrito`);
@@ -224,10 +187,6 @@ export class CatalogComponent implements OnInit, OnDestroy {
 
   onToastClosed(): void {
     this.showToast.set(false);
-  }
-
-  toggleCart(): void {
-    this.showCart = !this.showCart;
   }
 
   trackByProductId(index: number, product: Product): string {

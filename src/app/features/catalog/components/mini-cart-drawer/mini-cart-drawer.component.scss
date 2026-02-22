@@ -117,12 +117,33 @@
 
 /* === PRODUCT === */
 
+.mini-cart-products {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+}
+
 .mini-cart-product {
   display: flex;
   gap: 16px;
   padding: clamp(20px, 4vw, 24px);
   border-bottom: 1px solid rgba(0, 0, 0, 0.06);
   flex-shrink: 0;
+  transition: background-color 300ms ease;
+}
+
+.mini-cart-product--highlight {
+  background: rgba(198, 164, 108, 0.08);
+  animation: highlightPulse 600ms ease-out;
+}
+
+@keyframes highlightPulse {
+  0% {
+    background: rgba(198, 164, 108, 0.2);
+  }
+  100% {
+    background: rgba(198, 164, 108, 0.08);
+  }
 }
 
 .mini-cart-product__image {

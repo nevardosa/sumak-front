@@ -1,5 +1,6 @@
-import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy, inject, PLATFORM_ID } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { Router } from '@angular/router';
 import { Product } from '../../models/catalog.models';
 
 @Component({
@@ -11,10 +12,14 @@ import { Product } from '../../models/catalog.models';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProductCardComponent {
+  private readonly router = inject(Router);
+  private readonly platformId = inject(PLATFORM_ID);
+  
   @Input({ required: true }) product!: Product;
   @Output() productClick = new EventEmitter<Product>();
 
   onDiscoverRitual(): void {
-    this.productClick.emit(this.product);
+    // Always navigate to PDP for SEO and consistency
+    this.router.navigate(['/ritual', this.product.slug]);
   }
 }

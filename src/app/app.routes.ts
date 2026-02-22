@@ -26,6 +26,10 @@ export const routes: Routes = [
         loadComponent: () => import('./features/catalog/catalog.component').then(m => m.CatalogComponent)
       },
       {
+        path: 'ritual/:slug',
+        loadComponent: () => import('./features/ritual/ritual-detail.component').then(m => m.RitualDetailComponent)
+      },
+      {
         path: 'faq',
         loadComponent: () => import('./features/faq/faq.component').then(m => m.FaqComponent)
       },

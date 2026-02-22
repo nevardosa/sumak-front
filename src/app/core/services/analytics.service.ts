@@ -1,225 +1,221 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 
-/**
- * Analytics Event Names - Union Type for type safety
- * Naming convention: snake_case
- */
-export type AnalyticsEventName =
-  | 'page_view'
-  | 'click_whatsapp'
-  | 'click_email'
-  | 'click_solicitar_propuesta'
-  | 'form_start_propuesta'
-  | 'form_submit_propuesta'
-  | 'view_regalos_corporativos'
-  | 'view_contacto'
-  | 'view_experiencias'
-  | 'view_catalog'
-  | 'checkout_opened'
-  | 'checkout_confirm_clicked'
-  | 'pdf_generated'
-  | 'pdf_downloaded'
-  | 'pdf_link_created'
-  | 'whatsapp_opened'
-  | 'whatsapp_message_copied'
-  | 'checkout_completed_intent'
-  | 'checkout_error';
-
-/**
- * Standard Placements for consistent tracking
- */
-export type AnalyticsPlacement =
-  | 'navbar'
-  | 'hero'
-  | 'floating'
-  | 'footer'
-  | 'section'
-  | 'contact_card'
-  | 'cta_section';
-
-/**
- * Analytics Event Parameters
- */
-export interface AnalyticsEventParams {
-  page_path?: string;
-  page_title?: string;
-  placement?: AnalyticsPlacement;
-  cta_label?: string;
-  form_id?: string;
-  [key: string]: string | number | boolean | undefined;
+declare global {
+  interface Window {
+    gtag?: (...args: any[]) => void;
+    fbq?: (...args: any[]) => void;
+    dataLayer?: any[];
+  }
 }
 
-/**
- * PII-sensitive keys that should never be sent to analytics
- */
-const PII_KEYS = [
-  'email',
-  'phone',
-  'telephone',
-  'name',
-  'firstname',
-  'lastname',
-  'message',
-  'address',
-  'password',
-  'token',
-  'credit_card',
-  'ssn',
-  'dni',
-  'cedula'
-];
+export interface AnalyticsEvent {
+  category: string;
+  action: string;
+  label?: string;
+  value?: number;
+}
 
-/**
- * AnalyticsService
- * 
- * Centralized service for GA4 tracking via Google Tag Manager dataLayer.
- * Features:
- * - Type-safe event tracking
- * - PII sanitization
- * - No external dependencies
- * - Tree-shakeable
- * - Production-ready with error handling
- * 
- * @example
- * ```typescript
- * constructor(private analytics: AnalyticsService) {}
- * 
- * trackCTA() {
- *   this.analytics.track('click_solicitar_propuesta', {
- *     placement: 'hero',
- *     cta_label: 'Solicitar Propuesta',
- *     page_path: '/regalos-corporativos'
- *   });
- * }
- * ```
- */
 @Injectable({
   providedIn: 'root'
 })
 export class AnalyticsService {
-  private readonly isProduction = true; // Set based on environment
-  private dataLayer: any[] = [];
+  private readonly platformId = inject(PLATFORM_ID);
 
-  constructor() {
-    // Initialize dataLayer if not exists
-    if (typeof window !== 'undefined') {
-      (window as any).dataLayer = (window as any).dataLayer || [];
-      this.dataLayer = (window as any).dataLayer;
-    }
-  }
+  // Track page view
+  trackPageView(url: string, title: string): void {
+    if (!isPlatformBrowser(this.platformId)) return;
 
-  /**
-   * Track an analytics event
-   * @param eventName - Type-safe event name
-   * @param params - Event parameters (will be sanitized)
-   */
-  track(eventName: AnalyticsEventName, params: AnalyticsEventParams = {}): void {
-    if (typeof window === 'undefined') {
-      return; // SSR safety
-    }
-
-    try {
-      // Sanitize parameters to remove PII
-      const sanitizedParams = this.sanitizeParams(params);
-
-      // Add default page_path if not provided (only in browser)
-      if (!sanitizedParams.page_path && typeof window !== 'undefined') {
-        sanitizedParams.page_path = window.location.pathname;
-      }
-
-      // Push to dataLayer
-      this.dataLayer.push({
-        event: eventName,
-        ...sanitizedParams
+    // Google Analytics
+    if (window.gtag) {
+      window.gtag('config', 'GTM-P8S8S9TH', {
+        page_path: url,
+        page_title: title
       });
+    }
 
-      // Debug logging (only in development)
-      if (!this.isProduction) {
-        console.log('[Analytics]', eventName, sanitizedParams);
-      }
-    } catch (error) {
-      // Silent fail in production, log in development
-      if (!this.isProduction) {
-        console.error('[Analytics] Error tracking event:', error);
-      }
+    // Facebook Pixel
+    if (window.fbq) {
+      window.fbq('track', 'PageView');
     }
   }
 
-  /**
-   * Track page view (for SPA navigation)
-   * @param path - Page path
-   * @param title - Page title
-   */
-  trackPageView(path: string, title: string): void {
-    this.track('page_view', {
-      page_path: path,
-      page_title: title
-    });
-  }
+  // Track ritual view (PDP)
+  trackRitualView(ritualName: string, ritualId: string, price: number): void {
+    if (!isPlatformBrowser(this.platformId)) return;
 
-  /**
-   * Sanitize parameters to remove PII
-   * @param params - Raw parameters
-   * @returns Sanitized parameters
-   */
-  private sanitizeParams(params: AnalyticsEventParams): AnalyticsEventParams {
-    const sanitized: AnalyticsEventParams = {};
-
-    for (const [key, value] of Object.entries(params)) {
-      // Check if key is PII-sensitive
-      const isPII = PII_KEYS.some(piiKey => 
-        key.toLowerCase().includes(piiKey.toLowerCase())
-      );
-
-      if (isPII) {
-        // Skip PII fields
-        if (!this.isProduction) {
-          console.warn(`[Analytics] Blocked PII field: ${key}`);
-        }
-        continue;
-      }
-
-      // Check if value contains potential PII patterns
-      if (typeof value === 'string' && this.containsPII(value)) {
-        if (!this.isProduction) {
-          console.warn(`[Analytics] Blocked potential PII in value for key: ${key}`);
-        }
-        continue;
-      }
-
-      sanitized[key] = value;
+    // Google Analytics - View Item
+    if (window.gtag) {
+      window.gtag('event', 'view_item', {
+        currency: 'COP',
+        value: price,
+        items: [{
+          item_id: ritualId,
+          item_name: ritualName,
+          item_category: 'Ritual Gastronómico',
+          price: price
+        }]
+      });
     }
 
-    return sanitized;
+    // Facebook Pixel - ViewContent
+    if (window.fbq) {
+      window.fbq('track', 'ViewContent', {
+        content_name: ritualName,
+        content_ids: [ritualId],
+        content_type: 'product',
+        value: price,
+        currency: 'COP'
+      });
+    }
   }
 
-  /**
-   * Check if a string contains potential PII patterns
-   * @param value - String to check
-   * @returns true if potential PII detected
-   */
-  private containsPII(value: string): boolean {
-    // Email pattern
-    const emailPattern = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/;
-    // Phone pattern (Colombian and international)
-    const phonePattern = /(\+?\d{1,3}[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}/;
-    
-    return emailPattern.test(value) || phonePattern.test(value);
+  // Track add to cart
+  trackAddToCart(ritualName: string, ritualId: string, price: number, quantity: number = 1): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+
+    // Google Analytics
+    if (window.gtag) {
+      window.gtag('event', 'add_to_cart', {
+        currency: 'COP',
+        value: price * quantity,
+        items: [{
+          item_id: ritualId,
+          item_name: ritualName,
+          item_category: 'Ritual Gastronómico',
+          price: price,
+          quantity: quantity
+        }]
+      });
+    }
+
+    // Facebook Pixel
+    if (window.fbq) {
+      window.fbq('track', 'AddToCart', {
+        content_name: ritualName,
+        content_ids: [ritualId],
+        content_type: 'product',
+        value: price * quantity,
+        currency: 'COP'
+      });
+    }
   }
 
-  /**
-   * Set user consent (for GDPR/privacy compliance)
-   * @param granted - Whether consent is granted
-   */
-  setConsent(granted: boolean): void {
-    if (typeof window === 'undefined') return;
+  // Track WhatsApp click
+  trackWhatsAppClick(ritualName: string, source: 'pdp' | 'catalog' | 'checkout'): void {
+    if (!isPlatformBrowser(this.platformId)) return;
 
-    this.dataLayer.push({
-      event: 'consent_update',
-      consent: {
-        analytics_storage: granted ? 'granted' : 'denied',
-        ad_storage: granted ? 'granted' : 'denied'
-      }
-    });
+    if (window.gtag) {
+      window.gtag('event', 'whatsapp_click', {
+        event_category: 'engagement',
+        event_label: `${source} - ${ritualName}`,
+        ritual_name: ritualName,
+        source: source
+      });
+    }
+
+    if (window.fbq) {
+      window.fbq('track', 'Contact', {
+        content_name: ritualName,
+        source: source
+      });
+    }
+  }
+
+  // Track corporate inquiry
+  trackCorporateInquiry(ritualName?: string): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+
+    if (window.gtag) {
+      window.gtag('event', 'corporate_inquiry', {
+        event_category: 'lead',
+        event_label: ritualName || 'general',
+        ritual_name: ritualName
+      });
+    }
+
+    if (window.fbq) {
+      window.fbq('track', 'Lead', {
+        content_name: ritualName || 'Corporate Inquiry',
+        content_category: 'B2B'
+      });
+    }
+  }
+
+  // Track checkout initiation
+  trackBeginCheckout(items: any[], total: number): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+
+    if (window.gtag) {
+      window.gtag('event', 'begin_checkout', {
+        currency: 'COP',
+        value: total,
+        items: items.map(item => ({
+          item_id: item.product.id,
+          item_name: item.product.name,
+          price: item.product.price,
+          quantity: item.quantity
+        }))
+      });
+    }
+
+    if (window.fbq) {
+      window.fbq('track', 'InitiateCheckout', {
+        value: total,
+        currency: 'COP',
+        num_items: items.length
+      });
+    }
+  }
+
+  // Track purchase (order completion)
+  trackPurchase(orderId: string, items: any[], total: number): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+
+    if (window.gtag) {
+      window.gtag('event', 'purchase', {
+        transaction_id: orderId,
+        currency: 'COP',
+        value: total,
+        items: items.map(item => ({
+          item_id: item.product.id,
+          item_name: item.product.name,
+          price: item.product.price,
+          quantity: item.quantity
+        }))
+      });
+    }
+
+    if (window.fbq) {
+      window.fbq('track', 'Purchase', {
+        value: total,
+        currency: 'COP',
+        content_ids: items.map(item => item.product.id),
+        content_type: 'product',
+        num_items: items.length
+      });
+    }
+  }
+
+  // Generic event tracking
+  trackEvent(event: AnalyticsEvent): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+
+    if (window.gtag) {
+      window.gtag('event', event.action, {
+        event_category: event.category,
+        event_label: event.label,
+        value: event.value
+      });
+    }
+  }
+
+  // Legacy method for backward compatibility
+  track(eventName: string, properties?: Record<string, any>): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+
+    if (window.gtag) {
+      window.gtag('event', eventName, properties || {});
+    }
   }
 }

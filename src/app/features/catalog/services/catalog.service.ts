@@ -12,6 +12,7 @@ export class CatalogService {
   private readonly products = signal<Product[]>([
   {
     id: '1',
+    slug: 'kuntur-dorado',
     name: 'Kuntur Dorado',
     price: 426700,
     description:
@@ -28,6 +29,20 @@ export class CatalogService {
     sensorialExperience: 'Cítrica, tropical y herbal, con una frescura limpia y persistente.',
     imageUrl: 'assets/images/kuntur_dorado.jpg',
     category: ProductCategory.PREMIUM,
+    metaTitle: 'Kuntur Dorado - Ritual Gastronómico Premium | Sumak Gourmet',
+    metaDescription: 'Ritual gastronómico premium con bebida incluida, chocolate 70% cítrico, pistachos, arándanos y miel de maracuyá. Experiencia fresca y elegante.',
+    keywords: ['kuntur dorado', 'ritual premium', 'chocolate citrico', 'regalo corporativo colombia', 'experiencia gourmet'],
+    deliveryInfo: {
+      bogotaExpress: true,
+      nationalShipping: true,
+      estimatedDays: '2-4 días hábiles'
+    },
+    corporateOptions: {
+      available: true,
+      minQuantity: 10,
+      customization: true,
+      bulkDiscount: 15
+    },
 
     // Línea discreta (web)
     curatedLine:
@@ -50,6 +65,7 @@ export class CatalogService {
 
   {
     id: '2',
+    slug: 'sol-caribeno',
     name: 'Sol Caribeño',
     price: 310650,
     description:
@@ -66,6 +82,19 @@ export class CatalogService {
     sensorialExperience: 'Tropical, melosa y armoniosa, con un cierre suave y reconfortante.',
     imageUrl: 'assets/images/sol_caribeno.jpg',
     category: ProductCategory.CLASSIC,
+    metaTitle: 'Sol Caribeño - Ritual Clásico Tropical | Sumak Gourmet',
+    metaDescription: 'Ritual clásico con ron premium, chocolate con sal marina, almendras, maní y miel natural. Sabor tropical y reconfortante.',
+    keywords: ['sol caribeno', 'ritual clasico', 'ron premium', 'regalo tropical', 'chocolate sal marina'],
+    deliveryInfo: {
+      bogotaExpress: true,
+      nationalShipping: true,
+      estimatedDays: '2-4 días hábiles'
+    },
+    corporateOptions: {
+      available: true,
+      minQuantity: 10,
+      customization: true
+    },
 
     curatedLine:
       'Recomendado para: agradecimientos, celebraciones serenas y momentos familiares; dulzor cálido y armónico.',
@@ -86,6 +115,7 @@ export class CatalogService {
 
   {
     id: '3',
+    slug: 'zipa-real',
     name: 'Zipa Real',
     price: 392300,
     description:
@@ -103,6 +133,20 @@ export class CatalogService {
     sensorialExperience: 'Suave y elegante, con frutos secos nobles y un contraste frutal delicado.',
     imageUrl: 'assets/images/zipa_real.jpg',
     category: ProductCategory.PREMIUM,
+    metaTitle: 'Zipa Real - Ritual Premium Ejecutivo | Sumak Gourmet',
+    metaDescription: 'Ritual premium con whisky, chocolate de frutos secos nobles, marañón, almendra y mermelada de frutos rojos. Elegancia y tradición.',
+    keywords: ['zipa real', 'ritual ejecutivo', 'whisky premium', 'regalo corporativo', 'frutos secos'],
+    deliveryInfo: {
+      bogotaExpress: true,
+      nationalShipping: true,
+      estimatedDays: '2-4 días hábiles'
+    },
+    corporateOptions: {
+      available: true,
+      minQuantity: 5,
+      customization: true,
+      bulkDiscount: 12
+    },
 
     curatedLine:
       'Recomendado para: directivos y figuras de respeto; tradición sobria con contraste frutal discreto.',
@@ -123,6 +167,7 @@ export class CatalogService {
 
   {
     id: '4',
+    slug: 'magia-colombiana',
     name: 'Magia Colombiana',
     price: 535000,
     description:
@@ -140,6 +185,20 @@ export class CatalogService {
     sensorialExperience: 'Profunda, oscura y envolvente, con elegancia prolongada.',
     imageUrl: 'assets/images/magia_colombiana.jpg',
     category: ProductCategory.EXCLUSIVE,
+    metaTitle: 'Magia Colombiana - Ritual Exclusivo Premium | Sumak Gourmet',
+    metaDescription: 'Ritual exclusivo con ron añejo, chocolate con café, dátiles, nueces premium y miel con canela. Experiencia profunda y sofisticada.',
+    keywords: ['magia colombiana', 'ritual exclusivo', 'ron añejo', 'chocolate cafe', 'regalo lujo'],
+    deliveryInfo: {
+      bogotaExpress: true,
+      nationalShipping: true,
+      estimatedDays: '2-4 días hábiles'
+    },
+    corporateOptions: {
+      available: true,
+      minQuantity: 5,
+      customization: true,
+      bulkDiscount: 18
+    },
 
     curatedLine:
       'Recomendado para: conocedores y regalos de alto impacto; capas oscuras, largas y sofisticadas (after dinner).',
@@ -160,6 +219,7 @@ export class CatalogService {
 
   {
     id: '5',
+    slug: 'mama-killa',
     name: 'Mama Killa',
     price: 276100,
     description:
@@ -176,6 +236,19 @@ export class CatalogService {
     sensorialExperience: 'Dulce, sedosa y lunar, con notas suaves y envolventes.',
     imageUrl: 'assets/images/mama_killa.jpg',
     category: ProductCategory.CLASSIC,
+    metaTitle: 'Mama Killa - Ritual Clásico Dulce | Sumak Gourmet',
+    metaDescription: 'Ritual clásico con crema de whisky, chocolate caramelo, dátiles, almendras y mermelada de frutos rojos. Dulce y reconfortante.',
+    keywords: ['mama killa', 'ritual dulce', 'crema whisky', 'chocolate caramelo', 'regalo romantico'],
+    deliveryInfo: {
+      bogotaExpress: true,
+      nationalShipping: true,
+      estimatedDays: '2-4 días hábiles'
+    },
+    corporateOptions: {
+      available: true,
+      minQuantity: 10,
+      customization: true
+    },
 
     curatedLine:
       'Recomendado para: detalles afectivos y noches tranquilas; dulzor sedoso con calidez emocional.',
@@ -196,6 +269,7 @@ export class CatalogService {
 
   {
     id: '6',
+    slug: 'raiz-de-fuego',
     name: 'Raíz de Fuego',
     price: 578000,
     description:
@@ -212,6 +286,20 @@ export class CatalogService {
     sensorialExperience: 'Fuego, dulzor y chispa tropical.',
     imageUrl: 'assets/images/raíz_de_fuego.jpg',
     category: ProductCategory.EXCLUSIVE,
+    metaTitle: 'Raíz de Fuego - Ritual Exclusivo Intenso | Sumak Gourmet',
+    metaDescription: 'Ritual exclusivo con tequila premium, chocolate caramelo, pistachos, maní japonés y miel con jalapeño. Intensidad y carácter.',
+    keywords: ['raiz de fuego', 'tequila premium', 'ritual intenso', 'miel jalapeño', 'regalo exclusivo'],
+    deliveryInfo: {
+      bogotaExpress: true,
+      nationalShipping: true,
+      estimatedDays: '2-4 días hábiles'
+    },
+    corporateOptions: {
+      available: true,
+      minQuantity: 5,
+      customization: true,
+      bulkDiscount: 20
+    },
 
     curatedLine:
       'Recomendado para: personalidades de carácter y celebraciones potentes; contraste dulce-picante con final vibrante.',
@@ -232,6 +320,7 @@ export class CatalogService {
 
   {
     id: '7',
+    slug: 'viejo-amigo',
     name: 'Viejo Amigo',
     price: 383600,
     description:
@@ -248,6 +337,19 @@ export class CatalogService {
     sensorialExperience: 'Cálida, clásica y reconfortante.',
     imageUrl: 'assets/images/viejo_amigo.jpg',
     category: ProductCategory.CLASSIC,
+    metaTitle: 'Viejo Amigo - Ritual Clásico Tradicional | Sumak Gourmet',
+    metaDescription: 'Ritual clásico con whisky, chocolate caramelo, dátiles, nuez pecan, almendras y miel natural. Tradición y calidez.',
+    keywords: ['viejo amigo', 'whisky clasico', 'ritual tradicional', 'regalo amistad', 'chocolate caramelo'],
+    deliveryInfo: {
+      bogotaExpress: true,
+      nationalShipping: true,
+      estimatedDays: '2-4 días hábiles'
+    },
+    corporateOptions: {
+      available: true,
+      minQuantity: 10,
+      customization: true
+    },
 
     curatedLine:
       'Recomendado para: amistad, gratitud y tradición; perfil cálido, clásico y profundamente confiable.',
@@ -268,6 +370,7 @@ export class CatalogService {
 
   {
     id: '8',
+    slug: 'zipa-supremo',
     name: 'Zipa Supremo',
     price: 734550,
     description:
@@ -285,6 +388,20 @@ export class CatalogService {
     sensorialExperience: 'Lujo silencioso, mineralidad sutil y fruta oscura bien integrada.',
     imageUrl: 'assets/images/zipa_supremo.jpg',
     category: ProductCategory.EXCLUSIVE,
+    metaTitle: 'Zipa Supremo - Ritual Exclusivo de Lujo | Sumak Gourmet',
+    metaDescription: 'Ritual exclusivo de máximo nivel con whisky premium, chocolate caramelo, dátiles, pistachos, nuez pecan y mermelada de ciruela. Lujo silencioso.',
+    keywords: ['zipa supremo', 'ritual lujo', 'whisky premium', 'regalo ejecutivo', 'exclusivo colombia'],
+    deliveryInfo: {
+      bogotaExpress: true,
+      nationalShipping: true,
+      estimatedDays: '2-4 días hábiles'
+    },
+    corporateOptions: {
+      available: true,
+      minQuantity: 3,
+      customization: true,
+      bulkDiscount: 20
+    },
 
     curatedLine:
       'Recomendado para: máximos reconocimientos; lujo silencioso, maduro y profundamente integrado.',
@@ -305,6 +422,7 @@ export class CatalogService {
 
   {
     id: '9',
+    slug: 'ritual-de-agave',
     name: 'Ritual de Agave',
     price: 502000,
     description:
@@ -321,6 +439,20 @@ export class CatalogService {
     sensorialExperience: 'Dulce-cítrica, equilibrada y profundamente aromática.',
     imageUrl: 'assets/images/ritual_de_agave.jpg',
     category: ProductCategory.PREMIUM,
+    metaTitle: 'Ritual de Agave - Experiencia Premium con Tequila | Sumak Gourmet',
+    metaDescription: 'Ritual premium con tequila reposado, chocolate cítrico, albaricoque, marañón, almendras y miel con jengibre. Aromático y refinado.',
+    keywords: ['ritual agave', 'tequila reposado', 'chocolate citrico', 'miel jengibre', 'regalo premium'],
+    deliveryInfo: {
+      bogotaExpress: true,
+      nationalShipping: true,
+      estimatedDays: '2-4 días hábiles'
+    },
+    corporateOptions: {
+      available: true,
+      minQuantity: 5,
+      customization: true,
+      bulkDiscount: 15
+    },
 
     curatedLine:
       'Recomendado para: pausa consciente, regalo personal y celebraciones íntimas; aromático, cálido y refinado.',
@@ -341,6 +473,7 @@ export class CatalogService {
 
   {
     id: '10',
+    slug: 'killa-sagrada',
     name: 'Killa Sagrada',
     price: 234200,
     description:
@@ -357,6 +490,19 @@ export class CatalogService {
     sensorialExperience: 'Luminosa, fresca y suavemente tropical.',
     imageUrl: 'assets/images/killa_sagrada.jpg',
     category: ProductCategory.CLASSIC,
+    metaTitle: 'Killa Sagrada - Ritual Clásico Delicado | Sumak Gourmet',
+    metaDescription: 'Ritual clásico con crema de whisky, chocolate cítrico, pistachos, uva pasa y mermelada de maracuyá. Luminoso y fresco.',
+    keywords: ['killa sagrada', 'ritual delicado', 'chocolate citrico', 'mermelada maracuya', 'regalo femenino'],
+    deliveryInfo: {
+      bogotaExpress: true,
+      nationalShipping: true,
+      estimatedDays: '2-4 días hábiles'
+    },
+    corporateOptions: {
+      available: true,
+      minQuantity: 10,
+      customization: true
+    },
 
     curatedLine:
       'Recomendado para: detalles delicados y rituales personales; frescura luminosa con dulzor sutil.',
@@ -377,6 +523,7 @@ export class CatalogService {
 
   {
     id: '11',
+    slug: 'kuntur-andino',
     name: 'Kuntur Andino',
     price: 373100,
     description:
@@ -393,6 +540,20 @@ export class CatalogService {
     sensorialExperience: 'Herbal, cítrica y fresca, con espíritu de montaña.',
     imageUrl: 'assets/images/kuntur_andino.jpg',
     category: ProductCategory.PREMIUM,
+    metaTitle: 'Kuntur Andino - Ritual Premium Herbal | Sumak Gourmet',
+    metaDescription: 'Ritual premium con gin, chocolate cítrico, albaricoque, pistachos, arándanos y mermelada cítrica. Herbal y fresco.',
+    keywords: ['kuntur andino', 'gin premium', 'ritual herbal', 'chocolate citrico', 'regalo corporativo'],
+    deliveryInfo: {
+      bogotaExpress: true,
+      nationalShipping: true,
+      estimatedDays: '2-4 días hábiles'
+    },
+    corporateOptions: {
+      available: true,
+      minQuantity: 10,
+      customization: true,
+      bulkDiscount: 12
+    },
 
     curatedLine:
       'Recomendado para: perfiles sobrios, regalos profesionales y reuniones discretas; limpieza aromática de montaña.',
@@ -413,6 +574,7 @@ export class CatalogService {
 
   {
     id: '12',
+    slug: 'pasion-andina',
     name: 'Pasión Andina',
     price: 304000,
     description:
@@ -429,6 +591,19 @@ export class CatalogService {
     sensorialExperience: 'Intensa, frutal y envolvente.',
     imageUrl: 'assets/images/pasion_andina.jpg',
     category: ProductCategory.PREMIUM,
+    metaTitle: 'Pasión Andina - Ritual Premium con Vino Malbec | Sumak Gourmet',
+    metaDescription: 'Ritual premium con vino Malbec, chocolate con arándanos, albaricoque, nuez pecan y mermelada de frutos rojos. Intenso y frutal.',
+    keywords: ['pasion andina', 'vino malbec', 'ritual vino', 'chocolate arandanos', 'regalo pareja'],
+    deliveryInfo: {
+      bogotaExpress: true,
+      nationalShipping: true,
+      estimatedDays: '2-4 días hábiles'
+    },
+    corporateOptions: {
+      available: true,
+      minQuantity: 10,
+      customization: true
+    },
 
     curatedLine:
       'Recomendado para: celebraciones de pareja, cenas y regalos con emoción; frutal intenso, elegante y envolvente.',
@@ -449,6 +624,7 @@ export class CatalogService {
 
   {
     id: '13',
+    slug: 'selva-nocturna',
     name: 'Selva Nocturna',
     price: 306000,
     description:
@@ -465,6 +641,19 @@ export class CatalogService {
     sensorialExperience: 'Sobria, oscura y estructurada.',
     imageUrl: 'assets/images/selva_nocturna.jpg',
     category: ProductCategory.PREMIUM,
+    metaTitle: 'Selva Nocturna - Ritual Premium con Cabernet | Sumak Gourmet',
+    metaDescription: 'Ritual premium con vino Cabernet Sauvignon, chocolate con café, dátiles, nuez de Brasil y mermelada de ciruela. Oscuro y estructurado.',
+    keywords: ['selva nocturna', 'cabernet sauvignon', 'chocolate cafe', 'ritual vino', 'regalo sofisticado'],
+    deliveryInfo: {
+      bogotaExpress: true,
+      nationalShipping: true,
+      estimatedDays: '2-4 días hábiles'
+    },
+    corporateOptions: {
+      available: true,
+      minQuantity: 10,
+      customization: true
+    },
 
     curatedLine:
       'Recomendado para: noches elegantes y paladares avanzados; estructura oscura, contemplativa y precisa.',
@@ -485,6 +674,7 @@ export class CatalogService {
 
   {
     id: '14',
+    slug: 'parche-fino',
     name: 'Parche Fino',
     price: 374200,
     description:
@@ -501,6 +691,20 @@ export class CatalogService {
     sensorialExperience: 'Equilibrada y social, con dulzor especiado y textura natural.',
     imageUrl: 'assets/images/parche_fino.jpg',
     category: ProductCategory.PREMIUM,
+    metaTitle: 'Parche Fino - Ritual Premium Social | Sumak Gourmet',
+    metaDescription: 'Ritual premium con Chivas Regal 12 años, chocolate con arándanos, almendras y miel con canela. Equilibrado y elegante.',
+    keywords: ['parche fino', 'chivas regal', 'ritual social', 'miel canela', 'regalo amistad'],
+    deliveryInfo: {
+      bogotaExpress: true,
+      nationalShipping: true,
+      estimatedDays: '2-4 días hábiles'
+    },
+    corporateOptions: {
+      available: true,
+      minQuantity: 10,
+      customization: true,
+      bulkDiscount: 12
+    },
 
     curatedLine:
       'Recomendado para: encuentros elegantes, amistad y regalos versátiles; equilibrio social con dulzor especiado.',
@@ -531,6 +735,22 @@ export class CatalogService {
 
     const product = this.products().find(product => product.id === id);
     return product ? this.sanitizeProduct(product) : undefined;
+  }
+
+  getProductBySlug(slug: string): Product | undefined {
+    if (!slug || typeof slug !== 'string') return undefined;
+
+    const product = this.products().find(product => this.generateSlug(product.name) === slug);
+    return product ? this.sanitizeProduct(product) : undefined;
+  }
+
+  private generateSlug(name: string): string {
+    return name
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
   }
 
   getProductsByCategory(category: ProductCategory): Product[] {

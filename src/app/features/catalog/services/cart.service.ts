@@ -255,6 +255,7 @@ export class CartService implements OnDestroy {
         const cartItem: CartItem = {
           product: {
             id: militaryItem.productId,
+            slug: originalProduct?.slug || militaryItem.productId.toLowerCase(),
             name: decrypted.name,
             price: decrypted.price,
             description: originalProduct?.description || '',
