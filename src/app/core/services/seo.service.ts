@@ -268,10 +268,7 @@ export class SeoService {
       existingScript.remove();
     }
 
-    const script = this.doc.createElement('script');
-    script.type = 'application/ld+json';
-    script.id = 'product-schema';
-    script.text = JSON.stringify({
+    const schema: any = {
       "@context": "https://schema.org/",
       "@type": "Product",
       "name": product.name,
@@ -294,15 +291,25 @@ export class SeoService {
           "name": "Sumak Gourmet"
         }
       },
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.9",
-        "reviewCount": "156",
-        "bestRating": "5",
-        "worstRating": "1"
-      },
       "category": product.category
-    });
+    };
+
+    // Solo agregar aggregateRating si hay reseñas reales
+    // TODO: Integrar con sistema de reseñas real (Google Reviews, Trustpilot, etc.)
+    // if (product.reviews && product.reviews.count > 0) {
+    //   schema.aggregateRating = {
+    //     "@type": "AggregateRating",
+    //     "ratingValue": product.reviews.rating,
+    //     "reviewCount": product.reviews.count,
+    //     "bestRating": "5",
+    //     "worstRating": "1"
+    //   };
+    // }
+
+    const script = this.doc.createElement('script');
+    script.type = 'application/ld+json';
+    script.id = 'product-schema';
+    script.text = JSON.stringify(schema);
     this.doc.head.appendChild(script);
   }
 
