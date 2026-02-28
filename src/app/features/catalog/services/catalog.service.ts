@@ -19,8 +19,8 @@ export class CatalogService {
       'En las culturas andinas, el kuntur es el ave que habita las mayores alturas, símbolo de visión clara y conexión entre el cielo y la tierra. Kuntur Dorado representa ese vuelo amplio que desciende hacia los valles cálidos, donde los aromas cítricos se mezclan con la fruta y el aire se vuelve luminoso.',
     experience: 'Un combo fresco, vivo y elegante, pensado para abrir los sentidos.',
     ingredients: [
-      'Bebida premium incluida en presentación original',
-      'Chocolate 70% naranja y limón',
+      'Tanqueray Rangpur 750 ml',
+      'Chocolate 70% cacao con naranja y limón',
       'Snack de frutos amarillos deshidratados 30 g',
       'Pistachos naturales 80 g',
       'Arándanos secos 80 g',
@@ -72,8 +72,8 @@ export class CatalogService {
       'El Caribe no solo se vive: se siente en la piel y se guarda en la memoria. Sol Caribeño rinde homenaje a la luz que madura la caña, al tiempo que transforma la bebida y a la dulzura natural de las tierras cálidas.',
     experience: 'Este combo evoca tardes doradas, calma tropical y un sabor que abraza sin prisa.',
     ingredients: [
-      'Bebida premium incluida en presentación original',
-      'Chocolate 70% con sal marina',
+      'Ron Havana Club 7 años 700 ml',
+      'Chocolate 70% cacao con sal marina',
       'Snack de frutos amarillos deshidratados 30 g',
       'Almendra natural 80 g',
       'Maní natural 80 g',
@@ -123,8 +123,8 @@ export class CatalogService {
     experience:
       'Un combo clásico, armonioso y sobrio, pensado para líderes quienes valoran la tradición bien ejecutada.',
     ingredients: [
-      'Bebida premium incluida en presentación original',
-      'Chocolate 70% maní, almendra y pistacho',
+      'Buchanan’s 12 años 750 ml',
+      'Chocolate 70% cacao con maní, almendra y pistacho',
       'Snack de frutos amarillos deshidratados 30 g',
       'Marañón natural 80 g',
       'Almendra natural 80 g',
@@ -175,8 +175,8 @@ export class CatalogService {
     experience:
       'Este combo es un ritual lento, elegante y envolvente, donde cada sabor acompaña a la bebida como parte de un hechizo ancestral.',
     ingredients: [
-      'Bebida premium incluida en la presentación original',
-      'Chocolate 70% con granos de café',
+      'La Hechicera 700 ml',
+      'Chocolate 70% cacaocon granos de café',
       'Dátiles 80 g',
       'Nuez de Brasil 80 g',
       'Nuez pecan 80 g',
@@ -226,8 +226,8 @@ export class CatalogService {
       'La luna protege, envuelve y calma. Mama Killa es un homenaje a la dulzura, la ternura y el descanso del alma.',
     experience: 'Un combo cremoso y reconfortante, pensado como un abrazo nocturno.',
     ingredients: [
-      'Bebida premium incluida en presentación original',
-      'Chocolate 70% sal marina y caramelo',
+      'Baileys 700 ml',
+      'Chocolate 70% cacao con sal marina y caramelo',
       'Dátiles 80 g',
       'Almendra natural 80 g',
       'Uva pasa rubia 80 g',
@@ -276,8 +276,8 @@ export class CatalogService {
       'El fuego nace de la raíz. Este combo honra la energía ancestral del agave y la fuerza de la tierra.',
     experience: 'Intensidad y carácter en cada sorbo.',
     ingredients: [
-      'Bebida premium incluida en presentación original',
-      'Chocolate 70% sal marina y caramelo',
+      'Don Julio Reposado 700 ml',
+      'Chocolate 70% cacao con sal marina y caramelo',
       'Snack de frutos amarillos deshidratados 30 g',
       'Maní japonés 80 g',
       'Pistacho 80 g',
@@ -327,8 +327,8 @@ export class CatalogService {
       'Hay sabores que siempre están. Viejo Amigo representa la confianza, la memoria y la tradición.',
     experience: 'Familiaridad y calidez en cada momento.',
     ingredients: [
-      'Bebida premium incluida en presentación original',
-      'Chocolate 70% sal marina y caramelo',
+      'Old Parr 750 ml',
+      'Chocolate 70% cacao con sal marina y caramelo',
       'Dátiles 80 g',
       'Nuez pecan 80 g',
       'Almendra natural 80 g',
@@ -378,8 +378,8 @@ export class CatalogService {
     experience:
       'Este combo está diseñado para paladares que saben reconocer la grandeza en los detalles.',
     ingredients: [
-      'Bebida premium incluida en presentación original',
-      'Chocolate 70% sal marina y caramelo',
+      'Buchanan’s 18 años 750 ml',
+      'Chocolate 70% cacao con sal marina y caramelo',
       'Dátiles 80 g',
       'Pistachos naturales 80 g',
       'Nuez pecan 80 g',
@@ -429,8 +429,8 @@ export class CatalogService {
       'Hay bebidas que no se toman con prisa, se honran. Ritual del Agave invita a detener el tiempo, a conectar con la tierra, con el origen y con el pulso sereno del agave reposado.',
     experience: 'Es un momento consciente, profundo y cálido, pensado para disfrutar lentamente.',
     ingredients: [
-      'Bebida premium incluida en presentación original',
-      'Chocolate 70% con notas de naranja y limón',
+      'Tequila 1800 Reposado 750 ml',
+      'Chocolate 70% cacao con naranja y limón',
       'Albaricoque 80 g',
       'Marañón natural 80 g',
       'Almendra natural 80 g',
@@ -480,8 +480,8 @@ export class CatalogService {
       'La luna, killa, ha sido símbolo de lo sagrado y lo íntimo desde tiempos ancestrales. Killa Sagrada es un pequeño ritual personal, delicado y luminoso.',
     experience: 'Intimidad y conexión espiritual.',
     ingredients: [
-      'Bebida premium incluida en presentación original',
-      'Chocolate 70% naranja y limón',
+      'Baileys 375 ml',
+      'Chocolate 70% cacao con naranja y limón',
       'Snack de frutos amarillos deshidratados 30 g',
       'Pistachos naturales 80 g',
       'Uva pasa rubia 80 g',
@@ -530,8 +530,8 @@ export class CatalogService {
       'En las alturas de la cordillera, el kuntur vuela con calma y precisión. Kuntur Andino representa pureza, visión y sobriedad.',
     experience: 'Un combo limpio, elevado y elegante.',
     ingredients: [
-      'Bebida premium incluida en presentación original',
-      'Chocolate 70% naranja y limón',
+      'Tanqueray 700 ml',
+      'Chocolate 70% cacao con naranja y limón',
       'Albaricoque 80 g',
       'Pistachos naturales 80 g',
       'Arándano seco 80 g',
@@ -581,8 +581,8 @@ export class CatalogService {
       'Vino Malbec Las Moras La cordillera es fuerza, emoción y carácter. Pasión Andina expresa esa intensidad que nace de la altura y se siente en cada sorbo.',
     experience: 'Un combo honesto, profundo y lleno de expresión frutal.',
     ingredients: [
-      'Vino Malbec Las Moras',
-      'Chocolate 70% arándanos y sal rosada',
+      'Vino Malbec Las Moras 750 ml',
+      'Chocolate 70% cacao con arándanos y sal rosada',
       'Albaricoque',
       'Nuez pecan',
       'Uva pasa rubia',
@@ -631,8 +631,8 @@ export class CatalogService {
       'Vino Cabernet Sauvignon Cuando la selva se sumerge en la noche, todo se vuelve más profundo.',
     experience: 'Selva Nocturna es contemplación, silencio y elegancia natural.',
     ingredients: [
-      'Vino Cabernet Sauvignon',
-      'Chocolate 70% con granos de café',
+      'Vino Cabernet Las Moras 750 ml',
+      'Chocolate 70% cacao con granos de café',
       'Dátiles',
       'Nuez de Brasil',
       'Arándano seco',
@@ -682,7 +682,7 @@ export class CatalogService {
     experience: 'Este combo celebra la amistad desde la elegancia y el equilibrio.',
     ingredients: [
       'Chivas Regal 12 años',
-      'Chocolate 70% arándanos y pistacho',
+      'Chocolate 70% cacao con arándanos y pistacho',
       'Snack de frutos amarillos deshidratados',
       'Almendra natural',
       'Arándano seco',
