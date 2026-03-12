@@ -12,9 +12,49 @@
       </svg>
     </button>
 
-    <!-- Hero Image Protagonista -->
+    <!-- Hero Image Protagonista con Galería -->
     <div class="luxury-hero" (click)="onImageClick()">
-      <img [src]="product.imageUrl" [alt]="product.name" />
+      <img [src]="currentImage" [alt]="product.name" />
+      
+      <!-- Navegación de galería -->
+      <div *ngIf="product.images && product.images.length > 0" class="gallery-nav">
+        <button 
+          *ngIf="currentImageIndex > 0" 
+          (click)="prevImage(); $event.stopPropagation()" 
+          class="gallery-btn gallery-btn-prev"
+          aria-label="Imagen anterior">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+          </svg>
+        </button>
+        
+        <button 
+          *ngIf="currentImageIndex < totalImages - 1" 
+          (click)="nextImage(); $event.stopPropagation()" 
+          class="gallery-btn gallery-btn-next"
+          aria-label="Imagen siguiente">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+          </svg>
+        </button>
+      </div>
+      
+      <!-- Miniaturas -->
+      <div *ngIf="product.images && product.images.length > 0" class="gallery-thumbnails">
+        <button 
+          (click)="selectImage(0); $event.stopPropagation()" 
+          [class.active]="currentImageIndex === 0"
+          class="thumbnail">
+          <img [src]="product.imageUrl" [alt]="product.name" />
+        </button>
+        <button 
+          *ngFor="let img of product.images; let i = index" 
+          (click)="selectImage(i + 1); $event.stopPropagation()" 
+          [class.active]="currentImageIndex === i + 1"
+          class="thumbnail">
+          <img [src]="img" [alt]="product.name + ' - Detalle ' + (i + 1)" />
+        </button>
+      </div>
     </div>
 
     <!-- Contenido Editorial -->
@@ -86,7 +126,7 @@
 
 <!-- Zoom Modal -->
 <div *ngIf="showImageZoom" class="zoom-backdrop" (click)="onCloseImageZoom()">
-  <img [src]="product.imageUrl" [alt]="product.name" />
+  <img [src]="currentImage" [alt]="product.name" />
   <button (click)="onCloseImageZoom()" class="zoom-close" aria-label="Cerrar zoom">
     <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
       <path d="M2 2l12 12M14 2L2 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>

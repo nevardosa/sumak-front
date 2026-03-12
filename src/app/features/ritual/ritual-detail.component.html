@@ -10,14 +10,62 @@
   <section class="ritual-hero">
     <div class="ritual-hero__content">
       <img 
-        [src]="ritual()!.imageUrl" 
+        [src]="getCurrentImage()" 
         [alt]="ritual()!.name + ' - Ritual gastronómico premium Sumak Gourmet'"
         class="ritual-hero__image"
         itemprop="image"
         width="1200"
         height="1500"
         loading="eager"
-        fetchpriority="high">
+        fetchpriority="high"
+        (click)="onImageClick()"
+        style="cursor: zoom-in;">
+      
+      <!-- Navegación de galería -->
+      <div *ngIf="ritual()!.images && ritual()!.images!.length > 0" class="gallery-nav">
+        <button 
+          *ngIf="currentImageIndex() > 0" 
+          (click)="prevImage(); $event.stopPropagation()" 
+          class="gallery-btn gallery-btn-prev"
+          aria-label="Imagen anterior"
+          type="button">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+          </svg>
+        </button>
+        
+        <button 
+          *ngIf="currentImageIndex() < getTotalImages() - 1" 
+          (click)="nextImage(); $event.stopPropagation()" 
+          class="gallery-btn gallery-btn-next"
+          aria-label="Imagen siguiente"
+          type="button">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+          </svg>
+        </button>
+      </div>
+      
+      <!-- Miniaturas -->
+      <div *ngIf="ritual()!.images && ritual()!.images!.length > 0" class="gallery-thumbnails">
+        <button 
+          (click)="selectImage(0); $event.stopPropagation()" 
+          [class.active]="currentImageIndex() === 0"
+          class="thumbnail"
+          type="button"
+          [attr.aria-label]="'Ver imagen principal de ' + ritual()!.name">
+          <img [src]="ritual()!.imageUrl" [alt]="ritual()!.name" />
+        </button>
+        <button 
+          *ngFor="let img of ritual()!.images; let i = index" 
+          (click)="selectImage(i + 1); $event.stopPropagation()" 
+          [class.active]="currentImageIndex() === i + 1"
+          class="thumbnail"
+          type="button"
+          [attr.aria-label]="'Ver detalle ' + (i + 1) + ' de ' + ritual()!.name">
+          <img [src]="img" [alt]="ritual()!.name + ' - Detalle ' + (i + 1)" />
+        </button>
+      </div>
     </div>
   </section>
 
@@ -214,6 +262,103 @@
   </app-ritual-sticky-cta>
 
 </article>
+
+<!-- Zoom Modal -->
+<div *ngIf="showImageZoom()" class="zoom-backdrop" (click)="onCloseImageZoom()">
+  <div 
+    class="zoom-container" 
+    [class.zoom-container--dragging]="isDragging"
+    [class.zoom-container--zoomed]="imageScale() > 1"
+    (click)="$event.stopPropagation()" 
+    (wheel)="onImageWheel($event)"
+    (touchstart)="onTouchStart($event)"
+    (touchmove)="onTouchMove($event)"
+    (touchend)="onTouchEnd()"
+    (mousedown)="onMouseDown($event)"
+    (mousemove)="onMouseMove($event)"
+    (mouseup)="onMouseUp()"
+    (mouseleave)="onMouseUp()">
+    <img 
+      [src]="getCurrentImage()" 
+      [alt]="ritual()!.name" 
+      class="zoom-image"
+      [style.transform]="getImageTransform()"
+      draggable="false" />
+  </div>
+  
+  <button (click)="onCloseImageZoom()" class="zoom-close" aria-label="Cerrar zoom" type="button">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+    </svg>
+  </button>
+  
+  <!-- Controles de Zoom -->
+  <div class="zoom-controls">
+    <button 
+      (click)="onZoomIn(); $event.stopPropagation()" 
+      class="zoom-control-btn"
+      [disabled]="imageScale() >= 5"
+      aria-label="Acercar"
+      type="button">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+      </svg>
+    </button>
+    <span class="zoom-level">{{ (imageScale() * 100) | number:'1.0-0' }}%</span>
+    <button 
+      (click)="onZoomOut(); $event.stopPropagation()" 
+      class="zoom-control-btn"
+      [disabled]="imageScale() <= 1"
+      aria-label="Alejar"
+      type="button">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/>
+      </svg>
+    </button>
+  </div>
+  
+  <!-- Navegación en zoom -->
+  <div *ngIf="ritual()!.images && ritual()!.images!.length > 0" class="zoom-nav">
+    <button 
+      *ngIf="currentImageIndex() > 0" 
+      (click)="prevImage(); resetZoom(); $event.stopPropagation()" 
+      class="zoom-nav-btn zoom-nav-prev"
+      aria-label="Imagen anterior"
+      type="button">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+      </svg>
+    </button>
+    
+    <button 
+      *ngIf="currentImageIndex() < getTotalImages() - 1" 
+      (click)="nextImage(); resetZoom(); $event.stopPropagation()" 
+      class="zoom-nav-btn zoom-nav-next"
+      aria-label="Imagen siguiente"
+      type="button">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+      </svg>
+    </button>
+  </div>
+  
+  <!-- Contador de imágenes -->
+  <div *ngIf="getTotalImages() > 1" class="zoom-counter">
+    {{ currentImageIndex() + 1 }} / {{ getTotalImages() }}
+  </div>
+  
+  <!-- Instrucciones -->
+  <div class="zoom-instructions">
+    <span class="zoom-instruction-desktop">
+      <span *ngIf="imageScale() <= 1">Usa la rueda del mouse para hacer zoom</span>
+      <span *ngIf="imageScale() > 1">Arrastra para mover • Rueda para zoom</span>
+    </span>
+    <span class="zoom-instruction-mobile">
+      <span *ngIf="imageScale() <= 1">Pellizca para hacer zoom</span>
+      <span *ngIf="imageScale() > 1">Arrastra para mover • Pellizca para zoom</span>
+    </span>
+  </div>
+</div>
 
 <!-- Mini Cart Drawer -->
 <app-mini-cart-drawer

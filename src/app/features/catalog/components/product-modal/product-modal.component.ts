@@ -1,7 +1,6 @@
-import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Product, ProductCategory } from '../../models/catalog.models';
-import { SafeHtmlPipe, SecureTextPipe, SecurePricePipe } from '../../../../shared/pipes/security.pipes';
+import { Product } from '../../models/catalog.models';
 
 @Component({
   selector: 'app-product-modal',
@@ -18,6 +17,9 @@ export class ProductModalComponent implements OnInit, OnDestroy {
   @Output() addToCart = new EventEmitter<Product>();
 
   showImageZoom = false;
+  currentImageIndex = 0;
+
+  constructor(private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     document.body.style.overflow = 'hidden';
@@ -25,6 +27,36 @@ export class ProductModalComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     document.body.style.overflow = '';
+  }
+
+  get currentImage(): string {
+    if (this.product.images && this.product.images.length > 0) {
+      return this.currentImageIndex === 0 ? this.product.imageUrl : this.product.images[this.currentImageIndex - 1];
+    }
+    return this.product.imageUrl;
+  }
+
+  get totalImages(): number {
+    return this.product.images ? this.product.images.length + 1 : 1;
+  }
+
+  nextImage(): void {
+    if (this.currentImageIndex < this.totalImages - 1) {
+      this.currentImageIndex++;
+      this.cdr.markForCheck();
+    }
+  }
+
+  prevImage(): void {
+    if (this.currentImageIndex > 0) {
+      this.currentImageIndex--;
+      this.cdr.markForCheck();
+    }
+  }
+
+  selectImage(index: number): void {
+    this.currentImageIndex = index;
+    this.cdr.markForCheck();
   }
 
   onClose(): void {
@@ -57,23 +89,5 @@ export class ProductModalComponent implements OnInit, OnDestroy {
       currency: 'COP',
       minimumFractionDigits: 0
     }).format(price);
-  }
-
-  getCategoryClass(category: ProductCategory): string {
-    const classes = {
-      [ProductCategory.PREMIUM]: 'bg-sumak-green/10 text-sumak-green',
-      [ProductCategory.CLASSIC]: 'bg-sumak-gold/10 text-sumak-brown',
-      [ProductCategory.EXCLUSIVE]: 'bg-sumak-wine/10 text-sumak-wine'
-    };
-    return classes[category] || 'bg-gray-100 text-gray-600';
-  }
-
-  getCategoryLabel(category: ProductCategory): string {
-    const labels = {
-      [ProductCategory.PREMIUM]: 'Premium',
-      [ProductCategory.CLASSIC]: 'Clásico',
-      [ProductCategory.EXCLUSIVE]: 'Exclusivo'
-    };
-    return labels[category] || category;
   }
 }
