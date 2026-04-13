@@ -1,93 +1,89 @@
-import { Injectable, inject, PLATFORM_ID } from '@angular/core';
+import { Injectable, PLATFORM_ID, inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { environment } from '../../../environments/environment';
-import { RECAPTCHA_CONSTANTS } from '../constants/recaptcha.constants';
-
-declare global {
-  interface Window {
-    grecaptcha: any;
-  }
-}
 
 @Injectable({
   providedIn: 'root'
 })
 export class RecaptchaService {
   private readonly platformId = inject(PLATFORM_ID);
-  private readonly isBrowser = isPlatformBrowser(this.platformId);
-  private readonly siteKey = environment.recaptcha.siteKey;
+  private loaded = false;
+  private loading = false;
+  private readonly siteKey = '6Lf1yGUsAAAAAPWDonLO7z9GlhDvJzF0zpuk9kSv';
 
   /**
-   * Execute reCAPTCHA v3 and get token with timeout and retry
-   * @param action - Action name for analytics (use RECAPTCHA_CONSTANTS.ACTIONS)
-   * @returns Promise with reCAPTCHA token
-   * @throws Error if reCAPTCHA fails or times out
+   * Lazy load reCAPTCHA script only when needed
+   * Improves initial page load performance
    */
-  async executeRecaptcha(action: string): Promise<string> {
-    if (!this.isBrowser) {
-      throw new Error('reCAPTCHA solo funciona en navegador');
+  loadRecaptcha(): Promise<void> {
+    if (!isPlatformBrowser(this.platformId)) {
+      return Promise.resolve();
     }
 
-    if (!window.grecaptcha) {
-      throw new Error('reCAPTCHA no está cargado. Verifica tu conexión.');
+    if (this.loaded) {
+      return Promise.resolve();
     }
 
-    try {
-      return await this.executeWithTimeout(action, RECAPTCHA_CONSTANTS.EXECUTION_TIMEOUT_MS);
-    } catch (error) {
-      // Retry once
-      console.warn('reCAPTCHA first attempt failed, retrying...', error);
-      return await this.executeWithTimeout(action, RECAPTCHA_CONSTANTS.EXECUTION_TIMEOUT_MS);
+    if (this.loading) {
+      return this.waitForLoad();
     }
-  }
 
-  /**
-   * Execute reCAPTCHA with timeout
-   */
-  private executeWithTimeout(action: string, timeoutMs: number): Promise<string> {
-    return Promise.race([
-      this.executeRecaptchaInternal(action),
-      this.createTimeout(timeoutMs)
-    ]);
-  }
+    this.loading = true;
 
-  /**
-   * Internal reCAPTCHA execution
-   */
-  private executeRecaptchaInternal(action: string): Promise<string> {
     return new Promise((resolve, reject) => {
-      window.grecaptcha.ready(() => {
-        window.grecaptcha
+      const script = document.createElement('script');
+      script.src = `https://www.google.com/recaptcha/api.js?render=${this.siteKey}`;
+      script.async = true;
+      script.defer = true;
+      
+      script.onload = () => {
+        this.loaded = true;
+        this.loading = false;
+        resolve();
+      };
+
+      script.onerror = () => {
+        this.loading = false;
+        reject(new Error('Failed to load reCAPTCHA'));
+      };
+
+      document.head.appendChild(script);
+    });
+  }
+
+  private waitForLoad(): Promise<void> {
+    return new Promise((resolve) => {
+      const checkInterval = setInterval(() => {
+        if (this.loaded) {
+          clearInterval(checkInterval);
+          resolve();
+        }
+      }, 100);
+    });
+  }
+
+  async execute(action: string): Promise<string> {
+    await this.loadRecaptcha();
+
+    if (!isPlatformBrowser(this.platformId)) {
+      return '';
+    }
+
+    return new Promise((resolve, reject) => {
+      (window as any).grecaptcha.ready(() => {
+        (window as any).grecaptcha
           .execute(this.siteKey, { action })
-          .then((token: string) => {
-            if (!token || token.length < 20) {
-              reject(new Error('Token de reCAPTCHA inválido'));
-            } else {
-              resolve(token);
-            }
-          })
-          .catch((error: any) => {
-            reject(new Error(`Error de reCAPTCHA: ${error.message || 'Desconocido'}`));
-          });
+          .then((token: string) => resolve(token))
+          .catch((error: any) => reject(error));
       });
     });
   }
 
-  /**
-   * Create timeout promise
-   */
-  private createTimeout(ms: number): Promise<never> {
-    return new Promise((_, reject) => {
-      setTimeout(() => {
-        reject(new Error('reCAPTCHA timeout. Intenta nuevamente.'));
-      }, ms);
-    });
+  // Alias for backward compatibility
+  executeRecaptcha(action: string): Promise<string> {
+    return this.execute(action);
   }
 
-  /**
-   * Check if reCAPTCHA is loaded
-   */
   isLoaded(): boolean {
-    return this.isBrowser && !!window.grecaptcha;
+    return this.loaded;
   }
 }

@@ -99,7 +99,7 @@ import { QuantitySelectorComponent } from '../quantity-selector/quantity-selecto
     }
     
     .total-price {
-      @apply text-base font-semibold text-sumak-brown;
+      @apply text-base font-semibold text-sumak-green;
     }
     
     /* Responsive adjustments */

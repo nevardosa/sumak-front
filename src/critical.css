@@ -1,0 +1,10 @@
+/* Critical CSS - Above the fold only */
+/* Inline in <head> for instant render */
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%;font-family:Garet,system-ui,sans-serif}
+body{margin:0;background:#f9fafb;color:#1c1c1c;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+h1,h2,h3,h4,h5,h6{font-family:Against,serif;color:#063a3d;font-weight:400}
+.container-sumak{max-width:80rem;margin:0 auto;padding:0 1rem}
+@media(min-width:768px){.container-sumak{padding:0 1.5rem}}
+@media(min-width:1024px){.container-sumak{padding:0 2rem}}

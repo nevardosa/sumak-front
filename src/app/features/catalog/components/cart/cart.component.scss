@@ -29,7 +29,7 @@
 }
 
 .item-count {
-  @apply px-3 py-1 bg-sumak-gold/10 text-sumak-brown text-sm font-medium rounded-full;
+  @apply px-3 py-1 bg-sumak-gold/10 text-sumak-green text-sm font-medium rounded-full;
 }
 
 .close-btn {
@@ -81,7 +81,7 @@
 }
 
 .summary-value {
-  @apply text-sumak-brown font-semibold;
+  @apply text-sumak-green font-semibold;
 }
 
 .total-row {
@@ -93,7 +93,7 @@
 }
 
 .total-value {
-  @apply font-against text-xl font-semibold text-sumak-brown;
+  @apply font-against text-xl font-semibold text-sumak-green;
 }
 
 .action-buttons {
