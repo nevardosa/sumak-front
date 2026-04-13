@@ -2,8 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* SUMAK Gourmet Typography - Fuentes personalizadas */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+/* SUMAK Gourmet Typography - Fuentes personalizadas premium */
 
 @font-face {
   font-family: 'Against';
@@ -44,7 +43,7 @@
   }
 
   html {
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: 'Garet', system-ui, sans-serif;
   }
 
   body {

@@ -272,7 +272,13 @@ export class SeoService {
       "@context": "https://schema.org/",
       "@type": "Product",
       "name": product.name,
-      "image": [`${this.baseUrl}/${product.imageUrl}`],
+      "image": {
+        "@type": "ImageObject",
+        "url": `${this.baseUrl}/${product.imageUrl}`,
+        "width": "1200",
+        "height": "1200",
+        "caption": `${product.name} - Ritual gastronómico premium Sumak Gourmet`
+      },
       "description": product.description,
       "sku": product.id,
       "brand": {
